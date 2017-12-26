@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "538859600843",
+    "firebase_url": "https://qhere-20000.firebaseio.com",
+    "project_id": "qhere-20000",
+    "storage_bucket": "qhere-20000.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:538859600843:android:a8e77798c87d1869",
+        "android_client_info": {
+          "package_name": "com.qthekan.qhere"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "538859600843-vglpjcp3bqh5o2u0k5os5qhsjaoakvj8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBR__tuIKuhYtpE7e5e-va7-NS2J9Mz3NU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

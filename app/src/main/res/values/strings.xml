@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">qHere</string>
+    <string name="title_activity_maps">qHere</string>
+
+    <!--<string name="banner_ad_unit_id">ca-app-pub-6591940578118358~2789457324</string>-->
+    <string name="banner_ad_unit_id">ca-app-pub-6591940578118358/8856194625</string>
+
+</resources>
