@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="Joystick">
+        <attr name="start_on_first_touch" format="boolean" />
+        <attr name="force_square" format="boolean" />
+        <attr name="radius" format="dimension" />
+        <attr name="motion_constraint" format="enum">
+            <enum name="None" value="0" />
+            <enum name="Horizontal" value="1" />
+            <enum name="Vertical" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <!-- Declare custom theme attributes that allow changing which styles are
+         used for button bars depending on the API level.
+         ?android:attr/buttonBarStyle is new as of API 11 so this is
+         necessary to support previous API levels. -->
+    <declare-styleable name="ButtonBarContainerTheme">
+        <attr name="metaButtonBarStyle" format="reference" />
+        <attr name="metaButtonBarButtonStyle" format="reference" />
+    </declare-styleable>
+
+</resources>

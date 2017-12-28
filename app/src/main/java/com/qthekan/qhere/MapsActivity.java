@@ -2,21 +2,29 @@ package com.qthekan.qhere;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdView;
@@ -27,9 +35,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.qthekan.qhere.joystick.JoystickService;
+import com.qthekan.util.qlog;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
+    private static MapsActivity ins = null;
 
     private GoogleMap mMap;
 
@@ -40,9 +51,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean mIsRunning;
     private AdsMgr mAds;
 
+    private static final int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 3;
+
+
+    public static MapsActivity getIns()
+    {
+        return ins;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ins = this;
         mIsRunning = false;
 
         super.onCreate(savedInstanceState);
@@ -82,6 +102,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 genStopButton();
             }
         });
+
     }
 
     private void checkPermission()
@@ -117,7 +138,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
             }
         }
+
+        //===========================================================
+        // check permission: overlay window
+        //===========================================================
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {   // 마시멜로우 이상일 경우
+            if (!Settings.canDrawOverlays(this)) {              // 체크
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + getPackageName()));
+                startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
+            }
+        }
     }
+
+
+    @TargetApi(Build.VERSION_CODES.M)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
+            if (!Settings.canDrawOverlays(this)) {
+                // TODO 동의를 얻지 못했을 경우의 처리
+                Log.d("", "not allowed overlay permission\n\n\n");
+            } else {
+                Log.d("", "start joystick service\n\n\n");
+                startService(new Intent(this, JoystickService.class));
+            }
+        }
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
@@ -183,7 +232,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         double lat = Double.valueOf(latitude);
         double lng = Double.valueOf(longitude);
         mNewPosition = new LatLng(lat, lng);
-        moveMarker(mNewPosition);
+        moveMarker();
 
         return 0;
     }
@@ -230,11 +279,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapClick(LatLng latLng) {
         mNewPosition = latLng;
-        moveMarker(latLng);
-        genStartButton();
+        moveMarker();
+
+        //genStartButton();
+        showSubMenu();
     }
 
-    private void moveMarker(LatLng latLng)
+    private void moveMarker()
     {
         mEtSearch.clearFocus();
 
@@ -243,12 +294,52 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMarker.remove();
         }
 
-        String title = "Lat:" + latLng.latitude + ", Lng:" + latLng.longitude;
+        String title = "Lat:" + mNewPosition.latitude + ", Lng:" + mNewPosition.longitude;
         MarkerOptions mo = new MarkerOptions();
-        mo.position(latLng).title(title);
+        mo.position(mNewPosition).title(title);
 
         mMarker = mMap.addMarker(mo);
         mMarker.showInfoWindow();
+    }
+
+
+    //===============================================================
+    // start, stop button
+    //===============================================================
+    private LinearLayout mLayoutSubMenu;
+
+
+    private void showSubMenu()
+    {
+        mLayoutSubMenu = findViewById(R.id.viewSubMenu);
+
+        RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        Button btnStartWithLocation = findViewById(R.id.btnStand);
+        btnStartWithLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                qlog.i("start stand");
+                startMock();
+                mLayoutSubMenu.setVisibility(View.INVISIBLE);
+                genStopButton();
+            }
+        });
+
+        Button btnStartWithMove = findViewById(R.id.btnMove);
+        btnStartWithMove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                qlog.i("start move");
+                startMock();
+                startJoystick();
+                mLayoutSubMenu.setVisibility(View.INVISIBLE);
+                //genStopButton();
+            }
+        });
+
+        mLayoutSubMenu.setVisibility(View.VISIBLE);
     }
 
     @SuppressLint("SetTextI18n")
@@ -287,21 +378,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void genStopButton()
     {
         Button button = new Button(this);
-        button.setText("STOP");
+        button.setText("stop");
         button.setTextSize(11);
         button.setWidth(50);
         button.setBackgroundColor(Color.RED);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("button", "click");
+                //Log.d("button", "click");
                 stopMock();
                 view.setVisibility(View.INVISIBLE);
+                stopJoystick();
             }
         });
 
-        FrameLayout layout = new FrameLayout(this);
-        layout.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        LinearLayout layout = new LinearLayout(this);
+        layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        layout.setGravity(Gravity.BOTTOM | Gravity.CENTER);
         layout.addView(button);
 
         FrameLayout main = findViewById(R.id.map_view);
@@ -309,8 +402,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    MockUpdateGPSThread mMock;
+    private void startJoystick()
+    {
+        Log.d("", "start joystick");
+        startService(new Intent(this, JoystickService.class));
+    }
+
+
+    public void stopJoystick()
+    {
+        Log.d("", "stop joystick");
+        stopService(new Intent(this, JoystickService.class));
+    }
+
+
+    //===============================================================
+    // mock location
+    //===============================================================
+    public MockUpdateGPSThread mMock;
     //FakeUpdateGPSThread mMock;
+
     private void startMock()
     {
         mAds.showInterAds();
@@ -327,10 +438,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void stopMock()
     {
+        if(mIsRunning == false)
+        {
+            Log.d("", "is not running mock location");
+            return;
+        }
+
         mIsRunning = false;
         mBtnSearch.setClickable(true);
 
+        mMock.Running = false;
         mMock.interrupt();
+        mMock = null;
     }
+
+
+    public void setMockLoc()
+    {
+        if(mMock == null)
+        {
+            return;
+        }
+
+        mMock.setLocation(mNewPosition);
+        moveMarker();
+    }
+
+
+
 
 }

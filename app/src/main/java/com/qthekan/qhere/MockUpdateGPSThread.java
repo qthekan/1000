@@ -10,7 +10,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 
 class MockUpdateGPSThread extends Thread {
-    final int TIME_UPDATES_MS = 5000;
+    final int TIME_UPDATES_MS = 500;
     public boolean Running;
     //private double curLat = 34.526456 , curLong = 127.3298;
 
@@ -32,9 +32,14 @@ class MockUpdateGPSThread extends Thread {
 
         addSetProvider(locationManager,"gps");
         addSetProvider(locationManager,"network");
-        while (Running) {
-            setPLocation(locationManager ,"gps", mLatLng.latitude, mLatLng.longitude);
-            setPLocation(locationManager ,"network", mLatLng.latitude, mLatLng.longitude);
+
+        while (Running)
+        {
+            synchronized (mLatLng) {
+                setPLocation(locationManager, "gps", mLatLng.latitude, mLatLng.longitude);
+                setPLocation(locationManager, "network", mLatLng.latitude, mLatLng.longitude);
+            }
+
             try {
                 Thread.sleep(TIME_UPDATES_MS);
             } catch (Exception e) {
@@ -43,6 +48,7 @@ class MockUpdateGPSThread extends Thread {
             }
             //curLat = curLat + 0.01;
         }
+
         delProvider(locationManager, "gps");
         delProvider(locationManager, "network");
         Log.i("zzz", "Ending Mock GPSThread");
