@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +32,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.qthekan.qhere.joystick.JoystickService;
+import com.qthekan.util.qBackPressExitApp;
 import com.qthekan.util.qlog;
 
 
@@ -104,21 +106,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    private void showToast(String msg)
+
+    @Override
+    public void onDestroy()
     {
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+        super.onDestroy();
+
+        if(mMockRunning)
+        {
+            stopJoystick();
+        }
     }
 
-    private void checkPermission()
-    {
-        //===========================================================
-        // check permission: mock gps
-        //===========================================================
-        if( !isMockLocationOn() )
-        {
-            Toast.makeText(this, "You MUST set MOCK LOCATION!!", Toast.LENGTH_LONG).show();
-        }
 
+    qBackPressExitApp mBack = new qBackPressExitApp(this);
+    @Override
+    public void onBackPressed()
+    {
+        mBack.onBackPressed();
+    }
+
+    private void showToast(String msg)
+    {
+        Toast t = Toast.makeText(this, msg, Toast.LENGTH_LONG);
+        t.setGravity(Gravity.CENTER, 0, 0);
+        t.show();
+    }
+
+
+    /**
+     *
+     * @return r == 0 : all permission ok <br>
+     *     r < 0 : you need to add permission
+     */
+    private int checkPermission()
+    {
         //===========================================================
         // check permission: gps
         //===========================================================
@@ -159,6 +181,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
             }
         }
+
+        //===========================================================
+        // check permission: mock gps
+        //===========================================================
+        if( !isMockLocationOn() )
+        {
+            showToast("You MUST set MOCK LOCATION!!\n Developer option\n -> Mock location app\n -> qHere");
+            return -1;
+        }
+
+        return 0;
     }
 
 
@@ -176,11 +209,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (!Settings.canDrawOverlays(this)) {
                 // 동의를 얻지 못했을 경우의 처리
                 //Log.d("", "not allowed overlay permission\n\n\n");
-                Toast.makeText(this, "You MUST accept the DrawOverys permisstion!!", Toast.LENGTH_LONG).show();
+                showToast("You MUST accept the DrawOverys permisstion!!");
             } else {
                 //Log.d("", "start joystick service\n\n\n");
                 //startService(new Intent(this, JoystickService.class));
-                Toast.makeText(this, "NOW, You can move mock GPS!!", Toast.LENGTH_LONG).show();
+                showToast("NOW, You can move mock GPS!!");
             }
         }
     }
@@ -250,7 +283,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         if(!latLng.matches("^[0-9].*[,].*[0-9]$"))
         {
-            Toast.makeText(this, "Invalid LatLng. \nYou Must Input like this \n123.456,321.654", Toast.LENGTH_LONG).show();
+            showToast("Invalid LatLng. \nYou Must Input like this \n123.456,321.654");
             return -1;
         }
 
@@ -404,7 +437,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void startJoystick()
     {
         Log.d("", "start joystick");
-        startMock();
+        if( startMock() < 0 )
+        {
+            return;
+        }
+
         startService(new Intent(this, JoystickService.class));
     }
 
@@ -423,8 +460,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public MockUpdateGPSThread mMock;
     //FakeUpdateGPSThread mMock;
 
-    private void startMock()
+
+    /**
+     *
+     * @return r == 0 : ok
+     *      r < 0 : fail
+     */
+    private int startMock()
     {
+        if(checkPermission() < 0)
+        {
+            qlog.e("checkPermission() nok");
+            return -1;
+        }
+
         mAds.showInterAds();
         mMockRunning = true;
 
@@ -437,6 +486,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mLayoutSubMenu.setVisibility(View.INVISIBLE);
         genStopButton();
+
+        return 0;
     }
 
 

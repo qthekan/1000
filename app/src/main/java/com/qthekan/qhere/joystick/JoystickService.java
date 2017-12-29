@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.SeekBar;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.qthekan.qhere.MapsActivity;
@@ -24,7 +25,10 @@ public class JoystickService extends Service {
     WindowManager wm;
     View mView;
     Joystick mJoystick;
+
     Button mBtnStop;
+    SeekBar mSbMovePower;
+    private int mMovePower = 5;
 
 
     @Nullable
@@ -68,7 +72,7 @@ public class JoystickService extends Service {
 
             @Override
             public void onUp() {
-
+                setJoystickValue(0, 0, 0);
             }
         });
 
@@ -83,6 +87,29 @@ public class JoystickService extends Service {
                 MapsActivity.getIns().stopJoystick();
             }
         });
+
+        //===========================================================
+        // seek bar move power
+        // UI 가 너무 지저분해져서 삭제함
+        //===========================================================
+//        mSbMovePower = mView.findViewById(R.id.sbMovePower);
+//        mSbMovePower.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//            @Override
+//            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+//                qlog.i("seekbar: " + i);
+//                mMovePower = i;
+//            }
+//
+//            @Override
+//            public void onStartTrackingTouch(SeekBar seekBar) {
+//
+//            }
+//
+//            @Override
+//            public void onStopTrackingTouch(SeekBar seekBar) {
+//
+//            }
+//        });
 
         wm.addView(mView, params);
     }
@@ -175,7 +202,7 @@ public class JoystickService extends Service {
     private float mX = 0;
     private float mY = 0;
     private float mOffset = 0;
-    private final double CONST = 0.000001;
+    private final double CONST = 0.0000001;
 
     private void moveMockLocation()
     {
@@ -184,8 +211,10 @@ public class JoystickService extends Service {
         double lat = MapsActivity.getIns().mNewPosition.latitude;
         double lng = MapsActivity.getIns().mNewPosition.longitude;
 
-        lng += (mX * mOffset * CONST); // 가로
-        lat += (mY * mOffset * CONST); // 세로
+        //double c = CONST * mMovePower;
+        double c = CONST * 5;
+        lng += (mX * c); // 가로
+        lat += (mY * c); // 세로
 
         LatLng newPos = new LatLng(lat, lng);
         MapsActivity.getIns().mNewPosition = newPos;
@@ -200,7 +229,7 @@ public class JoystickService extends Service {
             }
         });
 
-        setJoystickValue(0, 0, 0);
+        //setJoystickValue(0, 0, 0);
     }
 
 
