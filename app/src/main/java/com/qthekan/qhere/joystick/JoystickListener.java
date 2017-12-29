@@ -5,10 +5,11 @@ public interface JoystickListener {
     void onDown();
 
     /**
-     * @param degrees -180 -> 180.
-     * @param offset  normalized, 0 -> 1.
+     *
+     * @param x : longitude move distance ㅡ
+     * @param y : latitude move distance ㅣ
+     * @param offset : move power
      */
-    //void onDrag(float degrees, float offset);
     void onDrag(float x, float y, float offset);
 
     void onUp();

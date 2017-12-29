@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/colorAccent"
-                    android:text="Stand" />
+                    android:text="stand" />
 
                 <Button
                     android:id="@+id/btnMove"
@@ -76,7 +76,25 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/colorAccent"
-                    android:text="Move" />
+                    android:text="move" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/viewStop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:orientation="horizontal"
+                android:paddingBottom="20dp"
+                android:visibility="invisible">
+
+                <Button
+                    android:id="@+id/btnStop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/colorAccent"
+                    android:text="stop" />
             </LinearLayout>
         </FrameLayout>
 

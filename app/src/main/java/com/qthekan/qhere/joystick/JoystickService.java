@@ -1,6 +1,5 @@
 package com.qthekan.qhere.joystick;
 
-
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.qthekan.qhere.MapsActivity;
 import com.qthekan.qhere.R;
 import com.qthekan.util.qlog;
+
 
 public class JoystickService extends Service {
     WindowManager wm;
@@ -42,8 +42,6 @@ public class JoystickService extends Service {
         wm = (WindowManager) getSystemService(WINDOW_SERVICE);
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-//                /*ViewGroup.LayoutParams.MATCH_PARENT*/300,
-//                ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
@@ -74,6 +72,9 @@ public class JoystickService extends Service {
             }
         });
 
+        //===========================================================
+        // stop button
+        //===========================================================
         mBtnStop = mView.findViewById(R.id.btnStop);
         mBtnStop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,8 +156,11 @@ public class JoystickService extends Service {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
                         qlog.e(e.toString());
+                        break;
                     }
                 }
+
+                qlog.i("joysitck thread end");
             }
         };
 
@@ -176,7 +180,7 @@ public class JoystickService extends Service {
     private void moveMockLocation()
     {
         //qlog.i("x:" + mX + ", y:" + mY + ", offset:" + mOffset);
-        Log.e("moveMockLocation()", "x:" + mX + ", y:" + mY + ", offset:" + mOffset);
+        Log.i("moveMockLocation()", "x:" + mX + ", y:" + mY + ", offset:" + mOffset);
         double lat = MapsActivity.getIns().mNewPosition.latitude;
         double lng = MapsActivity.getIns().mNewPosition.longitude;
 
@@ -185,8 +189,10 @@ public class JoystickService extends Service {
 
         LatLng newPos = new LatLng(lat, lng);
         MapsActivity.getIns().mNewPosition = newPos;
-        // MUST run this code in the UI thread
-        //MapsActivity.getIns().setMockLoc();
+
+        /**
+         * GUI 관련된 작업은 main thread 에서 수행해야 되서 다음과 같이 처리함.
+         */
         MapsActivity.getIns().runOnUiThread(new Runnable() {
             @Override
             public void run() {

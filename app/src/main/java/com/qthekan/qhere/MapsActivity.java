@@ -6,7 +6,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Criteria;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -17,14 +16,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdView;
@@ -48,7 +43,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private EditText mEtSearch;
 
     // mock location is running
-    private boolean mIsRunning;
+    private boolean mMockRunning;
     private AdsMgr mAds;
 
     private static final int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 3;
@@ -63,7 +58,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ins = this;
-        mIsRunning = false;
+        mMockRunning = false;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
@@ -92,26 +87,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 Log.d("btn", "search click");
+                if(mMockRunning)
+                {
+                    showToast("Already running. Stop first.");
+                    return;
+                }
 
                 if( setPosition() < 0 )
                 {
                     return;
                 }
 
-                startMock();
-                genStopButton();
+                moveCamera();
             }
         });
 
     }
 
+    private void showToast(String msg)
+    {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    }
+
     private void checkPermission()
     {
+        //===========================================================
+        // check permission: mock gps
+        //===========================================================
         if( !isMockLocationOn() )
         {
-            Toast.makeText(this, "You MUST set MOCK LOCATION!!", Toast.LENGTH_LONG);
+            Toast.makeText(this, "You MUST set MOCK LOCATION!!", Toast.LENGTH_LONG).show();
         }
 
+        //===========================================================
+        // check permission: gps
+        //===========================================================
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) )
             {
@@ -152,17 +162,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+    /**
+     * 퍼미션 설정 창을 띄운 후 사용자 설정결과를 수신하는 함수.
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
             if (!Settings.canDrawOverlays(this)) {
-                // TODO 동의를 얻지 못했을 경우의 처리
-                Log.d("", "not allowed overlay permission\n\n\n");
+                // 동의를 얻지 못했을 경우의 처리
+                //Log.d("", "not allowed overlay permission\n\n\n");
+                Toast.makeText(this, "You MUST accept the DrawOverys permisstion!!", Toast.LENGTH_LONG).show();
             } else {
-                Log.d("", "start joystick service\n\n\n");
-                startService(new Intent(this, JoystickService.class));
+                //Log.d("", "start joystick service\n\n\n");
+                //startService(new Intent(this, JoystickService.class));
+                Toast.makeText(this, "NOW, You can move mock GPS!!", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -195,6 +213,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+
+    /**
+     * 개발자옵션 - 가상위치사용앱 이 설정되어 있는지 확인한다.
+     * @return
+     */
     private boolean isMockLocationOn()
     {
         try {
@@ -215,6 +238,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return false;
     }
 
+
+    /**
+     * EditText 에 입력된 위경도로 마커를 이동.
+     * @return
+     */
     private int setPosition()
     {
         String latLng = mEtSearch.getText().toString();
@@ -249,14 +277,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-//        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
         mMap.setOnMapClickListener(this);
         mMap.getUiSettings().setZoomControlsEnabled(true);
+
         // 이거 동작 안해서 activateFindMyLocationButton() 수행
         //mMap.getUiSettings().setMyLocationButtonEnabled(true);
         //activateFindMyLocationButton();
@@ -264,10 +287,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         checkPermission();
     }
 
-    private void activateFindMyLocationButton() {
 
+    /**
+     * show find my location button in google map
+     */
+    private void activateFindMyLocationButton()
+    {
         mMap.setMyLocationEnabled(true);
-        //mMap.animateCamera( CameraUpdateFactory.zoomTo(15) );
     }
 
     //===============================================================
@@ -280,11 +306,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapClick(LatLng latLng) {
         mNewPosition = latLng;
         moveMarker();
-
-        //genStartButton();
-        showSubMenu();
     }
 
+
+    /**
+     * mNewPosition 에 설정된 위경도로 marker 를 이동
+     */
     private void moveMarker()
     {
         mEtSearch.clearFocus();
@@ -299,7 +326,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mo.position(mNewPosition).title(title);
 
         mMarker = mMap.addMarker(mo);
-        mMarker.showInfoWindow();
+        //mMarker.showInfoWindow();
+
+        showSubMenu();
+    }
+
+
+    private void moveCamera()
+    {
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mNewPosition, 15));
     }
 
 
@@ -307,104 +342,69 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     // start, stop button
     //===============================================================
     private LinearLayout mLayoutSubMenu;
+    private LinearLayout mLayoutStop;
 
 
     private void showSubMenu()
     {
+        if(mMockRunning)
+        {
+            qlog.i("move GPS is running. skip show sub menu");
+            return;
+        }
+
         mLayoutSubMenu = findViewById(R.id.viewSubMenu);
 
-        RelativeLayout.LayoutParams param = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
+        /**
+         * stand start button
+         */
         Button btnStartWithLocation = findViewById(R.id.btnStand);
         btnStartWithLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 qlog.i("start stand");
                 startMock();
-                mLayoutSubMenu.setVisibility(View.INVISIBLE);
-                genStopButton();
             }
         });
 
+        /**
+         * move start button
+         */
         Button btnStartWithMove = findViewById(R.id.btnMove);
         btnStartWithMove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 qlog.i("start move");
-                startMock();
                 startJoystick();
-                mLayoutSubMenu.setVisibility(View.INVISIBLE);
-                //genStopButton();
             }
         });
 
         mLayoutSubMenu.setVisibility(View.VISIBLE);
     }
 
-    @SuppressLint("SetTextI18n")
-    private void genStartButton()
-    {
-        if(mIsRunning)
-        {
-            Log.d("", "genStartButton() Already running.");
-            return;
-        }
-
-        Button button = new Button(this);
-        button.setText("START");
-        button.setTextSize(11);
-        button.setWidth(50);
-        button.setBackgroundColor(Color.RED);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("button", "click");
-                startMock();
-                view.setVisibility(View.INVISIBLE);
-                genStopButton();
-            }
-        });
-
-        FrameLayout layout = new FrameLayout(this);
-        layout.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        layout.addView(button);
-
-        FrameLayout main = findViewById(R.id.map_view);
-        main.addView(layout);
-    }
 
     @SuppressLint("SetTextI18n")
     private void genStopButton()
     {
-        Button button = new Button(this);
-        button.setText("stop");
-        button.setTextSize(11);
-        button.setWidth(50);
-        button.setBackgroundColor(Color.RED);
+        mLayoutStop = findViewById(R.id.viewStop);
+
+        Button button = findViewById(R.id.btnStop);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Log.d("button", "click");
-                stopMock();
-                view.setVisibility(View.INVISIBLE);
+                Log.d("button", "click");
                 stopJoystick();
             }
         });
 
-        LinearLayout layout = new LinearLayout(this);
-        layout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        layout.setGravity(Gravity.BOTTOM | Gravity.CENTER);
-        layout.addView(button);
-
-        FrameLayout main = findViewById(R.id.map_view);
-        main.addView(layout);
+        mLayoutStop.setVisibility(View.VISIBLE);
     }
 
 
     private void startJoystick()
     {
         Log.d("", "start joystick");
+        startMock();
         startService(new Intent(this, JoystickService.class));
     }
 
@@ -412,6 +412,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void stopJoystick()
     {
         Log.d("", "stop joystick");
+        stopMock();
         stopService(new Intent(this, JoystickService.class));
     }
 
@@ -425,31 +426,37 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void startMock()
     {
         mAds.showInterAds();
-        mIsRunning = true;
-        mBtnSearch.setClickable(false);
+        mMockRunning = true;
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mNewPosition, 15));
+        moveCamera();
+
         mMock = new MockUpdateGPSThread(this);
         //mMock = new FakeUpdateGPSThread(this);
         mMock.setLocation(mNewPosition);
         mMock.start();
+
+        mLayoutSubMenu.setVisibility(View.INVISIBLE);
+        genStopButton();
     }
 
 
-    private void stopMock()
+    public void stopMock()
     {
-        if(mIsRunning == false)
+        if(mMockRunning == false)
         {
             Log.d("", "is not running mock location");
             return;
         }
 
-        mIsRunning = false;
+        mMockRunning = false;
         mBtnSearch.setClickable(true);
 
         mMock.Running = false;
         mMock.interrupt();
         mMock = null;
+
+        mLayoutStop.setVisibility(View.INVISIBLE);
+        mLayoutSubMenu.setVisibility(View.VISIBLE);
     }
 
 
