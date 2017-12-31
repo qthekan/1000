@@ -281,14 +281,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String latLng = mEtSearch.getText().toString();
         Log.d("mEtSearch", "LatLng: " + latLng);
 
-        if(!latLng.matches("^[0-9].*[,].*[0-9]$"))
+        if(!latLng.matches("^[-0-9].*[,].*[-0-9]$"))
         {
             showToast("Invalid LatLng. \nYou Must Input like this \n123.456,321.654");
             return -1;
         }
 
-        String latitude = latLng.split(",")[0];
-        String longitude = latLng.split(",")[1];
+        String latitude = latLng.split(",")[0].trim();
+        String longitude = latLng.split(",")[1].trim();
 
         double lat = Double.valueOf(latitude);
         double lng = Double.valueOf(longitude);
@@ -389,21 +389,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mLayoutSubMenu = findViewById(R.id.viewSubMenu);
 
         /**
-         * stand start button
-         */
-        Button btnStartWithLocation = findViewById(R.id.btnStand);
-        btnStartWithLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                qlog.i("start stand");
-                startMock();
-            }
-        });
-
-        /**
          * move start button
          */
-        Button btnStartWithMove = findViewById(R.id.btnMove);
+        Button btnStartWithMove = findViewById(R.id.btnStart);
         btnStartWithMove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

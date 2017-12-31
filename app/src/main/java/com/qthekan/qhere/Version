@@ -1,0 +1,7 @@
+- fix : bug fix
+- modify : just modify function
+
+
+v1.6 20171231
+    - fix minus(-) lat, lng in search menu
+    - modify stand, move button to one start button (move only)

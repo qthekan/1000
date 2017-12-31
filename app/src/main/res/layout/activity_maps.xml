@@ -63,20 +63,12 @@
                 android:visibility="invisible">
 
                 <Button
-                    android:id="@+id/btnStand"
+                    android:id="@+id/btnStart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/colorAccent"
-                    android:text="stand" />
-
-                <Button
-                    android:id="@+id/btnMove"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/colorAccent"
-                    android:text="move" />
+                    android:text="start" />
             </LinearLayout>
 
             <LinearLayout
