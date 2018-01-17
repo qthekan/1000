@@ -2,6 +2,9 @@
 - modify : just modify function
 
 
+v2.0 20180117
+    - add poke radar for beta test
+
 v1.6 20171231
     - fix minus(-) lat, lng in search menu
     - modify stand, move button to one start button (move only)

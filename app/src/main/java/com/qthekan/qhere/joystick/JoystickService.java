@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.SeekBar;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.qthekan.qhere.MapsActivity;
+import com.qthekan.qhere.MainActivity;
 import com.qthekan.qhere.R;
 import com.qthekan.util.qlog;
 
@@ -84,7 +84,7 @@ public class JoystickService extends Service {
             @Override
             public void onClick(View view) {
                 qlog.i("move stop click");
-                MapsActivity.getIns().stopJoystick();
+                MainActivity.getIns().stopJoystick();
             }
         });
 
@@ -208,8 +208,8 @@ public class JoystickService extends Service {
     {
         //qlog.i("x:" + mX + ", y:" + mY + ", offset:" + mOffset);
         Log.i("moveMockLocation()", "x:" + mX + ", y:" + mY + ", offset:" + mOffset);
-        double lat = MapsActivity.getIns().mNewPosition.latitude;
-        double lng = MapsActivity.getIns().mNewPosition.longitude;
+        double lat = MainActivity.getIns().mNewPosition.latitude;
+        double lng = MainActivity.getIns().mNewPosition.longitude;
 
         //double c = CONST * mMovePower;
         double c = CONST * 5;
@@ -217,15 +217,15 @@ public class JoystickService extends Service {
         lat += (mY * c); // 세로
 
         LatLng newPos = new LatLng(lat, lng);
-        MapsActivity.getIns().mNewPosition = newPos;
+        MainActivity.getIns().mNewPosition = newPos;
 
         /**
          * GUI 관련된 작업은 main thread 에서 수행해야 되서 다음과 같이 처리함.
          */
-        MapsActivity.getIns().runOnUiThread(new Runnable() {
+        MainActivity.getIns().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                MapsActivity.getIns().setMockLoc();
+                MainActivity.getIns().setMockLoc();
             }
         });
 

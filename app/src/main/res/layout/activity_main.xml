@@ -45,12 +45,20 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
+            <Button
+                android:id="@+id/btnGoRadar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onGoRadarActivity"
+                android:background="@color/pink_light"
+                android:text="Radar (Beta)" />
+
             <fragment
                 android:id="@+id/map"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="com.qthekan.qhere.MapsActivity">
+                tools:context="com.qthekan.qhere.MainActivity">
             </fragment>
 
             <LinearLayout

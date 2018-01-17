@@ -28,16 +28,21 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.qthekan.qhere.joystick.JoystickService;
+import com.qthekan.qhere.radar.Poke;
+import com.qthekan.qhere.radar.RadarActivity;
 import com.qthekan.util.qBackPressExitApp;
 import com.qthekan.util.qlog;
 
+import java.util.ArrayList;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
-    private static MapsActivity ins = null;
+
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
+    private static MainActivity ins = null;
 
     private GoogleMap mMap;
 
@@ -51,9 +56,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 3;
 
 
-    public static MapsActivity getIns()
+    public static MainActivity getIns()
     {
         return ins;
+    }
+
+
+    private void initView()
+    {
+        mAds = new AdsMgr(this, (AdView) findViewById(R.id.adView));
+
+        mEtSearch = findViewById(R.id.etSearch);
+        mBtnSearch = findViewById(R.id.btnSearch);
+
+        mLayoutSubMenu = findViewById(R.id.viewSubMenu);
+        mLayoutStop = findViewById(R.id.viewStop);
     }
 
 
@@ -63,12 +80,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMockRunning = false;
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_main);
+
+        initView();
 
         //===========================================================
         // init google admob
         //===========================================================
-        mAds = new AdsMgr(this, (AdView) findViewById(R.id.adView));
         mAds.initAds();
         mAds.showInterAds();
 
@@ -83,8 +101,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //===========================================================
         // init search frame element
         //===========================================================
-        mEtSearch = findViewById(R.id.etSearch);
-        mBtnSearch = findViewById(R.id.btnSearch);
         mBtnSearch.setOnClickListener( new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -197,9 +213,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     /**
      * 퍼미션 설정 창을 띄운 후 사용자 설정결과를 수신하는 함수.
-     * @param requestCode
-     * @param resultCode
-     * @param data
      */
     @TargetApi(Build.VERSION_CODES.M)
     @Override
@@ -249,13 +262,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     /**
      * 개발자옵션 - 가상위치사용앱 이 설정되어 있는지 확인한다.
-     * @return
      */
     private boolean isMockLocationOn()
     {
         try {
             LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            lm.addTestProvider("check", false, true, false, true, false, true, false, Criteria.POWER_LOW, Criteria.ACCURACY_COARSE);
+            if (lm != null)
+            {
+                lm.addTestProvider("check", false, true, false,
+                        true, false, true, false,
+                        Criteria.POWER_LOW, Criteria.ACCURACY_COARSE);
+            }
         }
         catch (IllegalArgumentException e)
         {
@@ -274,7 +291,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     /**
      * EditText 에 입력된 위경도로 마커를 이동.
-     * @return
      */
     private int setPosition()
     {
@@ -365,6 +381,66 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+    /**
+     *
+     * @param lat : latitude
+     * @param lng : longitude
+     * @param title : info window title
+     * @param snippet : info window content
+     */
+    public void addMarker(double lat, double lng, String title, String snippet)
+    {
+        if(mMarker != null)
+        {
+            mMarker.remove();
+        }
+
+        MarkerOptions mo = new MarkerOptions();
+        mo.position( new LatLng(lat, lng) )
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                .title(title).snippet(snippet);
+
+        mMap.addMarker(mo);
+
+        // marker info window click listener
+        mMap.setOnInfoWindowClickListener(infoWindowClickListener);
+
+        // marker click listener
+        mMap.setOnMarkerClickListener(markerClickListener);
+    }
+
+
+    //===============================================================
+    // marker click listener
+    // if click other marker, then remove marker added by user
+    //===============================================================
+    GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            if(mMarker != null)
+            {
+                mMarker.remove();
+            }
+
+            mNewPosition = marker.getPosition();
+            showSubMenu();
+
+            return false;
+        }
+    };
+
+
+    //===============================================================
+    // marker info window click listener
+    //===============================================================
+    GoogleMap.OnInfoWindowClickListener infoWindowClickListener = new GoogleMap.OnInfoWindowClickListener() {
+        @Override
+        public void onInfoWindowClick(Marker marker) {
+            qlog.i("click marker info window");
+        }
+    };
+
+
     private void moveCamera()
     {
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mNewPosition, 15));
@@ -386,11 +462,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
 
-        mLayoutSubMenu = findViewById(R.id.viewSubMenu);
-
-        /**
-         * move start button
-         */
+        //===========================================================
+        // move start button
+        //===========================================================
         Button btnStartWithMove = findViewById(R.id.btnStart);
         btnStartWithMove.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -404,11 +478,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+    public void invisibleSubMenu()
+    {
+        mLayoutSubMenu.setVisibility(View.INVISIBLE);
+    }
+
+
     @SuppressLint("SetTextI18n")
     private void genStopButton()
     {
-        mLayoutStop = findViewById(R.id.viewStop);
-
         Button button = findViewById(R.id.btnStop);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -481,7 +559,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void stopMock()
     {
-        if(mMockRunning == false)
+        if(!mMockRunning)
         {
             Log.d("", "is not running mock location");
             return;
@@ -511,6 +589,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+    //===============================================================
+    // change activity
+    //===============================================================
+    public static ArrayList<Poke> mListPoke = new ArrayList<>();
 
+    public void onGoRadarActivity(View v)
+    {
+        Intent intent = new Intent(this, RadarActivity.class);
+        startActivity(intent);
+    }
+
+
+    public void drawPokeListInMap()
+    {
+        mMap.clear();
+
+        for(Poke p : mListPoke)
+        {
+            qlog.i(p.toStr());
+            String title = p.mID + "  " + p.mName + "  LV:" + p.mLevel + "  CP:" + p.mCP;
+            String snippet = "ATT:" + p.mAtt + "  DEF:" + p.mDef + "  HP:" + p.mHp;
+            addMarker(p.mLat, p.mLng, title, snippet);
+        }
+
+        LatLng camera = new LatLng(37.521938, 126.981117);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 10));
+    }
+
+
+    public static void printListPoke()
+    {
+        for(Poke p : mListPoke)
+        {
+            qlog.i( p.toStr() );
+        }
+    }
 
 }

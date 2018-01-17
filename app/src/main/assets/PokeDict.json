@@ -1,0 +1,1604 @@
+[
+  {
+    "mID": "63",
+    "mName": "Abra"
+  },
+  {
+    "mID": "359",
+    "mName": "Absol"
+  },
+  {
+    "mID": "142",
+    "mName": "Aerodactyl"
+  },
+  {
+    "mID": "306",
+    "mName": "Aggron"
+  },
+  {
+    "mID": "190",
+    "mName": "Aipom"
+  },
+  {
+    "mID": "65",
+    "mName": "Alakazam"
+  },
+  {
+    "mID": "334",
+    "mName": "Altaria"
+  },
+  {
+    "mID": "181",
+    "mName": "Ampharos"
+  },
+  {
+    "mID": "347",
+    "mName": "Anorith"
+  },
+  {
+    "mID": "24",
+    "mName": "Arbok"
+  },
+  {
+    "mID": "59",
+    "mName": "Arcanine"
+  },
+  {
+    "mID": "168",
+    "mName": "Ariados"
+  },
+  {
+    "mID": "348",
+    "mName": "Armaldo"
+  },
+  {
+    "mID": "304",
+    "mName": "Aron"
+  },
+  {
+    "mID": "144",
+    "mName": "Articuno"
+  },
+  {
+    "mID": "184",
+    "mName": "Azumarill"
+  },
+  {
+    "mID": "298",
+    "mName": "Azurill"
+  },
+  {
+    "mID": "371",
+    "mName": "Bagon"
+  },
+  {
+    "mID": "343",
+    "mName": "Baltoy"
+  },
+  {
+    "mID": "354",
+    "mName": "Banette"
+  },
+  {
+    "mID": "339",
+    "mName": "Barboach"
+  },
+  {
+    "mID": "153",
+    "mName": "Bayleef"
+  },
+  {
+    "mID": "267",
+    "mName": "Beautifly"
+  },
+  {
+    "mID": "15",
+    "mName": "Beedrill"
+  },
+  {
+    "mID": "374",
+    "mName": "Beldum"
+  },
+  {
+    "mID": "182",
+    "mName": "Bellossom"
+  },
+  {
+    "mID": "69",
+    "mName": "Bellsprout",
+    "h": 1
+  },
+  {
+    "mID": "9",
+    "mName": "Blastoise"
+  },
+  {
+    "mID": "257",
+    "mName": "Blaziken"
+  },
+  {
+    "mFlag": "true",
+    "mID": "242",
+    "mName": "Blissey"
+  },
+  {
+    "mID": "286",
+    "mName": "Breloom"
+  },
+  {
+    "mID": "1",
+    "mName": "Bulbasaur"
+  },
+  {
+    "mID": "12",
+    "mName": "Butterfree"
+  },
+  {
+    "mID": "331",
+    "mName": "Cacnea"
+  },
+  {
+    "mID": "332",
+    "mName": "Cacturne"
+  },
+  {
+    "mID": "323",
+    "mName": "Camerupt"
+  },
+  {
+    "mID": "318",
+    "mName": "Carvanha"
+  },
+  {
+    "mID": "268",
+    "mName": "Cascoon"
+  },
+  {
+    "mID": "351",
+    "mName": "Castform"
+  },
+  {
+    "mID": "10",
+    "mName": "Caterpie",
+    "h": 1
+  },
+  {
+    "mID": "251",
+    "mName": "Celebi"
+  },
+  {
+    "mID": "113",
+    "mName": "Chansey"
+  },
+  {
+    "mID": "6",
+    "mName": "Charizard"
+  },
+  {
+    "mID": "4",
+    "mName": "Charmander"
+  },
+  {
+    "mID": "5",
+    "mName": "Charmeleon"
+  },
+  {
+    "mID": "152",
+    "mName": "Chikorita"
+  },
+  {
+    "mID": "358",
+    "mName": "Chimecho"
+  },
+  {
+    "mID": "170",
+    "mName": "Chinchou",
+    "h": 1
+  },
+  {
+    "mID": "366",
+    "mName": "Clamperl"
+  },
+  {
+    "mID": "344",
+    "mName": "Claydol"
+  },
+  {
+    "mID": "36",
+    "mName": "Clefable"
+  },
+  {
+    "mID": "35",
+    "mName": "Clefairy",
+    "h": 1
+  },
+  {
+    "mID": "173",
+    "mName": "Cleffa"
+  },
+  {
+    "mID": "91",
+    "mName": "Cloyster"
+  },
+  {
+    "mID": "256",
+    "mName": "Combusken"
+  },
+  {
+    "mID": "341",
+    "mName": "Corphish"
+  },
+  {
+    "mID": "222",
+    "mName": "Corsola"
+  },
+  {
+    "mID": "346",
+    "mName": "Cradily"
+  },
+  {
+    "mID": "342",
+    "mName": "Crawdaunt"
+  },
+  {
+    "mID": "169",
+    "mName": "Crobat"
+  },
+  {
+    "mID": "159",
+    "mName": "Croconaw"
+  },
+  {
+    "mID": "104",
+    "mName": "Cubone"
+  },
+  {
+    "mID": "155",
+    "mName": "Cyndaquil"
+  },
+  {
+    "mID": "301",
+    "mName": "Delcatty"
+  },
+  {
+    "mID": "225",
+    "mName": "Delibird"
+  },
+  {
+    "mID": "386",
+    "mName": "Deoxys"
+  },
+  {
+    "mID": "87",
+    "mName": "Dewgong"
+  },
+  {
+    "mID": "50",
+    "mName": "Diglett"
+  },
+  {
+    "mID": "132",
+    "mName": "Ditto"
+  },
+  {
+    "mID": "85",
+    "mName": "Dodrio"
+  },
+  {
+    "mID": "84",
+    "mName": "Doduo"
+  },
+  {
+    "mFlag": "true",
+    "mID": "232",
+    "mName": "Donphan"
+  },
+  {
+    "mID": "148",
+    "mName": "Dragonair"
+  },
+  {
+    "mFlag": "true",
+    "mID": "149",
+    "mName": "Dragonite"
+  },
+  {
+    "mID": "147",
+    "mName": "Dratini"
+  },
+  {
+    "mID": "96",
+    "mName": "Drowzee"
+  },
+  {
+    "mID": "51",
+    "mName": "Dugtrio"
+  },
+  {
+    "mID": "206",
+    "mName": "Dunsparce"
+  },
+  {
+    "mID": "356",
+    "mName": "Dusclops"
+  },
+  {
+    "mID": "355",
+    "mName": "Duskull"
+  },
+  {
+    "mID": "269",
+    "mName": "Dustox"
+  },
+  {
+    "mID": "133",
+    "mName": "Eevee"
+  },
+  {
+    "mID": "23",
+    "mName": "Ekans",
+    "h": 1
+  },
+  {
+    "mID": "125",
+    "mName": "Electabuzz"
+  },
+  {
+    "mID": "309",
+    "mName": "Electrike"
+  },
+  {
+    "mID": "101",
+    "mName": "Electrode"
+  },
+  {
+    "mID": "239",
+    "mName": "Elekid"
+  },
+  {
+    "mFlag": "true",
+    "mID": "244",
+    "mName": "Entei"
+  },
+  {
+    "mFlag": "true",
+    "mID": "196",
+    "mName": "Espeon"
+  },
+  {
+    "mID": "102",
+    "mName": "Exeggcute"
+  },
+  {
+    "mID": "103",
+    "mName": "Exeggutor"
+  },
+  {
+    "mID": "295",
+    "mName": "Exploud"
+  },
+  {
+    "mID": "83",
+    "mName": "Farfetch'd"
+  },
+  {
+    "mID": "22",
+    "mName": "Fearow"
+  },
+  {
+    "mID": "349",
+    "mName": "Feebas"
+  },
+  {
+    "mID": "160",
+    "mName": "Feraligatr"
+  },
+  {
+    "mID": "180",
+    "mName": "Flaaffy"
+  },
+  {
+    "mID": "136",
+    "mName": "Flareon"
+  },
+  {
+    "mID": "330",
+    "mName": "Flygon"
+  },
+  {
+    "mID": "205",
+    "mName": "Forretress"
+  },
+  {
+    "mID": "162",
+    "mName": "Furret"
+  },
+  {
+    "mFlag": "true",
+    "mID": "282",
+    "mName": "Gardevoir"
+  },
+  {
+    "mID": "92",
+    "mName": "Gastly"
+  },
+  {
+    "mID": "94",
+    "mName": "Gengar"
+  },
+  {
+    "mID": "74",
+    "mName": "Geodude"
+  },
+  {
+    "mID": "203",
+    "mName": "Girafarig"
+  },
+  {
+    "mID": "362",
+    "mName": "Glalie"
+  },
+  {
+    "mID": "207",
+    "mName": "Gligar"
+  },
+  {
+    "mID": "44",
+    "mName": "Gloom"
+  },
+  {
+    "mID": "42",
+    "mName": "Golbat"
+  },
+  {
+    "mID": "118",
+    "mName": "Goldeen",
+    "h": 1
+  },
+  {
+    "mID": "55",
+    "mName": "Golduck"
+  },
+  {
+    "mID": "76",
+    "mName": "Golem"
+  },
+  {
+    "mID": "368",
+    "mName": "Gorebyss"
+  },
+  {
+    "mID": "210",
+    "mName": "Granbull"
+  },
+  {
+    "mID": "75",
+    "mName": "Graveler"
+  },
+  {
+    "mID": "88",
+    "mName": "Grimer"
+  },
+  {
+    "mFlag": "true",
+    "mID": "383",
+    "mName": "Groudon"
+  },
+  {
+    "mID": "253",
+    "mName": "Grovyle"
+  },
+  {
+    "mID": "58",
+    "mName": "Growlithe"
+  },
+  {
+    "mID": "326",
+    "mName": "Grumpig"
+  },
+  {
+    "mID": "316",
+    "mName": "Gulpin",
+    "h": 1
+  },
+  {
+    "mFlag": "true",
+    "mID": "130",
+    "mName": "Gyarados"
+  },
+  {
+    "mID": "297",
+    "mName": "Hariyama"
+  },
+  {
+    "mID": "93",
+    "mName": "Haunter"
+  },
+  {
+    "mID": "214",
+    "mName": "Heracross"
+  },
+  {
+    "mID": "107",
+    "mName": "Hitmonchan"
+  },
+  {
+    "mID": "106",
+    "mName": "Hitmonlee"
+  },
+  {
+    "mID": "237",
+    "mName": "Hitmontop"
+  },
+  {
+    "mFlag": "true",
+    "mID": "250",
+    "mName": "Ho-Oh"
+  },
+  {
+    "mID": "163",
+    "mName": "Hoothoot",
+    "h": 1
+  },
+  {
+    "mID": "187",
+    "mName": "Hoppip",
+    "h": 1
+  },
+  {
+    "mID": "116",
+    "mName": "Horsea"
+  },
+  {
+    "mID": "229",
+    "mName": "Houndoom"
+  },
+  {
+    "mID": "228",
+    "mName": "Houndour"
+  },
+  {
+    "mID": "367",
+    "mName": "Huntail"
+  },
+  {
+    "mID": "97",
+    "mName": "Hypno"
+  },
+  {
+    "mID": "174",
+    "mName": "Igglybuff"
+  },
+  {
+    "mID": "314",
+    "mName": "Illumise"
+  },
+  {
+    "mID": "2",
+    "mName": "Ivysaur"
+  },
+  {
+    "mID": "39",
+    "mName": "Jigglypuff"
+  },
+  {
+    "mID": "385",
+    "mName": "Jirachi"
+  },
+  {
+    "mID": "135",
+    "mName": "Jolteon"
+  },
+  {
+    "mID": "189",
+    "mName": "Jumpluff"
+  },
+  {
+    "mID": "124",
+    "mName": "Jynx"
+  },
+  {
+    "mID": "140",
+    "mName": "Kabuto"
+  },
+  {
+    "mID": "141",
+    "mName": "Kabutops"
+  },
+  {
+    "mID": "64",
+    "mName": "Kadabra"
+  },
+  {
+    "mID": "14",
+    "mName": "Kakuna"
+  },
+  {
+    "mID": "115",
+    "mName": "Kangaskhan"
+  },
+  {
+    "mID": "352",
+    "mName": "Kecleon"
+  },
+  {
+    "mID": "230",
+    "mName": "Kingdra"
+  },
+  {
+    "mID": "99",
+    "mName": "Kingler"
+  },
+  {
+    "mID": "281",
+    "mName": "Kirlia"
+  },
+  {
+    "mID": "109",
+    "mName": "Koffing"
+  },
+  {
+    "mID": "98",
+    "mName": "Krabby",
+    "h": 1
+  },
+  {
+    "mID": "382",
+    "mName": "Kyogre"
+  },
+  {
+    "mID": "305",
+    "mName": "Lairon"
+  },
+  {
+    "mID": "171",
+    "mName": "Lanturn"
+  },
+  {
+    "mID": "131",
+    "mName": "Lapras"
+  },
+  {
+    "mID": "246",
+    "mName": "Larvitar"
+  },
+  {
+    "mID": "380",
+    "mName": "Latias"
+  },
+  {
+    "mID": "381",
+    "mName": "Latios"
+  },
+  {
+    "mID": "166",
+    "mName": "Ledian"
+  },
+  {
+    "mID": "165",
+    "mName": "Ledyba",
+    "h": 1
+  },
+  {
+    "mID": "108",
+    "mName": "Lickitung"
+  },
+  {
+    "mID": "345",
+    "mName": "Lileep"
+  },
+  {
+    "mID": "264",
+    "mName": "Linoone"
+  },
+  {
+    "mID": "271",
+    "mName": "Lombre"
+  },
+  {
+    "mID": "270",
+    "mName": "Lotad"
+  },
+  {
+    "mID": "294",
+    "mName": "Loudred"
+  },
+  {
+    "mID": "272",
+    "mName": "Ludicolo"
+  },
+  {
+    "mFlag": "true",
+    "mID": "249",
+    "mName": "Lugia"
+  },
+  {
+    "mID": "337",
+    "mName": "Lunatone"
+  },
+  {
+    "mID": "370",
+    "mName": "Luvdisc"
+  },
+  {
+    "mID": "68",
+    "mName": "Machamp"
+  },
+  {
+    "mID": "67",
+    "mName": "Machoke"
+  },
+  {
+    "mID": "66",
+    "mName": "Machop"
+  },
+  {
+    "mID": "240",
+    "mName": "Magby"
+  },
+  {
+    "mID": "219",
+    "mName": "Magcargo"
+  },
+  {
+    "mID": "129",
+    "mName": "Magikarp"
+  },
+  {
+    "mID": "126",
+    "mName": "Magmar"
+  },
+  {
+    "mID": "81",
+    "mName": "Magnemite"
+  },
+  {
+    "mID": "82",
+    "mName": "Magneton"
+  },
+  {
+    "mID": "296",
+    "mName": "Makuhita"
+  },
+  {
+    "mID": "310",
+    "mName": "Manectric"
+  },
+  {
+    "mID": "56",
+    "mName": "Mankey"
+  },
+  {
+    "mID": "226",
+    "mName": "Mantine"
+  },
+  {
+    "mID": "179",
+    "mName": "Mareep"
+  },
+  {
+    "mID": "183",
+    "mName": "Marill",
+    "h": 1
+  },
+  {
+    "mID": "105",
+    "mName": "Marowak"
+  },
+  {
+    "mID": "259",
+    "mName": "Marshtomp"
+  },
+  {
+    "mID": "284",
+    "mName": "Masquerain"
+  },
+  {
+    "mID": "303",
+    "mName": "Mawile"
+  },
+  {
+    "mID": "308",
+    "mName": "Medicham"
+  },
+  {
+    "mID": "307",
+    "mName": "Meditite"
+  },
+  {
+    "mID": "154",
+    "mName": "Meganium"
+  },
+  {
+    "mID": "52",
+    "mName": "Meowth"
+  },
+  {
+    "mID": "376",
+    "mName": "Metagross"
+  },
+  {
+    "mID": "375",
+    "mName": "Metang"
+  },
+  {
+    "mID": "11",
+    "mName": "Metapod"
+  },
+  {
+    "mID": "151",
+    "mName": "Mew"
+  },
+  {
+    "mFlag": "true",
+    "mID": "150",
+    "mName": "Mewtwo"
+  },
+  {
+    "mID": "262",
+    "mName": "Mightyena"
+  },
+  {
+    "mFlag": "true",
+    "mID": "350",
+    "mName": "Milotic"
+  },
+  {
+    "mID": "241",
+    "mName": "Miltank"
+  },
+  {
+    "mID": "312",
+    "mName": "Minun"
+  },
+  {
+    "mID": "200",
+    "mName": "Misdreavus"
+  },
+  {
+    "mFlag": "true",
+    "mID": "146",
+    "mName": "Moltres"
+  },
+  {
+    "mID": "122",
+    "mName": "Mr. Mime"
+  },
+  {
+    "mID": "258",
+    "mName": "Mudkip"
+  },
+  {
+    "mID": "89",
+    "mName": "Muk"
+  },
+  {
+    "mID": "198",
+    "mName": "Murkrow",
+    "h": 1
+  },
+  {
+    "mID": "177",
+    "mName": "Natu",
+    "h": 1
+  },
+  {
+    "mID": "34",
+    "mName": "Nidoking"
+  },
+  {
+    "mID": "31",
+    "mName": "Nidoqueen"
+  },
+  {
+    "mID": "29",
+    "mName": "Nidoran♀",
+    "h": 1
+  },
+  {
+    "mID": "32",
+    "mName": "Nidoran♂",
+    "h": 1
+  },
+  {
+    "mID": "30",
+    "mName": "Nidorina"
+  },
+  {
+    "mID": "33",
+    "mName": "Nidorino"
+  },
+  {
+    "mID": "290",
+    "mName": "Nincada"
+  },
+  {
+    "mID": "38",
+    "mName": "Ninetales"
+  },
+  {
+    "mID": "291",
+    "mName": "Ninjask"
+  },
+  {
+    "mID": "164",
+    "mName": "Noctowl"
+  },
+  {
+    "mID": "299",
+    "mName": "Nosepass"
+  },
+  {
+    "mID": "322",
+    "mName": "Numel"
+  },
+  {
+    "mID": "274",
+    "mName": "Nuzleaf"
+  },
+  {
+    "mID": "224",
+    "mName": "Octillery"
+  },
+  {
+    "mID": "43",
+    "mName": "Oddish",
+    "h": 1
+  },
+  {
+    "mID": "138",
+    "mName": "Omanyte"
+  },
+  {
+    "mID": "139",
+    "mName": "Omastar"
+  },
+  {
+    "mID": "95",
+    "mName": "Onix"
+  },
+  {
+    "mID": "46",
+    "mName": "Paras",
+    "h": 1
+  },
+  {
+    "mID": "47",
+    "mName": "Parasect"
+  },
+  {
+    "mID": "279",
+    "mName": "Pelipper"
+  },
+  {
+    "mID": "53",
+    "mName": "Persian"
+  },
+  {
+    "mID": "231",
+    "mName": "Phanpy"
+  },
+  {
+    "mID": "172",
+    "mName": "Pichu"
+  },
+  {
+    "mID": "18",
+    "mName": "Pidgeot"
+  },
+  {
+    "mID": "17",
+    "mName": "Pidgeotto"
+  },
+  {
+    "mID": "16",
+    "mName": "Pidgey",
+    "h": 1
+  },
+  {
+    "mID": "25",
+    "mName": "Pikachu"
+  },
+  {
+    "mID": "221",
+    "mName": "Piloswine"
+  },
+  {
+    "mID": "204",
+    "mName": "Pineco"
+  },
+  {
+    "mID": "127",
+    "mName": "Pinsir"
+  },
+  {
+    "mID": "311",
+    "mName": "Plusle"
+  },
+  {
+    "mID": "186",
+    "mName": "Politoed"
+  },
+  {
+    "mID": "60",
+    "mName": "Poliwag",
+    "h": 1
+  },
+  {
+    "mID": "61",
+    "mName": "Poliwhirl"
+  },
+  {
+    "mID": "62",
+    "mName": "Poliwrath"
+  },
+  {
+    "mID": "77",
+    "mName": "Ponyta"
+  },
+  {
+    "mID": "261",
+    "mName": "Poochyena"
+  },
+  {
+    "mID": "137",
+    "mName": "Porygon"
+  },
+  {
+    "mID": "233",
+    "mName": "Porygon2"
+  },
+  {
+    "mID": "57",
+    "mName": "Primeape"
+  },
+  {
+    "mID": "54",
+    "mName": "Psyduck",
+    "h": 1
+  },
+  {
+    "mID": "247",
+    "mName": "Pupitar"
+  },
+  {
+    "mID": "195",
+    "mName": "Quagsire"
+  },
+  {
+    "mID": "156",
+    "mName": "Quilava"
+  },
+  {
+    "mID": "211",
+    "mName": "Qwilfish"
+  },
+  {
+    "mID": "26",
+    "mName": "Raichu"
+  },
+  {
+    "mFlag": "true",
+    "mID": "243",
+    "mName": "Raikou"
+  },
+  {
+    "mID": "280",
+    "mName": "Ralts"
+  },
+  {
+    "mID": "78",
+    "mName": "Rapidash"
+  },
+  {
+    "mID": "20",
+    "mName": "Raticate"
+  },
+  {
+    "mID": "19",
+    "mName": "Rattata",
+    "h": 1
+  },
+  {
+    "mID": "384",
+    "mName": "Rayquaza"
+  },
+  {
+    "mID": "378",
+    "mName": "Regice"
+  },
+  {
+    "mID": "377",
+    "mName": "Regirock"
+  },
+  {
+    "mID": "379",
+    "mName": "Registeel"
+  },
+  {
+    "mID": "369",
+    "mName": "Relicanth"
+  },
+  {
+    "mID": "223",
+    "mName": "Remoraid"
+  },
+  {
+    "mFlag": "true",
+    "mID": "112",
+    "mName": "Rhydon"
+  },
+  {
+    "mID": "111",
+    "mName": "Rhyhorn"
+  },
+  {
+    "mID": "315",
+    "mName": "Roselia",
+    "h": 1
+  },
+  {
+    "mID": "302",
+    "mName": "Sableye"
+  },
+  {
+    "mID": "373",
+    "mName": "Salamence"
+  },
+  {
+    "mID": "27",
+    "mName": "Sandshrew"
+  },
+  {
+    "mID": "28",
+    "mName": "Sandslash"
+  },
+  {
+    "mID": "254",
+    "mName": "Sceptile"
+  },
+  {
+    "mID": "212",
+    "mName": "Scizor"
+  },
+  {
+    "mID": "123",
+    "mName": "Scyther"
+  },
+  {
+    "mID": "117",
+    "mName": "Seadra"
+  },
+  {
+    "mID": "119",
+    "mName": "Seaking"
+  },
+  {
+    "mID": "364",
+    "mName": "Sealeo"
+  },
+  {
+    "mID": "273",
+    "mName": "Seedot",
+    "h": 1
+  },
+  {
+    "mID": "86",
+    "mName": "Seel"
+  },
+  {
+    "mID": "161",
+    "mName": "Sentret",
+    "h": 1
+  },
+  {
+    "mID": "336",
+    "mName": "Seviper"
+  },
+  {
+    "mID": "319",
+    "mName": "Sharpedo"
+  },
+  {
+    "mID": "292",
+    "mName": "Shedinja"
+  },
+  {
+    "mID": "372",
+    "mName": "Shelgon"
+  },
+  {
+    "mID": "90",
+    "mName": "Shellder"
+  },
+  {
+    "mID": "275",
+    "mName": "Shiftry"
+  },
+  {
+    "mID": "285",
+    "mName": "Shroomish"
+  },
+  {
+    "mID": "213",
+    "mName": "Shuckle"
+  },
+  {
+    "mID": "353",
+    "mName": "Shuppet"
+  },
+  {
+    "mID": "266",
+    "mName": "Silcoon"
+  },
+  {
+    "mID": "227",
+    "mName": "Skarmory"
+  },
+  {
+    "mID": "188",
+    "mName": "Skiploom"
+  },
+  {
+    "mID": "300",
+    "mName": "Skitty",
+    "h": 1
+  },
+  {
+    "mFlag": "true",
+    "mID": "289",
+    "mName": "Slaking"
+  },
+  {
+    "mID": "287",
+    "mName": "Slakoth"
+  },
+  {
+    "mID": "80",
+    "mName": "Slowbro"
+  },
+  {
+    "mID": "199",
+    "mName": "Slowking"
+  },
+  {
+    "mID": "79",
+    "mName": "Slowpoke"
+  },
+  {
+    "mID": "218",
+    "mName": "Slugma"
+  },
+  {
+    "mID": "235",
+    "mName": "Smeargle"
+  },
+  {
+    "mID": "238",
+    "mName": "Smoochum"
+  },
+  {
+    "mID": "215",
+    "mName": "Sneasel"
+  },
+  {
+    "mFlag": "true",
+    "mID": "143",
+    "mName": "Snorlax"
+  },
+  {
+    "mID": "361",
+    "mName": "Snorunt"
+  },
+  {
+    "mID": "209",
+    "mName": "Snubbull"
+  },
+  {
+    "mID": "338",
+    "mName": "Solrock"
+  },
+  {
+    "mID": "21",
+    "mName": "Spearow",
+    "h": 1
+  },
+  {
+    "mID": "363",
+    "mName": "Spheal",
+    "h": 1
+  },
+  {
+    "mID": "167",
+    "mName": "Spinarak",
+    "h": 1
+  },
+  {
+    "mID": "327",
+    "mName": "Spinda"
+  },
+  {
+    "mID": "325",
+    "mName": "Spoink"
+  },
+  {
+    "mID": "7",
+    "mName": "Squirtle"
+  },
+  {
+    "mID": "234",
+    "mName": "Stantler"
+  },
+  {
+    "mID": "121",
+    "mName": "Starmie"
+  },
+  {
+    "mID": "120",
+    "mName": "Staryu",
+    "h": 1
+  },
+  {
+    "mID": "208",
+    "mName": "Steelix"
+  },
+  {
+    "mID": "185",
+    "mName": "Sudowoodo"
+  },
+  {
+    "mID": "245",
+    "mName": "Suicune"
+  },
+  {
+    "mID": "192",
+    "mName": "Sunflora"
+  },
+  {
+    "mID": "191",
+    "mName": "Sunkern",
+    "h": 1
+  },
+  {
+    "mID": "283",
+    "mName": "Surskit"
+  },
+  {
+    "mID": "333",
+    "mName": "Swablu"
+  },
+  {
+    "mID": "317",
+    "mName": "Swalot"
+  },
+  {
+    "mID": "260",
+    "mName": "Swampert"
+  },
+  {
+    "mID": "277",
+    "mName": "Swellow"
+  },
+  {
+    "mID": "220",
+    "mName": "Swinub"
+  },
+  {
+    "mID": "276",
+    "mName": "Taillow"
+  },
+  {
+    "mID": "114",
+    "mName": "Tangela"
+  },
+  {
+    "mID": "128",
+    "mName": "Tauros"
+  },
+  {
+    "mID": "216",
+    "mName": "Teddiursa"
+  },
+  {
+    "mID": "72",
+    "mName": "Tentacool"
+  },
+  {
+    "mID": "73",
+    "mName": "Tentacruel"
+  },
+  {
+    "mID": "175",
+    "mName": "Togepi"
+  },
+  {
+    "mID": "176",
+    "mName": "Togetic"
+  },
+  {
+    "mID": "255",
+    "mName": "Torchic"
+  },
+  {
+    "mID": "324",
+    "mName": "Torkoal"
+  },
+  {
+    "mID": "158",
+    "mName": "Totodile"
+  },
+  {
+    "mID": "328",
+    "mName": "Trapinch"
+  },
+  {
+    "mID": "252",
+    "mName": "Treecko"
+  },
+  {
+    "mID": "357",
+    "mName": "Tropius"
+  },
+  {
+    "mID": "157",
+    "mName": "Typhlosion"
+  },
+  {
+    "mFlag": "true",
+    "mID": "248",
+    "mName": "Tyranitar"
+  },
+  {
+    "mID": "236",
+    "mName": "Tyrogue"
+  },
+  {
+    "mID": "197",
+    "mName": "Umbreon"
+  },
+  {
+    "mID": "201",
+    "mName": "Unown"
+  },
+  {
+    "mID": "217",
+    "mName": "Ursaring"
+  },
+  {
+    "mFlag": "true",
+    "mID": "134",
+    "mName": "Vaporeon"
+  },
+  {
+    "mID": "49",
+    "mName": "Venomoth"
+  },
+  {
+    "mID": "48",
+    "mName": "Venonat",
+    "h": 1
+  },
+  {
+    "mFlag": "true",
+    "mID": "3",
+    "mName": "Venusaur"
+  },
+  {
+    "mID": "329",
+    "mName": "Vibrava"
+  },
+  {
+    "mID": "71",
+    "mName": "Victreebel"
+  },
+  {
+    "mID": "288",
+    "mName": "Vigoroth"
+  },
+  {
+    "mID": "45",
+    "mName": "Vileplume"
+  },
+  {
+    "mID": "313",
+    "mName": "Volbeat"
+  },
+  {
+    "mID": "100",
+    "mName": "Voltorb"
+  },
+  {
+    "mID": "37",
+    "mName": "Vulpix",
+    "h": 1
+  },
+  {
+    "mID": "320",
+    "mName": "Wailmer"
+  },
+  {
+    "mID": "321",
+    "mName": "Wailord"
+  },
+  {
+    "mID": "365",
+    "mName": "Walrein"
+  },
+  {
+    "mID": "8",
+    "mName": "Wartortle"
+  },
+  {
+    "mID": "13",
+    "mName": "Weedle",
+    "h": 1
+  },
+  {
+    "mID": "70",
+    "mName": "Weepinbell"
+  },
+  {
+    "mID": "110",
+    "mName": "Weezing"
+  },
+  {
+    "mID": "340",
+    "mName": "Whiscash"
+  },
+  {
+    "mID": "293",
+    "mName": "Whismur"
+  },
+  {
+    "mID": "40",
+    "mName": "Wigglytuff"
+  },
+  {
+    "mID": "278",
+    "mName": "Wingull"
+  },
+  {
+    "mID": "202",
+    "mName": "Wobbuffet"
+  },
+  {
+    "mID": "194",
+    "mName": "Wooper",
+    "h": 1
+  },
+  {
+    "mID": "265",
+    "mName": "Wurmple"
+  },
+  {
+    "mID": "360",
+    "mName": "Wynaut"
+  },
+  {
+    "mID": "178",
+    "mName": "Xatu"
+  },
+  {
+    "mID": "193",
+    "mName": "Yanma"
+  },
+  {
+    "mID": "335",
+    "mName": "Zangoose"
+  },
+  {
+    "mFlag": "true",
+    "mID": "145",
+    "mName": "Zapdos"
+  },
+  {
+    "mID": "263",
+    "mName": "Zigzagoon",
+    "h": 1
+  },
+  {
+    "mID": "41",
+    "mName": "Zubat",
+    "h": 1
+  }
+]

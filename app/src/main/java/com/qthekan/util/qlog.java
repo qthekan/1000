@@ -40,7 +40,7 @@ public class qlog
     {
         StackTraceElement stack = Thread.currentThread().getStackTrace()[4];
 
-        String strMethod = stack.getMethodName();
+        String strMethod = stack.getMethodName() + "()";
         String strLine = String.valueOf(stack.getLineNumber());
 
         String strContents = String.format("%s %s: %s", strMethod, strLine, log);
