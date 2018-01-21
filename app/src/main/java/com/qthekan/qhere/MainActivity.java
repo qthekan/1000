@@ -37,6 +37,7 @@ import com.qthekan.qhere.radar.Poke;
 import com.qthekan.qhere.radar.RadarActivity;
 import com.qthekan.util.qBackPressExitApp;
 import com.qthekan.util.qlog;
+import com.qthekan.util.qutil;
 
 import java.util.ArrayList;
 
@@ -608,8 +609,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         for(Poke p : mListPoke)
         {
             qlog.i(p.toStr());
+            String disapearHHmm = qutil.unixtimeToHourMin(p.mDespawn);
             String title = p.mID + "  " + p.mName + "  LV:" + p.mLevel + "  CP:" + p.mCP;
-            String snippet = "ATT:" + p.mAtt + "  DEF:" + p.mDef + "  HP:" + p.mHp;
+            String snippet = "ATT:" + p.mAtt + "  DEF:" + p.mDef + "  HP:" + p.mHp + "  " + disapearHHmm;
             addMarker(p.mLat, p.mLng, title, snippet);
         }
 

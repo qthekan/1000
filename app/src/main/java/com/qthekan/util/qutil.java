@@ -4,6 +4,9 @@ import android.content.Context;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 public class qutil {
 
@@ -31,5 +34,20 @@ public class qutil {
         Toast t = Toast.makeText(context, msg, Toast.LENGTH_LONG);
         t.setGravity(Gravity.CENTER, 0, 0);
         t.show();
+    }
+
+
+    /**
+     * @param unixTimeStamp : unix timestamp. not java timestame.
+     * @return
+     */
+    public static String unixtimeToHourMin(long unixTimeStamp)
+    {
+        long javaTimeStamp = unixTimeStamp * 1000;
+        Date date = new Date(javaTimeStamp);
+
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        String hourMin = format.format(date);
+        return hourMin;
     }
 }
