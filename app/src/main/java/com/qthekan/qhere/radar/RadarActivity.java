@@ -1,6 +1,7 @@
 package com.qthekan.qhere.radar;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -64,7 +65,14 @@ public class RadarActivity extends AppCompatActivity {
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, mPokeDict.mPokeList);
         mListViewPokeSelect.setAdapter(adapter);
 
-        checkListViewByDefault();
+        mAppData = getSharedPreferences("appData", MODE_PRIVATE);
+        loadUserInput();
+        //checkListViewByDefault();
+
+        mEtCP.setText(mMinCP + "");
+        mEtIV.setText(mMinIV + "");
+        mEtLV.setText(mMinLV + "");
+
     }
 
 
@@ -127,6 +135,7 @@ public class RadarActivity extends AppCompatActivity {
 
         getFilterValue();
         getSelectedPokeIDs();
+        saveUserInput();
 
         // send search request to server
         AsyncTask.execute(new Runnable() {
@@ -353,6 +362,48 @@ public class RadarActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+
+    //===============================================================
+    // save, load user input data
+    //===============================================================
+    SharedPreferences mAppData;
+    private void saveUserInput()
+    {
+        SharedPreferences.Editor editor = mAppData.edit();
+        editor.clear();
+
+        SparseBooleanArray booleanArray = mListViewPokeSelect.getCheckedItemPositions();
+        for(int i = 0; i < PokeDict.mPokeList.size() ; i++)
+        {
+            if( booleanArray.get(i) )
+            {
+                // poke id start with 1
+                // then, mID - 1
+                editor.putBoolean(PokeDict.mPokeList.get(i).mID - 1 + "", true);
+            }
+        }
+
+        editor.putInt("cp", mMinCP);
+        editor.putInt("iv", mMinIV);
+        editor.putInt("lv", mMinLV);
+
+        editor.commit();
+    }
+
+
+    private void loadUserInput()
+    {
+        for(int i = 0 ; i < mListViewPokeSelect.getCount() ; i++)
+        {
+            boolean flag = mAppData.getBoolean(i + "", false);
+            mListViewPokeSelect.setItemChecked(i, flag);
+        }
+
+        mMinCP = mAppData.getInt("cp", 0);
+        mMinIV = mAppData.getInt("iv", 0);
+        mMinLV = mAppData.getInt("lv", 0);
     }
 
 }

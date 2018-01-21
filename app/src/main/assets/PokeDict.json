@@ -20,6 +20,7 @@
     "mName": "Aipom"
   },
   {
+    "mFlag": "true",
     "mID": "65",
     "mName": "Alakazam"
   },
@@ -40,6 +41,7 @@
     "mName": "Arbok"
   },
   {
+    "mFlag": "true",
     "mID": "59",
     "mName": "Arcanine"
   },
@@ -370,6 +372,7 @@
     "mName": "Exeggcute"
   },
   {
+    "mFlag": "true",
     "mID": "103",
     "mName": "Exeggutor"
   },
@@ -398,6 +401,7 @@
     "mName": "Flaaffy"
   },
   {
+    "mFlag": "true",
     "mID": "136",
     "mName": "Flareon"
   },
@@ -460,6 +464,7 @@
     "mName": "Golduck"
   },
   {
+    "mFlag": "true",
     "mID": "76",
     "mName": "Golem"
   },
@@ -515,6 +520,7 @@
     "mName": "Haunter"
   },
   {
+    "mFlag": "true",
     "mID": "214",
     "mName": "Heracross"
   },
@@ -721,6 +727,7 @@
     "mName": "Luvdisc"
   },
   {
+    "mFlag": "true",
     "mID": "68",
     "mName": "Machamp"
   },
@@ -1158,6 +1165,7 @@
     "mName": "Sceptile"
   },
   {
+    "mFlag": "true",
     "mID": "212",
     "mName": "Scizor"
   },
@@ -1347,6 +1355,7 @@
     "mName": "Sudowoodo"
   },
   {
+    "mFlag": "true",
     "mID": "245",
     "mName": "Suicune"
   },
@@ -1372,6 +1381,7 @@
     "mName": "Swalot"
   },
   {
+    "mFlag": "true",
     "mID": "260",
     "mName": "Swampert"
   },
