@@ -15,22 +15,23 @@ import com.qthekan.util.qlog;
 import java.util.ArrayList;
 
 
-public class CustomAdapter extends BaseAdapter {
-
-    // Adapter에 추가된 데이터를 저장하기 위한 ArrayList
+public class CustomAdapter extends BaseAdapter
+{
     private ArrayList<ListViewItem> mItemList = new ArrayList<ListViewItem>() ;
 
-    // ListViewAdapter의 생성자
-    public CustomAdapter() {
+
+    public CustomAdapter()
+    {
 
     }
 
-    // Adapter에 사용되는 데이터의 개수를 리턴. : 필수 구현
+
     @Override
-    public int getCount() {
-        //qlog.i("======================================\n" + mItemList.size());
+    public int getCount()
+    {
         return mItemList.size() ;
     }
+
 
     // position에 위치한 데이터를 화면에 출력하는데 사용될 View를 리턴. : 필수 구현
     @Override
@@ -59,17 +60,20 @@ public class CustomAdapter extends BaseAdapter {
         return convertView;
     }
 
+
     // 지정한 위치(position)에 있는 데이터와 관계된 아이템(row)의 ID를 리턴. : 필수 구현
     @Override
     public long getItemId(int position) {
         return position ;
     }
 
+
     // 지정한 위치(position)에 있는 데이터 리턴 : 필수 구현
     @Override
     public ListViewItem getItem(int position) {
         return mItemList.get(position) ;
     }
+
 
     // 아이템 데이터 추가를 위한 함수. 개발자가 원하는대로 작성 가능.
     public void addItem(Bitmap icon, String id, String name) {
@@ -80,6 +84,20 @@ public class CustomAdapter extends BaseAdapter {
         item.name = name;
 
         mItemList.add(item);
+    }
+
+
+    public ListViewItem getItemById(int id)
+    {
+        for(ListViewItem i : mItemList)
+        {
+            if( Integer.parseInt(i.id) == id )
+            {
+                return i;
+            }
+        }
+
+        return null;
     }
 
 }

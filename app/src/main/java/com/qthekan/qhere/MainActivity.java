@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Criteria;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -35,11 +36,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.qthekan.qhere.joystick.JoystickService;
 import com.qthekan.qhere.radar.Poke;
 import com.qthekan.qhere.radar.RadarActivity;
+import com.qthekan.qhere.radar.listview.CustomAdapter;
+import com.qthekan.qhere.radar.listview.ListViewItem;
 import com.qthekan.util.qBackPressExitApp;
 import com.qthekan.util.qlog;
 import com.qthekan.util.qutil;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
@@ -389,7 +393,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      * @param title : info window title
      * @param snippet : info window content
      */
-    public void addMarker(double lat, double lng, String title, String snippet)
+    public void addMarker(double lat, double lng, String title, String snippet, int id)
     {
         if(mMarker != null)
         {
@@ -398,8 +402,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         MarkerOptions mo = new MarkerOptions();
         mo.position( new LatLng(lat, lng) )
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
                 .title(title).snippet(snippet);
+
+        Bitmap bitmap = ((CustomAdapter)RadarActivity.mListViewPoke.getAdapter()).getItemById(id).image;
+        mo.icon( BitmapDescriptorFactory.fromBitmap(bitmap));
 
         mMap.addMarker(mo);
 
@@ -612,7 +619,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             String disapearHHmm = qutil.unixtimeToHourMin(p.mDespawn);
             String title = p.mID + "  " + p.mName + "  LV:" + p.mLevel + "  CP:" + p.mCP;
             String snippet = "ATT:" + p.mAtt + "  DEF:" + p.mDef + "  HP:" + p.mHp + "  " + disapearHHmm;
-            addMarker(p.mLat, p.mLng, title, snippet);
+            addMarker(p.mLat, p.mLng, title, snippet, p.mID);
         }
 
         LatLng camera = new LatLng(37.521938, 126.981117);

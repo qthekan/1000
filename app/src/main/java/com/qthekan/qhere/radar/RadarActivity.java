@@ -20,7 +20,6 @@ import com.google.gson.JsonParser;
 import com.qthekan.qhere.MainActivity;
 import com.qthekan.qhere.R;
 import com.qthekan.qhere.radar.listview.CustomAdapter;
-import com.qthekan.qhere.radar.listview.ListViewItem;
 import com.qthekan.util.qlog;
 import com.qthekan.util.qutil;
 
@@ -37,7 +36,7 @@ import javax.net.ssl.HttpsURLConnection;
 public class RadarActivity extends AppCompatActivity {
 
     private PokeDict mPokeDict;
-    private ListView mListViewPokeSelect;
+    public static ListView mListViewPoke;
     private EditText mEtCP;
     private EditText mEtIV;
     private EditText mEtLV;
@@ -48,7 +47,7 @@ public class RadarActivity extends AppCompatActivity {
      */
     private void initView()
     {
-        mListViewPokeSelect = findViewById(R.id.listViewPoke);
+        mListViewPoke = findViewById(R.id.listViewPoke);
 
         mEtCP = findViewById(R.id.etMinCP);
         mEtIV = findViewById(R.id.etMinIV);
@@ -67,9 +66,8 @@ public class RadarActivity extends AppCompatActivity {
         //===========================================================
         // draw List View
         //===========================================================
-        //ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, mPokeDict.mPokeList);
         CustomAdapter adapter = new CustomAdapter();
-        mListViewPokeSelect.setAdapter(adapter);
+        mListViewPoke.setAdapter(adapter);
 
         for(Poke p: PokeDict.mPokeList)
         {
@@ -107,7 +105,7 @@ public class RadarActivity extends AppCompatActivity {
             Poke p = mPokeDict.mPokeList.get(i);
             if(p.mFlag)
             {
-                mListViewPokeSelect.setItemChecked(i, true);
+                mListViewPoke.setItemChecked(i, true);
             }
         }
     }
@@ -131,7 +129,7 @@ public class RadarActivity extends AppCompatActivity {
     public void onClear(View v)
     {
         qlog.i("start");
-        mListViewPokeSelect.clearChoices();
+        mListViewPoke.clearChoices();
         mEtCP.setText(null);
         mEtIV.setText(null);
         mEtLV.setText(null);
@@ -184,7 +182,7 @@ public class RadarActivity extends AppCompatActivity {
     {
         mSelectedPokeIDs = "";
 
-        SparseBooleanArray booleanArray = mListViewPokeSelect.getCheckedItemPositions();
+        SparseBooleanArray booleanArray = mListViewPoke.getCheckedItemPositions();
 
         for(int i = 0; i < PokeDict.mPokeList.size() ; i++)
         {
@@ -404,7 +402,7 @@ public class RadarActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = mAppData.edit();
         editor.clear();
 
-        SparseBooleanArray booleanArray = mListViewPokeSelect.getCheckedItemPositions();
+        SparseBooleanArray booleanArray = mListViewPoke.getCheckedItemPositions();
         for(int i = 0; i < PokeDict.mPokeList.size() ; i++)
         {
             if( booleanArray.get(i) )
@@ -426,12 +424,12 @@ public class RadarActivity extends AppCompatActivity {
 
     private void loadUserInput()
     {
-        //qlog.i("===================================\n" + mListViewPokeSelect.getCount());
-        //for(int i = 0 ; i < mListViewPokeSelect.getCount() ; i++)
+        //qlog.i("===================================\n" + mListViewPoke.getCount());
+        //for(int i = 0 ; i < mListViewPoke.getCount() ; i++)
         for(int i = 0 ; i < PokeDict.mPokeList.size() ; i++)
         {
             boolean flag = mAppData.getBoolean(i + "", false);
-            mListViewPokeSelect.setItemChecked(i, flag);
+            mListViewPoke.setItemChecked(i, flag);
             qlog.i("load id:" + i);
         }
 
