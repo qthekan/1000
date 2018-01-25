@@ -2,12 +2,14 @@ package com.qthekan.qhere.radar;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseBooleanArray;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -17,11 +19,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.qthekan.qhere.MainActivity;
 import com.qthekan.qhere.R;
+import com.qthekan.qhere.radar.listview.CustomAdapter;
+import com.qthekan.qhere.radar.listview.ListViewItem;
 import com.qthekan.util.qlog;
 import com.qthekan.util.qutil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -62,16 +67,35 @@ public class RadarActivity extends AppCompatActivity {
         //===========================================================
         // draw List View
         //===========================================================
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, mPokeDict.mPokeList);
+        //ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, mPokeDict.mPokeList);
+        CustomAdapter adapter = new CustomAdapter();
         mListViewPokeSelect.setAdapter(adapter);
 
+        for(Poke p: PokeDict.mPokeList)
+        {
+            String id = String.format("%03d", p.mID);
+            AssetManager assetManager = getAssets();
+            InputStream is = null;
+            try {
+                is = assetManager.open("poke_img/" + id + ".png");
+            }
+            catch (IOException e) {
+                try {
+                    is = assetManager.open("poke_img/unknown.png");
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+
+            Bitmap bitmap = BitmapFactory.decodeStream(is);
+            adapter.addItem(bitmap, id, p.mName);
+        }
+
+        //===========================================================
+        // load previous user input data
+        //===========================================================
         mAppData = getSharedPreferences("appData", MODE_PRIVATE);
         loadUserInput();
-        //checkListViewByDefault();
-
-        mEtCP.setText(mMinCP + "");
-        mEtIV.setText(mMinIV + "");
-        mEtLV.setText(mMinLV + "");
 
     }
 
@@ -135,6 +159,12 @@ public class RadarActivity extends AppCompatActivity {
 
         getFilterValue();
         getSelectedPokeIDs();
+        if(mSelectedPokeIDs.length() < 1)
+        {
+            qutil.showToast(this, "Select Pokemon Please.");
+            return;
+        }
+
         saveUserInput();
 
         // send search request to server
@@ -379,9 +409,10 @@ public class RadarActivity extends AppCompatActivity {
         {
             if( booleanArray.get(i) )
             {
-                // poke id start with 1
-                // then, mID - 1
-                editor.putBoolean(PokeDict.mPokeList.get(i).mID - 1 + "", true);
+                // poke id start with 1. then, mID - 1
+                String id = PokeDict.mPokeList.get(i).mID - 1 + "";
+                editor.putBoolean(id, true);
+                qlog.i("save id:" + id);
             }
         }
 
@@ -395,10 +426,13 @@ public class RadarActivity extends AppCompatActivity {
 
     private void loadUserInput()
     {
-        for(int i = 0 ; i < mListViewPokeSelect.getCount() ; i++)
+        //qlog.i("===================================\n" + mListViewPokeSelect.getCount());
+        //for(int i = 0 ; i < mListViewPokeSelect.getCount() ; i++)
+        for(int i = 0 ; i < PokeDict.mPokeList.size() ; i++)
         {
             boolean flag = mAppData.getBoolean(i + "", false);
             mListViewPokeSelect.setItemChecked(i, flag);
+            qlog.i("load id:" + i);
         }
 
         mMinCP = mAppData.getInt("cp", 0);
