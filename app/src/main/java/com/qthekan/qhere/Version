@@ -1,6 +1,11 @@
 - fix : bug fix
 - modify : just modify function
 
+v2.3 20180126
+    - fix minCP, IV, LV print text when load data
+    - resize marker
+    - resize scrollbar
+
 v2.2 20180125
     - add poke image to list view
     - modify google map marker image after search

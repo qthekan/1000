@@ -436,6 +436,10 @@ public class RadarActivity extends AppCompatActivity {
         mMinCP = mAppData.getInt("cp", 0);
         mMinIV = mAppData.getInt("iv", 0);
         mMinLV = mAppData.getInt("lv", 0);
+
+        mEtCP.setText(mMinCP + "");
+        mEtIV.setText(mMinIV + "");
+        mEtLV.setText(mMinLV + "");
     }
 
 }

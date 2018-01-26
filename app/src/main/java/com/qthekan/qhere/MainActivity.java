@@ -406,7 +406,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 .title(title).snippet(snippet);
 
         Bitmap bitmap = ((CustomAdapter)RadarActivity.mListViewPoke.getAdapter()).getItemById(id).image;
-        mo.icon( BitmapDescriptorFactory.fromBitmap(bitmap));
+        mo.icon( BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, 130, 130, false)) );
 
         mMap.addMarker(mo);
 
