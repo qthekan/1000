@@ -12,6 +12,8 @@ import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -41,6 +43,9 @@ public class RadarActivity extends AppCompatActivity {
     private EditText mEtIV;
     private EditText mEtLV;
 
+    private RadioGroup mRadioGroup;
+    private RadioButton mRbSeoul, mRbNewYork, mRbLondon;
+
 
     /**
      * set member variables relative with view
@@ -52,6 +57,11 @@ public class RadarActivity extends AppCompatActivity {
         mEtCP = findViewById(R.id.etMinCP);
         mEtIV = findViewById(R.id.etMinIV);
         mEtLV = findViewById(R.id.etMinLv);
+
+        mRadioGroup = findViewById(R.id.rgRegion);
+        mRbSeoul = findViewById(R.id.rbSeoul);
+        mRbLondon = findViewById(R.id.rbLondon);
+        mRbNewYork = findViewById(R.id.rbNewYork);
     }
 
 
@@ -169,7 +179,18 @@ public class RadarActivity extends AppCompatActivity {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                sendHttpReq(mSelectedPokeIDs);
+                String site = "https://seoulpokemap.com";
+
+                if( mRbLondon.isChecked() )
+                {
+                    site = "https://londonpogomap.com";
+                }
+                else if( mRbNewYork.isChecked() )
+                {
+                    site = "https://nycpokemap.com";
+                }
+
+                sendHttpReq(site, mSelectedPokeIDs);
 
                 responseJsonToObject();
             }
@@ -217,12 +238,12 @@ public class RadarActivity extends AppCompatActivity {
      * @param ids : Poke ID list (ex: 3,6,9,59,65);
      */
     private String mJsonResponse = "";
-    private void sendHttpReq(String ids)
+    private void sendHttpReq(String site, String ids)
     {
         try {
             getCookies();
 
-            String cmd = "https://seoulpokemap.com/query2.php?since=0&mons=" + ids;
+            String cmd = site + "/query2.php?since=0&mons=" + ids;
             URL url = new URL(cmd);
             qlog.i("url:" + cmd);
 
@@ -326,7 +347,7 @@ public class RadarActivity extends AppCompatActivity {
             @Override
             public void run() {
                 MainActivity.getIns().invisibleSubMenu();
-                MainActivity.getIns().drawPokeListInMap();
+                MainActivity.getIns().drawPokeListInMap( getCheckedSite() );
             }
         });
 
@@ -384,6 +405,28 @@ public class RadarActivity extends AppCompatActivity {
 
 
     //===============================================================
+    // site (nation, region)
+    //===============================================================
+    public static final int mSEOUL = 0;
+    public static final int mNEWYORK = 1;
+    public static final int mRONDON = 2;
+
+    private int getCheckedSite()
+    {
+        if( mRbNewYork.isChecked() )
+        {
+            return mNEWYORK;
+        }
+        else if( mRbLondon.isChecked() )
+        {
+            return mRONDON;
+        }
+
+        return mSEOUL;
+    }
+
+
+    //===============================================================
     // change activity
     //===============================================================
     public void goMainActivity()
@@ -402,6 +445,9 @@ public class RadarActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = mAppData.edit();
         editor.clear();
 
+        //-----------------------------------------------------------
+        // list view info
+        //-----------------------------------------------------------
         SparseBooleanArray booleanArray = mListViewPoke.getCheckedItemPositions();
         for(int i = 0; i < PokeDict.mPokeList.size() ; i++)
         {
@@ -414,9 +460,17 @@ public class RadarActivity extends AppCompatActivity {
             }
         }
 
+        //-----------------------------------------------------------
+        // edit text info
+        //-----------------------------------------------------------
         editor.putInt("cp", mMinCP);
         editor.putInt("iv", mMinIV);
         editor.putInt("lv", mMinLV);
+
+        //-----------------------------------------------------------
+        // radio button info
+        //-----------------------------------------------------------
+        editor.putInt("site", getCheckedSite() );
 
         editor.commit();
     }
@@ -424,8 +478,9 @@ public class RadarActivity extends AppCompatActivity {
 
     private void loadUserInput()
     {
-        //qlog.i("===================================\n" + mListViewPoke.getCount());
-        //for(int i = 0 ; i < mListViewPoke.getCount() ; i++)
+        //-----------------------------------------------------------
+        // list view info
+        //-----------------------------------------------------------
         for(int i = 0 ; i < PokeDict.mPokeList.size() ; i++)
         {
             boolean flag = mAppData.getBoolean(i + "", false);
@@ -433,6 +488,9 @@ public class RadarActivity extends AppCompatActivity {
             qlog.i("load id:" + i);
         }
 
+        //-----------------------------------------------------------
+        // edit text info
+        //-----------------------------------------------------------
         mMinCP = mAppData.getInt("cp", 0);
         mMinIV = mAppData.getInt("iv", 0);
         mMinLV = mAppData.getInt("lv", 0);
@@ -440,6 +498,13 @@ public class RadarActivity extends AppCompatActivity {
         mEtCP.setText(mMinCP + "");
         mEtIV.setText(mMinIV + "");
         mEtLV.setText(mMinLV + "");
+
+        //-----------------------------------------------------------
+        // radio button info
+        //-----------------------------------------------------------
+        RadioButton radio = (RadioButton) mRadioGroup.getChildAt( mAppData.getInt("site", 0) );
+        radio.toggle();
+
     }
 
 }

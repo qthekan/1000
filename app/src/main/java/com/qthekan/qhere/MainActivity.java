@@ -609,7 +609,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    public void drawPokeListInMap()
+    /**
+     *
+     * @param site : nation, region, site ...
+     */
+    public void drawPokeListInMap(int site)
     {
         mMap.clear();
 
@@ -623,6 +627,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         LatLng camera = new LatLng(37.521938, 126.981117);
+        if(site == RadarActivity.mNEWYORK)
+        {
+            camera = new LatLng(40.695842, -73.946729);
+        }
+        else if(site == RadarActivity.mRONDON)
+        {
+            camera = new LatLng(51.513818, -0.115680);
+        }
+
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 10));
     }
 

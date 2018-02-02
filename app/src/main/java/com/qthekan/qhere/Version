@@ -1,6 +1,10 @@
 - fix : bug fix
 - modify : just modify function
 
+
+v2.4 20180202
+    - radar site : NewYork, London, Seoul
+
 v2.3 20180126
     - fix minCP, IV, LV print text when load data
     - resize marker
