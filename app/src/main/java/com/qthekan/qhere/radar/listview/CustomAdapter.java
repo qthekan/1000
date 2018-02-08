@@ -1,7 +1,9 @@
 package com.qthekan.qhere.radar.listview;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,10 +47,6 @@ public class CustomAdapter extends BaseAdapter
             convertView = inflater.inflate(R.layout.listview_item, parent, false);
         }
 
-        // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
-        ImageView iconImageView = (ImageView) convertView.findViewById(R.id.imageViewItem) ;
-        TextView textTextView = (TextView) convertView.findViewById(R.id.textViewItem) ;
-
         ListViewItem item = mItemList.get(position);
 
         ImageView imageView = convertView.findViewById(R.id.imageViewItem);
@@ -56,6 +54,22 @@ public class CustomAdapter extends BaseAdapter
 
         TextView textView = convertView.findViewById(R.id.textViewItem);
         textView.setText(item.id + "  " + item.name);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String strID = ((TextView)view).getText().toString().substring(0,3);
+                int id = Integer.valueOf( strID );
+                //ListViewItem item = mItemList.get(id);
+                ListViewItem item = getItemById(id);
+
+                String url = "https://pokemon.gameinfo.io/en/pokemon/" + item.id + "-" + item.name;
+                qlog.d(url);
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("https://pokemon.gameinfo.io/en/pokemon/" + item.id + "-" + item.name));
+                view.getContext().startActivity(intent);
+            }
+        });
 
         return convertView;
     }
@@ -87,6 +101,11 @@ public class CustomAdapter extends BaseAdapter
     }
 
 
+    /**
+     *
+     * @param id : pokemon id (num)
+     * @return
+     */
     public ListViewItem getItemById(int id)
     {
         for(ListViewItem i : mItemList)

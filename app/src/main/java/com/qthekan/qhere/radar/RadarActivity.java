@@ -59,6 +59,13 @@ public class RadarActivity extends AppCompatActivity {
         mEtLV = findViewById(R.id.etMinLv);
 
         mRadioGroup = findViewById(R.id.rgRegion);
+        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                qutil.showToast(getApplicationContext(), "Warning!! \nWhen move between countries, more than 3 hours of rest is required.");
+            }
+        });
+
         mRbSeoul = findViewById(R.id.rbSeoul);
         mRbLondon = findViewById(R.id.rbLondon);
         mRbNewYork = findViewById(R.id.rbNewYork);

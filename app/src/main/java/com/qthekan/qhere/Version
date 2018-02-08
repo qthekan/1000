@@ -2,6 +2,13 @@
 - modify : just modify function
 
 
+v2.5 20180208
+    - add warning when change site
+    - modify default poke list
+    - add radar result count limit 100
+    - add image
+    - add poke info
+
 v2.4 20180202
     - radar site : NewYork, London, Seoul
 

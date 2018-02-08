@@ -613,9 +613,22 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      *
      * @param site : nation, region, site ...
      */
+    public static final int mLIST_POKE_MAX = 100;
     public void drawPokeListInMap(int site)
     {
         mMap.clear();
+
+        qlog.i("drawPokeListInMap() mListPoke.size(): " + mListPoke.size());
+        if(mListPoke.size() > mLIST_POKE_MAX)
+        {
+            qutil.showToast(this, "Too many result. Will show " + mLIST_POKE_MAX + " limit.");
+
+            for(int i = mListPoke.size() - 1 ; i > mLIST_POKE_MAX ; i--)
+            {
+                qlog.i("drawPokeListInMap() delete index : " + i);
+                mListPoke.remove(i);
+            }
+        }
 
         for(Poke p : mListPoke)
         {

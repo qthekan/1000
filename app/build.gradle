@@ -4,10 +4,10 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.qthekan.qhere"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 26
-        versionCode 24
-        versionName "2.4"
+        versionCode 25
+        versionName "2.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

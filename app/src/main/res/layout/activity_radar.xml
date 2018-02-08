@@ -174,7 +174,7 @@
             android:fastScrollAlwaysVisible="true"
             android:fastScrollEnabled="true"
             android:scrollbarStyle="outsideInset"
-            android:scrollbarSize="30dp"
+            android:scrollbarSize="20dp"
             android:scrollbars="vertical" />
 
     </LinearLayout>
