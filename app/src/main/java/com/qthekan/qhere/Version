@@ -2,6 +2,11 @@
 - modify : just modify function
 
 
+v2.6 20180220
+    - add IV100 site
+    - add SelectAll button
+    - add Popup to show search progressing
+
 v2.5 20180208
     - add warning when change site
     - modify default poke list

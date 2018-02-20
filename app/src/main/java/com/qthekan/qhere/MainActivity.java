@@ -37,13 +37,11 @@ import com.qthekan.qhere.joystick.JoystickService;
 import com.qthekan.qhere.radar.Poke;
 import com.qthekan.qhere.radar.RadarActivity;
 import com.qthekan.qhere.radar.listview.CustomAdapter;
-import com.qthekan.qhere.radar.listview.ListViewItem;
 import com.qthekan.util.qBackPressExitApp;
 import com.qthekan.util.qlog;
 import com.qthekan.util.qutil;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
@@ -606,6 +604,16 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     {
         Intent intent = new Intent(this, RadarActivity.class);
         startActivity(intent);
+    }
+
+
+    public void onGoIv100(View view)
+    {
+        String url = "https://pokedex100.com/";
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        view.getContext().startActivity(intent);
     }
 
 

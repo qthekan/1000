@@ -21,6 +21,14 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btnAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="onAll"
+                android:text="All" />
+
+            <Button
                 android:id="@+id/btnClear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -178,4 +186,18 @@
             android:scrollbars="vertical" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvResult"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_overlay_200"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="wait for seconds"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:visibility="invisible" />
+
 </android.support.constraint.ConstraintLayout>

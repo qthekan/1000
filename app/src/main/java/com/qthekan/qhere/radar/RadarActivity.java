@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -46,6 +47,8 @@ public class RadarActivity extends AppCompatActivity {
     private RadioGroup mRadioGroup;
     private RadioButton mRbSeoul, mRbNewYork, mRbLondon;
 
+    private TextView mTvResult;
+
 
     /**
      * set member variables relative with view
@@ -69,6 +72,8 @@ public class RadarActivity extends AppCompatActivity {
         mRbSeoul = findViewById(R.id.rbSeoul);
         mRbLondon = findViewById(R.id.rbLondon);
         mRbNewYork = findViewById(R.id.rbNewYork);
+
+        mTvResult = findViewById(R.id.tvResult);
     }
 
 
@@ -141,11 +146,23 @@ public class RadarActivity extends AppCompatActivity {
 
 
     /**
+     * SelectAll button click event handler
+     */
+    public void onAll(View v)
+    {
+        for(int i = 0 ; i < mListViewPoke.getCount() ; i++)
+        {
+            mListViewPoke.setItemChecked(i, true);
+        }
+    }
+
+
+    /**
      * clear button click event handler
      */
     public void onClear(View v)
     {
-        qlog.i("start");
+        qlog.i("Clear");
         mListViewPoke.clearChoices();
         mEtCP.setText(null);
         mEtIV.setText(null);
@@ -158,7 +175,7 @@ public class RadarActivity extends AppCompatActivity {
      */
     public void onDefault(View v)
     {
-        qlog.i("start");
+        qlog.i("Default");
 
         onClear(null);
         checkListViewByDefault();
@@ -170,8 +187,9 @@ public class RadarActivity extends AppCompatActivity {
      */
     public void onSearch(View v)
     {
-        qlog.i("onSearch() start");
+        qlog.i("Search");
 
+        mTvResult.setVisibility(View.VISIBLE);
         getFilterValue();
         getSelectedPokeIDs();
         if(mSelectedPokeIDs.length() < 1)
@@ -302,8 +320,17 @@ public class RadarActivity extends AppCompatActivity {
         JsonArray pokeList = jsonObject.get("pokemons").getAsJsonArray();
         qlog.i("pokeList.size():" + pokeList.size() );
 
+        final int total = pokeList.size();
         for(int i = 0 ; i < pokeList.size() ; i++)
         {
+            final int index = i;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mTvResult.setText( index + " / " + total );
+                }
+            });
+
             JsonElement element = pokeList.get(i);
             JsonObject o = element.getAsJsonObject();
 
@@ -353,6 +380,7 @@ public class RadarActivity extends AppCompatActivity {
         MainActivity.getIns().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                mTvResult.setVisibility(View.INVISIBLE);
                 MainActivity.getIns().invisibleSubMenu();
                 MainActivity.getIns().drawPokeListInMap( getCheckedSite() );
             }
