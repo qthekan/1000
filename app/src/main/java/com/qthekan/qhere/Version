@@ -1,6 +1,8 @@
 - fix : bug fix
 - modify : just modify function
 
+v2.7 20180221
+    - Added lat,lng copy when marker info window is clicked.
 
 v2.6 20180220
     - add IV100 site

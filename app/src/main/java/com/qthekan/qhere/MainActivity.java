@@ -3,6 +3,8 @@ package com.qthekan.qhere;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -442,7 +444,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     GoogleMap.OnInfoWindowClickListener infoWindowClickListener = new GoogleMap.OnInfoWindowClickListener() {
         @Override
         public void onInfoWindowClick(Marker marker) {
-            qlog.i("click marker info window");
+            String latlng = marker.getPosition().latitude + "," + marker.getPosition().longitude;
+            qutil.showToast(ins, "copied " + latlng);
+
+            ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+            ClipData clipData = ClipData.newPlainText("latlng", latlng);
+            clipboardManager.setPrimaryClip( clipData );
         }
     };
 
