@@ -32,4 +32,7 @@
     <color name="black">#000000</color>
     <color name="black_overlay_200">#c8000000</color>
 
+    <color name="alpha_full">#00000000</color>
+    <color name="black_overlay_150">#96000000</color>
+    <color name="blue_light_150">#960090ff</color>
 </resources>

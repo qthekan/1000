@@ -17,12 +17,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <service
-            android:name=".joystick.JoystickService"
-            android:enabled="true"
-            android:permission="android.permission.SYSTEM_ALERT_WINDOW">
-        </service>
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -41,6 +35,18 @@
             android:name=".radar.RadarActivity"
             android:label="Poke Radar Setting (Beta Test)">
         </activity>
+
+        <service
+            android:name=".joystick.JoystickService"
+            android:enabled="true"
+            android:permission="android.permission.SYSTEM_ALERT_WINDOW">
+        </service>
+
+        <service
+            android:permission="android.permission.SYSTEM_ALERT_WINDOW"
+            android:enabled="true"
+            android:name=".talk.ChatService">
+        </service>
     </application>
 
 </manifest>

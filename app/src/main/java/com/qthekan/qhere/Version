@@ -1,6 +1,9 @@
 - fix : bug fix
 - modify : just modify function
 
+v2.8 20180316
+    - Added chatting
+
 v2.7 20180221
     - Added lat,lng copy when marker info window is clicked.
 

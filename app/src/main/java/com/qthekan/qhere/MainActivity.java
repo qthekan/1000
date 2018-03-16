@@ -39,6 +39,7 @@ import com.qthekan.qhere.joystick.JoystickService;
 import com.qthekan.qhere.radar.Poke;
 import com.qthekan.qhere.radar.RadarActivity;
 import com.qthekan.qhere.radar.listview.CustomAdapter;
+import com.qthekan.qhere.talk.ChatService;
 import com.qthekan.util.qBackPressExitApp;
 import com.qthekan.util.qlog;
 import com.qthekan.util.qutil;
@@ -76,6 +77,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         mLayoutSubMenu = findViewById(R.id.viewSubMenu);
         mLayoutStop = findViewById(R.id.viewStop);
+
+        initChatService();
     }
 
 
@@ -676,4 +679,69 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+
+    //===============================================================
+    // chat service
+    //===============================================================
+    private Button mBtnTalk;
+
+
+    private void initChatService()
+    {
+        mBtnTalk = findViewById(R.id.btnTalk);
+    }
+
+
+    public void onJoin(View v)
+    {
+        mAds.showInterAds();
+        startChatService();
+    }
+
+
+    private void startChatService()
+    {
+        Log.d("startChatService()", "start");
+        mBtnTalk.setEnabled(false);
+
+        // start service
+        String roomname = "Pokemon";
+
+        int num = randomRange(1, 1000);
+        String nickname = "player" + num;
+
+        Intent intent = new Intent(this, ChatService.class);
+        intent.putExtra("NickName", nickname);
+        intent.putExtra("RoomName", roomname);
+        startService(intent);
+
+        // home 버튼 클릭한 것 처럼 activity 숨기기
+//        Intent intentHome = new Intent();
+//        intentHome.setAction("android.intent.action.MAIN");
+//        intentHome.addCategory("android.intent.category.HOME");
+//        intentHome.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+//                | Intent.FLAG_ACTIVITY_FORWARD_RESULT
+//                | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP
+//                | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+//        startActivity(intentHome);
+    }
+
+
+    // 지정된 범위의 정수 1개를 램덤하게 반환하는 메서드
+    // n1 은 "하한값", n2 는 상한값
+    public static int randomRange(int n1, int n2)
+    {
+        return (int) (Math.random() * (n2 - n1 + 1)) + n1;
+    }
+
+
+    public void stopChatService()
+    {
+        Log.i("stopChatService()", "stop");
+        mBtnTalk.setEnabled(true);
+
+        // stop service
+        Intent intent = new Intent(this, ChatService.class);
+        stopService(intent);
+    }
 }

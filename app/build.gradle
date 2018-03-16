@@ -6,8 +6,8 @@ android {
         applicationId "com.qthekan.qhere"
         minSdkVersion 24
         targetSdkVersion 26
-        versionCode 27
-        versionName "2.7"
+        versionCode 28
+        versionName "2.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -36,6 +36,7 @@ dependencies {
     // hankyuduk
     implementation 'com.google.android.gms:play-services-location:11.6.2'
     compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.google.firebase:firebase-database:11.6.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
