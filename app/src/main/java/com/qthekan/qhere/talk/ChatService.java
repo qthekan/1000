@@ -88,15 +88,16 @@ public class ChatService extends Service
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else {
-            LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_PHONE;
+            //LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_PHONE;
+            LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
         }
 
         mWinMgrParam = new WindowManager.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,    // width
                 ViewGroup.LayoutParams.WRAP_CONTENT,    // height
                 LAYOUT_FLAG,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,  // layout 이외의 영역은 터치가능. 뒤로가기 이벤트도 팝업창이 먹음. edittext 키보드올라옴.
-                //WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,  // window manager layout 이외의 영역은 터치 가능. 화면 뒤의 어플에서 뒤로가기 이벤트 처리. edit text 에 키보드가 안올라옴.
+                //WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,  // layout 이외의 영역은 터치가능. 뒤로가기 이벤트도 팝업창이 먹음. edittext 키보드올라옴.
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,  // window manager layout 이외의 영역은 터치 가능. 화면 뒤의 어플에서 뒤로가기 이벤트 처리. edit text 에 키보드가 안올라옴.
                 //WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,  // 팝업창에 터치가 안통하고, 아래 어플에 터치가 통과됨.
                 PixelFormat.TRANSLUCENT);
 
@@ -155,6 +156,33 @@ public class ChatService extends Service
             }
         });
 
+        /**
+         * edit text 에 포커스가 있을 때만 이벤트 처리하도록 설정.
+         * 왜냐하면 기본적으로 home, back 이벤트는 백그라운드 앱에 전달하기 위함.
+         */
+        mEtUserInput.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                mWinMgrParam.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;  // 기본값으로 원복
+                mWindowMgr.updateViewLayout(mView, mWinMgrParam);
+                return false;
+            }
+        });
+
+        mEtUserInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b)
+                {
+                    setEventOnEditText();
+                }
+                else
+                {
+                    unsetEventOnEditText();
+                }
+            }
+        });
+
     }
 
 
@@ -203,7 +231,7 @@ public class ChatService extends Service
         mTvRoomName.setText(mRoomName);
 
         mFireMgr = new FirebaseMgr();
-        mFireMgr.connect();
+        mFireMgr.connect(mRoomName);
         mFireMgr.select(mRoomName);
 
         return START_STICKY;
@@ -240,6 +268,9 @@ public class ChatService extends Service
     }
 
 
+    /**
+     * popup window 를 최소화하여 버튼만 보여주고 이동할 수 있도록 한다.
+     */
     public void hideChatWindow()
     {
         mLayoutChatWindow.setVisibility(View.INVISIBLE);
@@ -248,11 +279,13 @@ public class ChatService extends Service
         mWinMgrParam.width = mBtnShow.getWidth();
         mWinMgrParam.height = mBtnShow.getHeight();
 
-        mWinMgrParam.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;  // back key 이벤트를 다른 어플에서 처리
-        mWindowMgr.updateViewLayout(mView, mWinMgrParam);
+        unsetEventOnEditText();
     }
 
 
+    /**
+     * 채팅 내용을 볼 수 있도록 popup window 를 크게한다.
+     */
     public void showChatWindow()
     {
         mLayoutChatWindow.setVisibility(View.VISIBLE);
@@ -261,7 +294,27 @@ public class ChatService extends Service
         mWinMgrParam.width = ViewGroup.LayoutParams.MATCH_PARENT;
         mWinMgrParam.height = ViewGroup.LayoutParams.WRAP_CONTENT;
 
+        setEventOnEditText();
+    }
+
+
+    /**
+     * popup window 에 포커스를 주고 터치 이벤트를 처리하도록 설정.
+     */
+    private void setEventOnEditText()
+    {
         mWinMgrParam.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;  // 기본값으로 원복
         mWindowMgr.updateViewLayout(mView, mWinMgrParam);
     }
+
+
+    /**
+     * popup window 에 포커스를 해제하고 home, back 이벤트를 다른 어플로 전달.
+     */
+    private void unsetEventOnEditText()
+    {
+        mWinMgrParam.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;  // back key 이벤트를 다른 어플에서 처리
+        mWindowMgr.updateViewLayout(mView, mWinMgrParam);
+    }
+
 }

@@ -1,6 +1,13 @@
 - fix : bug fix
 - modify : just modify function
 
+
+v2.9 20180319
+    - Modified delete old message time -> count
+    - Fixed black screen when start pokemonGo during open chat window
+    - Pass the event(BACK, HOME) to under layer app
+    - Copy user touch marker latlng
+
 v2.8 20180316
     - Added chatting
 

@@ -383,7 +383,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mo.position(mNewPosition).title(title);
 
         mMarker = mMap.addMarker(mo);
-        //mMarker.showInfoWindow();
+        mMarker.showInfoWindow();
+
+        // marker info window click listener
+        mMap.setOnInfoWindowClickListener(infoWindowClickListener);
 
         showSubMenu();
     }
@@ -447,7 +450,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     GoogleMap.OnInfoWindowClickListener infoWindowClickListener = new GoogleMap.OnInfoWindowClickListener() {
         @Override
         public void onInfoWindowClick(Marker marker) {
-            String latlng = marker.getPosition().latitude + "," + marker.getPosition().longitude;
+            //String latlng = marker.getPosition().latitude + "," + marker.getPosition().longitude;
+            String latlng = qutil.getDouble(marker.getPosition().latitude, 4) + "," + qutil.getDouble(marker.getPosition().longitude, 4);
             qutil.showToast(ins, "copied " + latlng);
 
             ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -705,7 +709,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mBtnTalk.setEnabled(false);
 
         // start service
-        String roomname = "Pokemon";
+        String roomname = "PokemonGo";
 
         int num = randomRange(1, 1000);
         String nickname = "player" + num;

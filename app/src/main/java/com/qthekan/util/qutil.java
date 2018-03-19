@@ -50,4 +50,11 @@ public class qutil {
         String hourMin = format.format(date);
         return hourMin;
     }
+
+
+    public static double getDouble(double value, int decimalPoint)
+    {
+        String point = "%." + decimalPoint + "f";
+        return Double.parseDouble( String.format(point, value) );
+    }
 }
