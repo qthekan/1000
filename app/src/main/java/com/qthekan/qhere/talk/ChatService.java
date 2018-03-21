@@ -1,6 +1,8 @@
 package com.qthekan.qhere.talk;
 
 import android.app.Service;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
@@ -17,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.qthekan.qhere.MainActivity;
 import com.qthekan.qhere.R;
@@ -127,6 +130,7 @@ public class ChatService extends Service
             @Override
             public void onClick(View view) {
                 Log.i("setEventHandler()", "stop chat service");
+                hideCopyPasteButton();
                 MainActivity.getIns().stopChatService();
             }
         });
@@ -135,7 +139,9 @@ public class ChatService extends Service
             @Override
             public void onClick(View view) {
                 Log.i("setEventHandler()", "hide chat service");
+                hideCopyPasteButton();
                 hideChatWindow();
+
             }
         });
 
@@ -169,6 +175,9 @@ public class ChatService extends Service
             }
         });
 
+        /**
+         * edit text 에 포커스가 없을때는 home, back 이벤트를 다른 어플로 전달하도록 설정
+         */
         mEtUserInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -183,6 +192,122 @@ public class ChatService extends Service
             }
         });
 
+        /**
+         * 길게 눌렀을 때는 copy, paste 동작을 수행할 메뉴를 보여줌
+         */
+        mTvContents.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                showCopyPasteButton((TextView) view);
+                return false;
+            }
+        });
+
+        /**
+         * 짧게 눌렀을 때는 copy, paste 메뉴를 숨김
+         */
+        mTvContents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideCopyPasteButton();
+            }
+        });
+
+        mEtUserInput.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                showCopyPasteButton((TextView) view);
+                return false;
+            }
+        });
+
+        mEtUserInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideCopyPasteButton();
+            }
+        });
+
+    }
+
+
+    /**
+     * 전달받은 뷰에서 선택된 텍스트를 copy, paste 하기위한 버튼을 보여줌
+     */
+    LinearLayout mLayoutMenuCopyPaste = null;
+    private void showCopyPasteButton(final TextView textView)
+    {
+        if(mLayoutMenuCopyPaste != null)
+        {
+            hideCopyPasteButton();
+        }
+
+        // layout
+        mLayoutMenuCopyPaste = new LinearLayout(ins);
+
+        // copy button
+        Button copy = new Button(ins);
+        copy.setText("copy");
+        copy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String selectedString = textView.getText().toString().substring( textView.getSelectionStart(), textView.getSelectionEnd() );
+                Toast.makeText(ins, selectedString, Toast.LENGTH_LONG).show();
+
+                ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                cm.setPrimaryClip(ClipData.newPlainText("text", selectedString));
+                hideCopyPasteButton();
+            }
+
+        });
+        mLayoutMenuCopyPaste.addView(copy);
+
+        // paste button
+        if(textView.getId() == mEtUserInput.getId())
+        {
+            Button paste = new Button(ins);
+            paste.setText("paste");
+            paste.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                    textView.append(cm.getPrimaryClip().getItemAt(0).getText());
+                    hideCopyPasteButton();
+                }
+            });
+            mLayoutMenuCopyPaste.addView(paste);
+        }
+
+        // layout
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                PixelFormat.TRANSLUCENT);
+        mWindowMgr.addView(mLayoutMenuCopyPaste, params);
+    }
+
+
+    /**
+     * copy, paste 버튼을 숨김
+     * 최대한 자연스럽게 동작하도록 textview를 짧게 터치시, copy | paste | hide | exit 버튼 클릭시 호출해준다.
+     */
+    private void hideCopyPasteButton()
+    {
+        try
+        {
+            if(mLayoutMenuCopyPaste == null)
+            {
+                return;
+            }
+            mWindowMgr.removeView(mLayoutMenuCopyPaste);
+            mLayoutMenuCopyPaste = null;
+        }
+        catch (Exception e)
+        {
+            Log.e("hideCopyPasteButton()", e.toString() );
+        }
     }
 
 
