@@ -2,6 +2,9 @@
 - modify : just modify function
 
 
+v3.1 20180331
+    - Modified joystick display problem in Android 8.x
+
 v3.0 20180321
     - Added copy and paste in chatting service
 
