@@ -63,18 +63,20 @@
                     android:id="@+id/btnGoRadar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="onGoRadarActivity"
                     android:background="@color/pink_light"
-                    android:text="Radar" />
+                    android:onClick="onGoRadarActivity"
+                    android:text="Radar"
+                    android:visibility="invisible" />
 
                 <Button
                     android:id="@+id/btnGoIv100"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:onClick="onGoIv100"
-                    android:background="@color/blue_light"
                     android:layout_marginLeft="10dp"
-                    android:text="Iv100" />
+                    android:background="@color/blue_light"
+                    android:onClick="onGoIv100"
+                    android:text="Iv100"
+                    android:visibility="invisible" />
 
                 <Button
                     android:id="@+id/btnTalk"

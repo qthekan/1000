@@ -2,6 +2,11 @@
 - modify : just modify function
 
 
+v3.1 20180509
+    - Remove radar, 100IV (map server down)
+    - Modify move speed + 1
+    - Modify marker info title only show 4 decimal point
+
 v3.0 20180321
     - Added copy and paste in chatting service
 

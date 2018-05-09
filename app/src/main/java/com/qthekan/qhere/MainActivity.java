@@ -378,7 +378,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             mMarker.remove();
         }
 
-        String title = "Lat:" + mNewPosition.latitude + ", Lng:" + mNewPosition.longitude;
+        //String title = "Lat:" + mNewPosition.latitude + ", Lng:" + mNewPosition.longitude;
+        String title = qutil.getDouble(mNewPosition.latitude, 4) + "," + qutil.getDouble(mNewPosition.longitude, 4);
         MarkerOptions mo = new MarkerOptions();
         mo.position(mNewPosition).title(title);
 

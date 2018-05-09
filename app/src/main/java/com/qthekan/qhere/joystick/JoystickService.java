@@ -28,7 +28,8 @@ public class JoystickService extends Service {
 
     Button mBtnStop;
     SeekBar mSbMovePower;
-    private int mMovePower = 5;
+    //private int mMovePower = 5;
+    private int mMovePower = 6;
 
 
     @Nullable
@@ -211,8 +212,8 @@ public class JoystickService extends Service {
         double lat = MainActivity.getIns().mNewPosition.latitude;
         double lng = MainActivity.getIns().mNewPosition.longitude;
 
-        //double c = CONST * mMovePower;
-        double c = CONST * 5;
+        double c = CONST * mMovePower;
+        //double c = CONST * 5;
         lng += (mX * c); // 가로
         lat += (mY * c); // 세로
 
