@@ -632,6 +632,16 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+    public void onGoDictionary(View view)
+    {
+        String url = "https://pokemon.gameinfo.io/ko";
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        view.getContext().startActivity(intent);
+    }
+
+
     /**
      *
      * @param site : nation, region, site ...

@@ -28,6 +28,7 @@
         <Button
             android:layout_width="@dimen/stick_size"
             android:layout_height="@dimen/stick_size"
+            android:clickable="false"
             android:background="@drawable/bg_stick" />
     </com.qthekan.qhere.joystick.Joystick>
 
