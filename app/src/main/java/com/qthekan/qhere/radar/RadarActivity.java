@@ -260,7 +260,7 @@ public class RadarActivity extends AppCompatActivity {
 
     /**
      *
-     * @param ids : Poke ID list (ex: 3,6,9,59,65);
+     * @param ids : Poke mName list (ex: 3,6,9,59,65);
      */
     private String mJsonResponse = "";
     private void sendHttpReq(String site, String ids)

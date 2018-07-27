@@ -32,8 +32,11 @@
         </activity>
 
         <activity
-            android:name=".radar.RadarActivity"
-            android:label="Poke Radar Setting (Beta Test)">
+            android:name=".radar.RadarActivity">
+        </activity>
+
+        <activity
+            android:name=".Favorite.FavoriteActivity">
         </activity>
 
         <service

@@ -30,7 +30,7 @@ public class JoystickService extends Service {
     Button mBtnStop;
     SeekBar mSbMovePower;
     //private int mMovePower = 5;
-    private int mMovePower = 7;
+    private int mMovePower = 8;
 
 
     @Nullable

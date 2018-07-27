@@ -2,6 +2,12 @@
 - modify : just modify function
 
 
+v4.0 20180727
+    - Add register favorite gps positions (lat,lng)
+     + long click : copy gps lat,lng
+     + swipe item : delete it
+    - Modify automatically remove space string in user input lat,lng
+
 v3.3 20180712
     - Modify move speed + 1
     - Add Poke Dictionary site

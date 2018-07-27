@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.qthekan.qhere.Favorite.FavoriteActivity;
 import com.qthekan.qhere.joystick.JoystickService;
 import com.qthekan.qhere.radar.Poke;
 import com.qthekan.qhere.radar.RadarActivity;
@@ -302,7 +303,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      */
     private int setPosition()
     {
-        String latLng = mEtSearch.getText().toString();
+        String latLng = mEtSearch.getText().toString().replace(" ", "");
         Log.d("mEtSearch", "LatLng: " + latLng);
 
         if(!latLng.matches("^[-0-9].*[,].*[-0-9]$"))
@@ -642,6 +643,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+    public void onFavorite(View view)
+    {
+        Intent intent = new Intent(this, FavoriteActivity.class);
+        startActivity(intent);
+    }
+
+
     /**
      *
      * @param site : nation, region, site ...
@@ -703,7 +711,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void initChatService()
     {
-        mBtnTalk = findViewById(R.id.btnTalk);
+        //mBtnTalk = findViewById(R.id.btnTalk);
     }
 
 

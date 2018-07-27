@@ -87,10 +87,20 @@
                     android:visibility="gone" />
 
                 <Button
-                    android:id="@+id/btnTalk"
+                    android:id="@+id/btnFav"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
+                    android:background="@color/blue_light"
+                    android:onClick="onFavorite"
+                    android:text="favorite" />
+
+                <Button
+                    android:id="@+id/btnTalk2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
                     android:background="@color/green_light"
                     android:onClick="onJoin"
                     android:text="Talk" />
