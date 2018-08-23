@@ -2,6 +2,14 @@
 - modify : just modify function
 
 
+v4.1 20180823
+    - Fixed error talk.
+    - Modify Poke dict site.
+    - Modify Fake GPS mode.
+     + You can use Fake GPS everywhere!!
+    - Add automatically corrects Fake GPS location.
+    - Add move joystick window.
+
 v4.0 20180727
     - Add register favorite gps positions (lat,lng)
      + long click : copy gps lat,lng

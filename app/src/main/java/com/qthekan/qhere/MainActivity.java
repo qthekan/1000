@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Criteria;
+import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
@@ -27,6 +28,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -35,6 +38,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.qthekan.qhere.Favorite.FavoriteActivity;
 import com.qthekan.qhere.joystick.JoystickService;
 import com.qthekan.qhere.radar.Poke;
@@ -129,6 +134,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mToast = Toast.makeText(MainActivity.getIns(), "detected mock location. please wait.", Toast.LENGTH_LONG);
+        mToast.setGravity(Gravity.CENTER, 0, 0);
     }
 
 
@@ -480,7 +488,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     {
         if(mMockRunning)
         {
-            qlog.i("move GPS is running. skip show sub menu");
+            //qlog.i("move GPS is running. skip show sub menu");
             return;
         }
 
@@ -635,7 +643,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void onGoDictionary(View view)
     {
-        String url = "https://pokemon.gameinfo.io/ko";
+        String url = "https://pokemon.gameinfo.io/ko/pokemon/list/best-pokemon-by-cp";
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
@@ -711,7 +719,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void initChatService()
     {
-        //mBtnTalk = findViewById(R.id.btnTalk);
+        mBtnTalk = findViewById(R.id.btnTalk);
     }
 
 
@@ -767,4 +775,50 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = new Intent(this, ChatService.class);
         stopService(intent);
     }
+
+
+    //===============================================================
+    // 현재 위치 정보를 구해오는 함수 (포켓몬고와 동일한 방식)
+    //===============================================================
+    private FusedLocationProviderClient mFusedLocationClient;
+    private Location mCurrentLocation;
+    private Toast mToast;
+
+    @SuppressLint("MissingPermission")
+    public Location getCurrentLocation()
+    {
+        OnCompleteListener<Location> mCompleteListener = new OnCompleteListener<Location>()
+        {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+                if( task.isSuccessful() && task.getResult() != null )
+                {
+                    mCurrentLocation = task.getResult();
+                    if( mMock != null ) {
+                        mMock.setCurrentLocation(mCurrentLocation);
+                    }
+//                    qlog.e("provider: " + mCurrentLocation.getProvider()
+//                            + ", lat: " + mCurrentLocation.getLatitude()
+//                            + ", lng: " + mCurrentLocation.getLongitude()
+//                            + ", accuracy: " + mCurrentLocation.getAccuracy() );
+                    if(mCurrentLocation.isFromMockProvider())
+                    {
+                        mToast.show();
+                    }
+                    else
+                    {
+                        mToast.cancel();
+                    }
+                }
+                else
+                {
+                    qlog.e("getCurrentLocation() fail: " + task.getException().getMessage() );
+                }
+            }
+        };
+
+        mFusedLocationClient.getLastLocation().addOnCompleteListener(this, mCompleteListener);
+        return mCurrentLocation;
+    }
+
 }

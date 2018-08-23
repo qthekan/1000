@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -23,14 +24,17 @@ import com.qthekan.util.qlog;
 
 
 public class JoystickService extends Service {
-    WindowManager wm;
+    WindowManager mWinMgr;
     View mView;
     Joystick mJoystick;
+    WindowManager.LayoutParams mParams;
 
     Button mBtnStop;
     SeekBar mSbMovePower;
     //private int mMovePower = 5;
     private int mMovePower = 8;
+
+    public static boolean mIsMoveing = false;
 
 
     @Nullable
@@ -45,7 +49,7 @@ public class JoystickService extends Service {
         super.onCreate();
         LayoutInflater inflate = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+        mWinMgr = (WindowManager) getSystemService(WINDOW_SERVICE);
 
         int winType = 0;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
@@ -57,7 +61,7 @@ public class JoystickService extends Service {
             winType = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         }
 
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+        mParams = new WindowManager.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
 //                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
@@ -67,25 +71,28 @@ public class JoystickService extends Service {
                         |WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
                 PixelFormat.TRANSLUCENT);
 
-        params.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+        //mParams.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+        mParams.gravity = Gravity.RIGHT | Gravity.CENTER;
         mView = inflate.inflate(R.layout.activity_joystick, null);
 
         mJoystick = mView.findViewById(R.id.joystick);
         mJoystick.setJoystickListener(new JoystickListener() {
             @Override
             public void onDown() {
-
+                mIsMoveing = true;
             }
 
             @Override
             public void onDrag(float x, float y, float offset) {
                 //qlog.i("x:" + x + ", y:" + y + ", offset:" + offset);
                 setJoystickValue(x, y, offset);
+                mIsMoveing = true;
             }
 
             @Override
             public void onUp() {
                 setJoystickValue(0, 0, 0);
+                mIsMoveing = false;
             }
         });
 
@@ -124,8 +131,40 @@ public class JoystickService extends Service {
 //            }
 //        });
 
-        wm.addView(mView, params);
+        mWinMgr.addView(mView, mParams);
+
+        mView.setOnTouchListener(mWindowTouchListener);
     }
+
+
+    private float prevX;
+    private float prevY;
+    private View.OnTouchListener mWindowTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent event) {
+            switch (event.getAction())
+            {
+                case MotionEvent.ACTION_DOWN:
+                    prevX = event.getRawX();
+                    prevY = event.getRawY();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    // 이동한 위치에서 처음 위치를 빼서 이동한 거리를 구한다.
+                    float x = event.getRawX() - prevX;
+                    float y = event.getRawY() - prevY;
+
+                    mParams.x -= x; // gravity 가 right 여서 x 좌표가 음수로 떨어짐
+                    mParams.y += y;
+
+                    prevX = event.getRawX();
+                    prevY = event.getRawY();
+
+                    mWinMgr.updateViewLayout(mView, mParams);
+                    break;
+            }
+            return true;
+        }
+    };
 
 
     @Override
@@ -141,12 +180,12 @@ public class JoystickService extends Service {
 
         super.onDestroy();
 
-        if(wm != null) {
+        if(mWinMgr != null) {
             if(mView != null) {
-                wm.removeView(mView);
+                mWinMgr.removeView(mView);
                 mView = null;
             }
-            wm = null;
+            mWinMgr = null;
         }
     }
 
@@ -220,7 +259,7 @@ public class JoystickService extends Service {
     private void moveMockLocation()
     {
         //qlog.i("x:" + mX + ", y:" + mY + ", offset:" + mOffset);
-        Log.i("moveMockLocation()", "x:" + mX + ", y:" + mY + ", offset:" + mOffset);
+        //Log.i("moveMockLocation()", "x:" + mX + ", y:" + mY + ", offset:" + mOffset);
         double lat = MainActivity.getIns().mNewPosition.latitude;
         double lng = MainActivity.getIns().mNewPosition.longitude;
 

@@ -3,6 +3,9 @@ package com.qthekan.util;
 
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class qlog
 {
     public static void e(String log)
@@ -43,7 +46,14 @@ public class qlog
         String strMethod = stack.getMethodName() + "()";
         String strLine = String.valueOf(stack.getLineNumber());
 
-        String strContents = String.format("%s %s: %s", strMethod, strLine, log);
+        String strContents = String.format("%s %s %s: %s", getCurrTime(), strMethod, strLine, log);
         return strContents;
+    }
+
+
+    private static String getCurrTime()
+    {
+        String now = new SimpleDateFormat("HH:mm:ss.SSS").format(new Date());
+        return now;
     }
 }

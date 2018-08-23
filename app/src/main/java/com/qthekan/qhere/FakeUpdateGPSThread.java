@@ -10,7 +10,7 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 
 class FakeUpdateGPSThread extends Thread {
-    final int TIME_UPDATES_MS = 5000;
+    final int TIME_UPDATES_MS = 15 * 1000;
     public boolean Running;
 
     Context mContext;
@@ -38,7 +38,6 @@ class FakeUpdateGPSThread extends Thread {
                 Running = false;
                 break;
             }
-            //curLat = curLat + 0.01;
         }
         delProvider(locationManager, "network");
         Log.i("zzz", "Ending fake GPSThread");
