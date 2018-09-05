@@ -64,15 +64,12 @@ public class JoystickService extends Service {
         mParams = new WindowManager.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
-//                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
                 winType,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                        //|WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                         |WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
                 PixelFormat.TRANSLUCENT);
 
-        //mParams.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
-        mParams.gravity = Gravity.RIGHT | Gravity.CENTER;
+        mParams.gravity = Gravity.LEFT | Gravity.TOP;
         mView = inflate.inflate(R.layout.activity_joystick, null);
 
         mJoystick = mView.findViewById(R.id.joystick);
@@ -153,7 +150,7 @@ public class JoystickService extends Service {
                     float x = event.getRawX() - prevX;
                     float y = event.getRawY() - prevY;
 
-                    mParams.x -= x; // gravity 가 right 여서 x 좌표가 음수로 떨어짐
+                    mParams.x += x;
                     mParams.y += y;
 
                     prevX = event.getRawX();

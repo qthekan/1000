@@ -65,8 +65,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean mMockRunning;
     private AdsMgr mAds;
 
-    private static final int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 3;
-
 
     public static MainActivity getIns()
     {
@@ -135,8 +133,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        mToast = Toast.makeText(MainActivity.getIns(), "detected mock location. please wait.", Toast.LENGTH_LONG);
-        mToast.setGravity(Gravity.CENTER, 0, 0);
+        mToast = Toast.makeText(MainActivity.getIns(), "detected mock location.\nplease wait.", Toast.LENGTH_LONG);
+        //mToast.setGravity(Gravity.BOTTOM, 0, 0);
     }
 
 
@@ -159,7 +157,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mBack.onBackPressed();
     }
 
-    private void showToast(String msg)
+    public void showToast(String msg)
     {
         Toast t = Toast.makeText(this, msg, Toast.LENGTH_LONG);
         t.setGravity(Gravity.CENTER, 0, 0);
@@ -172,6 +170,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      * @return r == 0 : all permission ok <br>
      *     r < 0 : you need to add permission
      */
+    private final int mPERMISSION_CODE_FINE_LOCATION = 1;
+    private final int mPERMISSION_CODE_COARSE_LOCATION = 2;
+    private static final int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 3;
+    private final int mPERMISSION_CODE_EXTERNAL_STROAGE_WRITE = 4;
     private int checkPermission()
     {
         //===========================================================
@@ -184,7 +186,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             }
             else
             {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, mPERMISSION_CODE_FINE_LOCATION);
             }
         }
         else
@@ -200,7 +202,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             }
             else
             {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, mPERMISSION_CODE_COARSE_LOCATION);
             }
         }
 
@@ -222,6 +224,20 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         {
             showToast("You MUST set MOCK LOCATION!!\n Developer option\n -> Mock location app\n -> qHere");
             return -1;
+        }
+
+        //===========================================================
+        // check permission: external storage
+        //===========================================================
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) )
+            {
+                Log.e("", "user reject permission WRITE_EXTERNAL_STORAGE");
+            }
+            else
+            {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, mPERMISSION_CODE_EXTERNAL_STROAGE_WRITE);
+            }
         }
 
         return 0;
@@ -252,7 +268,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
-            case 1: {
+            case mPERMISSION_CODE_FINE_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -263,13 +279,23 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 break;
             }
-            case 2: {
+            case mPERMISSION_CODE_COARSE_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.d("", "permission on ACCESS_COARSE_LOCATION");
                 } else {
                     Log.d("", "permission off ACCESS_COARSE_LOCATION");
+                }
+                break;
+            }
+            case mPERMISSION_CODE_EXTERNAL_STROAGE_WRITE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("", "permission on EXTERNAL_STROAGE_WRITE");
+                } else {
+                    Log.d("", "permission off EXTERNAL_STROAGE_WRITE");
                 }
                 break;
             }
@@ -812,7 +838,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 else
                 {
-                    qlog.e("getCurrentLocation() fail: " + task.getException().getMessage() );
+                    if(task != null) {
+                        qlog.e("getCurrentLocation() fail: " + task.getException().getMessage());
+                    }
                 }
             }
         };

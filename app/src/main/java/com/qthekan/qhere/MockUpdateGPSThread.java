@@ -2,15 +2,9 @@ package com.qthekan.qhere;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Bundle;
-import android.os.Looper;
 import android.os.SystemClock;
-import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.qthekan.qhere.joystick.JoystickService;
@@ -27,7 +21,7 @@ class MockUpdateGPSThread extends Thread {
     private double mCurrLat = 0;
     private double mCurrLng = 0;
     private float mCurrAcc = 0;
-    private final float mACCURACY_MAX = 1100;
+    private final float mACCURACY_MAX = 1000;
 
     private LocationManager mLocMgr;
 
@@ -40,12 +34,9 @@ class MockUpdateGPSThread extends Thread {
         mContext = c;
 
         mLocMgr = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-        addSetProvider(mLocMgr, "gps");
-        //addSetProvider(mLocMgr,"network");
     }
 
 
-    @SuppressLint("MissingPermission")
     @Override
     public void run() {
         qlog.i("Starting Mock GPSThread");
@@ -56,21 +47,14 @@ class MockUpdateGPSThread extends Thread {
             if( JoystickService.mIsMoveing )
             {
                 moveToMockLocation();
-
-                try {
-                    sleep(300);
-                } catch (InterruptedException e) {
-                    Running = false;
-                    break;
-                }
-
-                continue;
+                //continue;
             }
 
             MainActivity.getIns().getCurrentLocation();
 
             if( mCurrLng != mLatLng.longitude || mCurrLat != mLatLng.latitude || mCurrAcc > mACCURACY_MAX )
             {
+                qlog.e("current: " + mCurrLat + "," + mCurrLng + " destination: " + mLatLng.latitude + "," + mLatLng.longitude + " accuracy: " + mCurrAcc);
                 moveToMockLocation();
             }
 
@@ -85,8 +69,6 @@ class MockUpdateGPSThread extends Thread {
             }
         }
 
-        delProvider(mLocMgr, "gps");
-        //delProvider(mLocMgr, "network");
         qlog.e("Mock GPSThread end");
     }
 
@@ -94,8 +76,12 @@ class MockUpdateGPSThread extends Thread {
     private void moveToMockLocation()
     {
         qlog.e("new lat: " + mLatLng.latitude + ", lng: " + mLatLng.longitude);
+        addSetProvider(mLocMgr, "gps");
+        addSetProvider(mLocMgr,"network");
         setPLocation(mLocMgr, "gps", mLatLng.latitude, mLatLng.longitude);
-        //setPLocation(mLocMgr, "network", mLatLng.latitude, mLatLng.longitude);
+        setPLocation(mLocMgr, "network", mLatLng.latitude, mLatLng.longitude);
+        delProvider(mLocMgr, "gps");
+        delProvider(mLocMgr, "network");
     }
 
 

@@ -23,7 +23,7 @@ import java.util.Comparator;
 
 public class FavAdapter extends BaseAdapter
 {
-    private ArrayList<Data> mItemList = new ArrayList<>();
+    public ArrayList<Data> mItemList = new ArrayList<>();
 
 
     public FavAdapter()

@@ -2,6 +2,10 @@
 - modify : just modify function
 
 
+v4.2 20180905
+    - Modify joystick default position LEFT, TOP
+    - Fixed infinity detected mock location
+
 v4.1 20180823
     - Fixed error talk.
     - Modify Poke dict site.

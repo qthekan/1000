@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.DragEvent;
@@ -15,7 +16,19 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.qthekan.qhere.MainActivity;
 import com.qthekan.qhere.R;
+import com.qthekan.util.qlog;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class FavoriteActivity extends AppCompatActivity
@@ -162,26 +175,85 @@ public class FavoriteActivity extends AppCompatActivity
     // save, load user input data
     //===============================================================
     SharedPreferences mAppData;
+    private String mSaveDirName = "qhere";
+    private String mSaveFileName = "fav.txt";
 
     private void saveLatLng()
     {
-        SharedPreferences.Editor editor = mAppData.edit();
-        editor.clear();
+//        SharedPreferences.Editor editor = mAppData.edit();
+//        editor.clear();
+//
+//        //-----------------------------------------------------------
+//        // list view info
+//        //-----------------------------------------------------------
+//        for(int i = 0 ; i < mAdapter.getCount() ; i++)
+//        {
+//            editor.putString(i+"name", mAdapter.getItem(i).mName);
+//            editor.putString(i+"latlng", mAdapter.getItem(i).mLatLng);
+//        }
+//
+//        editor.commit();
 
-        //-----------------------------------------------------------
-        // list view info
-        //-----------------------------------------------------------
-        for(int i = 0 ; i < mAdapter.getCount() ; i++)
+        if( isExternalStorageWritable() == false )
         {
-            editor.putString(i+"name", mAdapter.getItem(i).mName);
-            editor.putString(i+"latlng", mAdapter.getItem(i).mLatLng);
+            qlog.e("external storage not writable!!");
+            return;
         }
 
-        editor.commit();
+        String strJson = new Gson().toJson( mAdapter.mItemList );
+        qlog.e("strJson" + strJson);
+
+        File f = new File( getSaveDir(), mSaveFileName);
+        try {
+            FileWriter w = new FileWriter(f, false);
+            w.write(strJson);
+            w.close();
+            MainActivity.getIns().showToast("save file:\n" + f.getAbsolutePath() );
+            qlog.e("save success: " + f.getAbsolutePath() );
+        }
+        catch (IOException e) {
+            qlog.e("file write fail: " + e.getMessage() );
+        }
     }
 
 
     private void loadLatLng()
+    {
+        if( isExternalStorageReadable() == false )
+        {
+            qlog.e("external storage not readable!!");
+            return;
+        }
+
+        File f = new File( getSaveDir(), mSaveFileName );
+        if( f.exists() == false )
+        {
+            loadOldVersion();
+            return;
+        }
+
+        String strData = "";
+        try {
+            BufferedReader r = new BufferedReader(new FileReader(f));
+            String line;
+            while( (line = r.readLine()) != null )
+            {
+                strData += line;
+            }
+            qlog.e("strData: " + strData);
+            r.close();
+        }
+        catch (Exception e) {
+            qlog.e("read fail: " + e.getMessage() );
+            return;
+        }
+
+        Gson gson = new Gson();
+        mAdapter.mItemList = gson.fromJson(strData, new TypeToken< ArrayList<Data> >(){}.getType() );
+    }
+
+
+    private void loadOldVersion()
     {
         //-----------------------------------------------------------
         // list view info
@@ -199,6 +271,37 @@ public class FavoriteActivity extends AppCompatActivity
 
             mAdapter.addItem(name, latlng);
         }
+    }
+
+
+    public File getSaveDir()
+    {
+        File f = new File( Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), mSaveDirName);
+        if( !f.mkdirs() )
+        {
+            qlog.e("mkdirs() fail: " + f.getAbsolutePath() );
+        }
+
+        return f;
+    }
+
+
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+
+    public boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
     }
 
 }
