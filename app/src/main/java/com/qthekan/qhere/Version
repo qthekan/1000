@@ -2,6 +2,10 @@
 - modify : just modify function
 
 
+v4.3 20180928
+    - Modify check permission
+    - Modify delete new line char in edit text latlng
+
 v4.2 20180905
     - Modify joystick default position LEFT, TOP
     - Fixed infinity detected mock location

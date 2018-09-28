@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -180,14 +181,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         // check permission: gps
         //===========================================================
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) )
-            {
-                Log.d("", "user reject permission ACCESS_FINE_LOCATION");
-            }
-            else
-            {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, mPERMISSION_CODE_FINE_LOCATION);
-            }
+            qutil.showDialog(this, "Need Permission", "Get GPS location", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    ActivityCompat.requestPermissions(MainActivity.getIns(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, mPERMISSION_CODE_FINE_LOCATION);
+                }
+            }, null);
         }
         else
         {
@@ -196,14 +195,25 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
-            if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION) )
-            {
-                Log.d("", "user reject permission ACCESS_COARSE_LOCATION");
-            }
-            else
-            {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, mPERMISSION_CODE_COARSE_LOCATION);
-            }
+            qutil.showDialog(this, "Need Permission", "Fake GPS location", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    ActivityCompat.requestPermissions(MainActivity.getIns(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, mPERMISSION_CODE_COARSE_LOCATION);
+                }
+            }, null);
+        }
+
+        //===========================================================
+        // check permission: external storage
+        //===========================================================
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+        {
+            qutil.showDialog(this, "Need Permission", "For save favorite as file", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    ActivityCompat.requestPermissions(MainActivity.getIns(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, mPERMISSION_CODE_EXTERNAL_STROAGE_WRITE);
+                }
+            }, null);
         }
 
         //===========================================================
@@ -211,9 +221,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         //===========================================================
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {   // 마시멜로우 이상일 경우
             if (!Settings.canDrawOverlays(this)) {              // 체크
-                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                        Uri.parse("package:" + getPackageName()));
-                startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
+                qutil.showDialog(this, "Need Permission", "For joystick", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                Uri.parse("package:" + getPackageName()));
+                        startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
+                    }
+                }, null);
             }
         }
 
@@ -222,22 +237,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         //===========================================================
         if( !isMockLocationOn() )
         {
-            showToast("You MUST set MOCK LOCATION!!\n Developer option\n -> Mock location app\n -> qHere");
+            qutil.showDialog(this, "Need Set Mock Location App", "설정 -> 개발자옵션 -> 모의위치앱 -> qHere", null, null);
             return -1;
-        }
-
-        //===========================================================
-        // check permission: external storage
-        //===========================================================
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) )
-            {
-                Log.e("", "user reject permission WRITE_EXTERNAL_STORAGE");
-            }
-            else
-            {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, mPERMISSION_CODE_EXTERNAL_STROAGE_WRITE);
-            }
         }
 
         return 0;
@@ -255,11 +256,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             if (!Settings.canDrawOverlays(this)) {
                 // 동의를 얻지 못했을 경우의 처리
                 //Log.d("", "not allowed overlay permission\n\n\n");
-                showToast("You MUST accept the DrawOverys permisstion!!");
+                //showToast("You MUST accept the DrawOverys permisstion!!");
             } else {
                 //Log.d("", "start joystick service\n\n\n");
                 //startService(new Intent(this, JoystickService.class));
-                showToast("NOW, You can move mock GPS!!");
+                //showToast("NOW, You can move mock GPS!!");
             }
         }
     }

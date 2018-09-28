@@ -1,6 +1,10 @@
 package com.qthekan.util;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.view.Gravity;
 import android.widget.Toast;
 
@@ -56,5 +60,29 @@ public class qutil {
     {
         String point = "%." + decimalPoint + "f";
         return Double.parseDouble( String.format(point, value) );
+    }
+
+
+    public static void showDialog(Activity activity, String title, String message, DialogInterface.OnClickListener yes, DialogInterface.OnClickListener no)
+    {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(activity);
+        dialog.setTitle(title).setMessage(message);
+
+        if( yes == null && no == null )
+        {
+            dialog.setPositiveButton("ok", null);
+        }
+
+        if( yes != null )
+        {
+            dialog.setPositiveButton("yes", yes);
+        }
+
+        if( no != null )
+        {
+            dialog.setNegativeButton("no", no);
+        }
+
+        dialog.create().show();
     }
 }
