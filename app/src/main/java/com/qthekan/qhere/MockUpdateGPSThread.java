@@ -13,7 +13,7 @@ import com.qthekan.util.qutil;
 
 
 class MockUpdateGPSThread extends Thread {
-    final int TIME_UPDATES_MS = 1000;
+    final int TIME_UPDATES_MS = 2000;
     public boolean Running;
 
     Context mContext;
@@ -21,7 +21,10 @@ class MockUpdateGPSThread extends Thread {
     private double mCurrLat = 0;
     private double mCurrLng = 0;
     private float mCurrAcc = 0;
+    // 포고에서는 1000 보다 커지면 '신호를 찾을수 없음' 에러 발생.
     private final float mACCURACY_MAX = 1000;
+    // 목표좌표와 현재좌표의 오차 허용범위
+    private final double mErrorRange = 0.0001;
 
     private LocationManager mLocMgr;
 
@@ -34,6 +37,9 @@ class MockUpdateGPSThread extends Thread {
         mContext = c;
 
         mLocMgr = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+
+        addSetProvider(mLocMgr, "gps");
+        addSetProvider(mLocMgr,"network");
     }
 
 
@@ -52,7 +58,9 @@ class MockUpdateGPSThread extends Thread {
 
             MainActivity.getIns().getCurrentLocation();
 
-            if( mCurrLng != mLatLng.longitude || mCurrLat != mLatLng.latitude || mCurrAcc > mACCURACY_MAX )
+            if( Math.abs(mCurrLng - mLatLng.longitude) > mErrorRange
+                    || Math.abs(mCurrLat - mLatLng.latitude) > mErrorRange
+                    || mCurrAcc > mACCURACY_MAX )
             {
                 qlog.e("current: " + mCurrLat + "," + mCurrLng + " destination: " + mLatLng.latitude + "," + mLatLng.longitude + " accuracy: " + mCurrAcc);
                 moveToMockLocation();
@@ -70,18 +78,20 @@ class MockUpdateGPSThread extends Thread {
         }
 
         qlog.e("Mock GPSThread end");
+        delProvider(mLocMgr, "gps");
+        delProvider(mLocMgr, "network");
     }
 
 
     private void moveToMockLocation()
     {
         qlog.e("new lat: " + mLatLng.latitude + ", lng: " + mLatLng.longitude);
-        addSetProvider(mLocMgr, "gps");
-        addSetProvider(mLocMgr,"network");
+        //addSetProvider(mLocMgr, "gps");
+        //addSetProvider(mLocMgr,"network");
         setPLocation(mLocMgr, "gps", mLatLng.latitude, mLatLng.longitude);
         setPLocation(mLocMgr, "network", mLatLng.latitude, mLatLng.longitude);
-        delProvider(mLocMgr, "gps");
-        delProvider(mLocMgr, "network");
+        //delProvider(mLocMgr, "gps");
+        //delProvider(mLocMgr, "network");
     }
 
 

@@ -830,6 +830,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 //                            + ", accuracy: " + mCurrentLocation.getAccuracy() );
                     if(mCurrentLocation.isFromMockProvider())
                     {
+                        mToast.setText(" 가상위치 수행중입니다\n qHere 화면에서 기다려주세요\n " + mCurrentLocation.getLatitude() + "," + mCurrentLocation.getLongitude() );
                         mToast.show();
                     }
                     else

@@ -130,7 +130,7 @@ public class FirebaseMgr {
 
     public void deleteOldDataByCount()
     {
-        int remainDataCount = 100;
+        int remainDataCount = 50;
         int deleteDataCount = mDataCount - remainDataCount;
         Log.i("deleteOldDataByCount()", "deleteDataCount:" + deleteDataCount);
         if(deleteDataCount <= 0)
