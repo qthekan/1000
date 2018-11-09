@@ -653,6 +653,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void onGoRadarActivity(View v)
     {
+        mAds.showInterAds();
         Intent intent = new Intent(this, RadarActivity.class);
         startActivity(intent);
     }
