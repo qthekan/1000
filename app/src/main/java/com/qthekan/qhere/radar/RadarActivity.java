@@ -45,7 +45,7 @@ public class RadarActivity extends AppCompatActivity {
     private EditText mEtLV;
 
     private RadioGroup mRadioGroup;
-    private RadioButton mRbSeoul, mRbNewYork, mRbLondon;
+    private RadioButton mRbSeoul, mRbNewYork, mRbLondon; // 포케맵이 다 다운되어 현재 살아난 싱가폴맵을 서울맵인스턴스에 연결해서 사용.
 
     private TextView mTvResult;
 
@@ -65,7 +65,7 @@ public class RadarActivity extends AppCompatActivity {
         mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                qutil.showToast(getApplicationContext(), "Warning!! \nWhen move between countries, more than 3 hours of rest is required.");
+                qutil.showToast(getApplicationContext(), "Warning!! \nWhen move between countries, more than 2 hours of rest is required.");
             }
         });
 
@@ -182,6 +182,7 @@ public class RadarActivity extends AppCompatActivity {
     }
 
 
+    String mSite = "";
     /**
      * search button click event handler
      */
@@ -204,18 +205,19 @@ public class RadarActivity extends AppCompatActivity {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                String site = "https://seoulpokemap.com";
+                //String site = "https://seoulpokemap.com";
+                mSite = "https://sgpokemap.com";
 
                 if( mRbLondon.isChecked() )
                 {
-                    site = "https://londonpogomap.com";
+                    mSite = "https://londonpogomap.com";
                 }
                 else if( mRbNewYork.isChecked() )
                 {
-                    site = "https://nycpokemap.com";
+                    mSite = "https://nycpokemap.com";
                 }
 
-                sendHttpReq(site, mSelectedPokeIDs);
+                sendHttpReq(mSite, mSelectedPokeIDs);
 
                 responseJsonToObject();
             }
@@ -273,7 +275,7 @@ public class RadarActivity extends AppCompatActivity {
             qlog.i("url:" + cmd);
 
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-            connection.setRequestProperty("Referer", "https://seoulpokemap.com/");
+            connection.setRequestProperty("Referer", mSite);
             connection.setRequestProperty("Cookie", mCookie);
             connection.connect();
 

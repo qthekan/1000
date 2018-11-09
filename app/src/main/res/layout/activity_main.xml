@@ -30,6 +30,8 @@
                 android:ems="10"
                 android:hint="Latitude,Longitude"
                 android:inputType="none"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
                 android:selectAllOnFocus="true" />
 
             <Button
@@ -61,24 +63,24 @@
 
                 <Button
                     android:id="@+id/btnGoRadar"
-                    android:layout_width="wrap_content"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:background="@color/pink_light"
+                    android:background="@color/yellow_light"
                     android:onClick="onGoRadarActivity"
-                    android:text="Radar"
-                    android:visibility="gone" />
+                    android:text="Radar" />
 
                 <Button
                     android:id="@+id/btnGoDictionary"
-                    android:layout_width="wrap_content"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:background="@color/pink_light"
                     android:onClick="onGoDictionary"
                     android:text="Dict" />
 
                 <Button
                     android:id="@+id/btnGoIv100"
-                    android:layout_width="wrap_content"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:background="@color/blue_light"
@@ -88,7 +90,7 @@
 
                 <Button
                     android:id="@+id/btnFav"
-                    android:layout_width="wrap_content"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:background="@color/blue_light"
@@ -97,7 +99,7 @@
 
                 <Button
                     android:id="@+id/btnTalk"
-                    android:layout_width="wrap_content"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"

@@ -715,7 +715,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             addMarker(p.mLat, p.mLng, title, snippet, p.mID);
         }
 
-        LatLng camera = new LatLng(37.521938, 126.981117);
+        //LatLng camera = new LatLng(37.521938, 126.981117);
+        LatLng camera = new LatLng(1.3565, 103.871);
         if(site == RadarActivity.mNEWYORK)
         {
             camera = new LatLng(40.695842, -73.946729);

@@ -2,6 +2,10 @@
 - modify : just modify function
 
 
+v4.5 20181109
+    - Modify left margin in edit text 15dp
+    - Add SG Map
+
 v.4.4 20181015
     - Modify talk count 100 -> 50
     - Modify mock location algorithm

@@ -73,21 +73,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Seoul" />
+                    android:text="Singapore" />
 
                 <RadioButton
                     android:id="@+id/rbNewYork"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="NewYork" />
+                    android:text="NewYork"
+                    android:visibility="gone" />
 
                 <RadioButton
                     android:id="@+id/rbLondon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="London" />
+                    android:text="London"
+                    android:visibility="gone" />
             </RadioGroup>
 
         </LinearLayout>
