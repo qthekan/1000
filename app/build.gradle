@@ -6,8 +6,8 @@ android {
         applicationId "com.qthekan.qhere"
         minSdkVersion 24
         targetSdkVersion 26
-        versionCode 46
-        versionName "4.6"
+        versionCode 47
+        versionName "4.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

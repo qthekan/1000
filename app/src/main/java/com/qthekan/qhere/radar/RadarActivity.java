@@ -141,6 +141,7 @@ public class RadarActivity extends AppCompatActivity {
         initView();
         initViewValue();
 
+        MainActivity.getIns().mAds.showInterAds();
         qutil.showToast(this, "Lv.30 User Olny Correct Data!!");
     }
 

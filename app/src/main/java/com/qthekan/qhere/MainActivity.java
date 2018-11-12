@@ -64,7 +64,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     // mock location is running
     private boolean mMockRunning;
-    private AdsMgr mAds;
+    public AdsMgr mAds;
 
 
     public static MainActivity getIns()
@@ -653,7 +653,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void onGoRadarActivity(View v)
     {
-        mAds.showInterAds();
         Intent intent = new Intent(this, RadarActivity.class);
         startActivity(intent);
     }

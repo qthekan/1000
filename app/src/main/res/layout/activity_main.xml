@@ -63,7 +63,7 @@
 
                 <Button
                     android:id="@+id/btnGoRadar"
-                    android:layout_width="80dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:background="@color/yellow_light"
                     android:onClick="onGoRadarActivity"
@@ -71,18 +71,18 @@
 
                 <Button
                     android:id="@+id/btnGoDictionary"
-                    android:layout_width="80dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="5dp"
                     android:background="@color/pink_light"
                     android:onClick="onGoDictionary"
                     android:text="Dict" />
 
                 <Button
                     android:id="@+id/btnGoIv100"
-                    android:layout_width="80dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="5dp"
                     android:background="@color/blue_light"
                     android:onClick="onGoIv100"
                     android:text="Iv100"
@@ -90,18 +90,18 @@
 
                 <Button
                     android:id="@+id/btnFav"
-                    android:layout_width="80dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="5dp"
                     android:background="@color/blue_light"
                     android:onClick="onFavorite"
                     android:text="favorite" />
 
                 <Button
                     android:id="@+id/btnTalk"
-                    android:layout_width="80dp"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:background="@color/green_light"
                     android:onClick="onJoin"
