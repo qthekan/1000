@@ -47,11 +47,15 @@ import com.qthekan.qhere.radar.Poke;
 import com.qthekan.qhere.radar.RadarActivity;
 import com.qthekan.qhere.radar.listview.CustomAdapter;
 import com.qthekan.qhere.talk.ChatService;
+import com.qthekan.qhere.walk.WalkActivity;
+import com.qthekan.qhere.walk.WalkThread;
 import com.qthekan.util.qBackPressExitApp;
 import com.qthekan.util.qlog;
 import com.qthekan.util.qutil;
 
 import java.util.ArrayList;
+
+import static java.lang.Thread.sleep;
 
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
@@ -63,7 +67,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private EditText mEtSearch;
 
     // mock location is running
-    private boolean mMockRunning;
+    public boolean mMockRunning;
     public AdsMgr mAds;
 
 
@@ -405,7 +409,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     /**
      * mNewPosition 에 설정된 위경도로 marker 를 이동
      */
-    private void moveMarker()
+    public void moveMarker()
     {
         mEtSearch.clearFocus();
 
@@ -557,7 +561,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    private void startJoystick()
+    public void startJoystick()
     {
         Log.d("", "start joystick");
         if( startMock() < 0 )
@@ -589,7 +593,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      * @return r == 0 : ok
      *      r < 0 : fail
      */
-    private int startMock()
+    public int startMock()
     {
         if(checkPermission() < 0)
         {
@@ -600,6 +604,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mAds.showInterAds();
         mMockRunning = true;
 
+        moveMarker();
         moveCamera();
 
         mMock = new MockUpdateGPSThread(this);
@@ -621,6 +626,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             Log.d("", "is not running mock location");
             return;
         }
+
+        stopWalk();
 
         mMockRunning = false;
         mBtnSearch.setClickable(true);
@@ -658,16 +665,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    public void onGoIv100(View view)
-    {
-        String url = "https://pokedex100.com/";
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(url));
-        view.getContext().startActivity(intent);
-    }
-
-
     public void onGoDictionary(View view)
     {
         String url = "https://pokemon.gameinfo.io/ko/pokemon/list/best-pokemon-by-cp";
@@ -684,6 +681,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         startActivity(intent);
     }
 
+
+    public void onWalk(View view)
+    {
+        Intent intent = new Intent(this, WalkActivity.class);
+        startActivity(intent);
+    }
 
     /**
      *
@@ -809,8 +812,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     // 현재 위치 정보를 구해오는 함수 (포켓몬고와 동일한 방식)
     //===============================================================
     private FusedLocationProviderClient mFusedLocationClient;
-    private Location mCurrentLocation;
+    public Location mCurrentLocation;
     private Toast mToast;
+    public boolean mIsMockLoc = true;
+    public float mAccuracy = 9999;
 
     @SuppressLint("MissingPermission")
     public Location getCurrentLocation()
@@ -829,18 +834,24 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 //                            + ", lat: " + mCurrentLocation.getLatitude()
 //                            + ", lng: " + mCurrentLocation.getLongitude()
 //                            + ", accuracy: " + mCurrentLocation.getAccuracy() );
+
+                    mAccuracy = mCurrentLocation.getAccuracy();
+
                     if(mCurrentLocation.isFromMockProvider())
                     {
+                        mIsMockLoc = true;
                         mToast.setText(" 가상위치 수행중입니다\n qHere 화면에서 기다려주세요\n " + mCurrentLocation.getLatitude() + "," + mCurrentLocation.getLongitude() );
                         mToast.show();
                     }
                     else
                     {
+                        mIsMockLoc = false;
                         mToast.cancel();
                     }
                 }
                 else
                 {
+                    mAccuracy = 9999;
                     if(task != null) {
                         qlog.e("getCurrentLocation() fail: " + task.getException().getMessage());
                     }
@@ -850,6 +861,38 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         mFusedLocationClient.getLastLocation().addOnCompleteListener(this, mCompleteListener);
         return mCurrentLocation;
+    }
+
+
+    //===============================================================
+    // walk 관련 기능
+    //===============================================================
+    public ArrayList<String> mListPosition = new ArrayList<>();
+    public int mInterval = 3;
+    public WalkThread mWalkThread = null;
+
+
+    public void startWalk()
+    {
+        if(mWalkThread != null)
+        {
+            return;
+        }
+
+        mWalkThread = new WalkThread();
+        mWalkThread.start();
+    }
+
+
+    public void stopWalk()
+    {
+        if(mWalkThread == null)
+        {
+            return;
+        }
+
+        mWalkThread.interrupt();
+        mWalkThread = null;
     }
 
 }

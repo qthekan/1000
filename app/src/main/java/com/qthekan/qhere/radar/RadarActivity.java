@@ -253,9 +253,9 @@ public class RadarActivity extends AppCompatActivity {
     private int mMinLV = 0;
     private void getFilterValue()
     {
-        mMinCP = qutil.parseInt( mEtCP.getText().toString() );
-        mMinIV = qutil.parseInt( mEtIV.getText().toString() );
-        mMinLV = qutil.parseInt( mEtLV.getText().toString() );
+        mMinCP = qutil.parseInt( mEtCP.getText().toString(), 0 );
+        mMinIV = qutil.parseInt( mEtIV.getText().toString(), 0 );
+        mMinLV = qutil.parseInt( mEtLV.getText().toString(), 0 );
 
         qlog.i("CP:"+mMinCP + " IV:"+mMinIV + " LV:"+mMinLV);
     }

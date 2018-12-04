@@ -3,40 +3,88 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="right|center_vertical"
-    android:background="#7FFFFFFF"
     android:orientation="vertical"
     tools:context="com.qthekan.qhere.joystick.JoystickService">
 
-    <TextView
-        android:id="@+id/tvJoystick"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="qHere"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
-        android:background="#FFFFFF"/>
+        android:background="#6800bbff"
+        android:orientation="horizontal">
 
-    <com.qthekan.qhere.joystick.Joystick
-        android:id="@+id/joystick"
-        android:layout_width="@dimen/base_size"
-        android:layout_height="@dimen/base_size"
-        android:layout_gravity="center_vertical|right"
-        android:background="@drawable/bg_base">
+        <TextView
+            android:id="@+id/tvJoyTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="qHere"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="25sp" />
 
-        <!-- You may use any View here. -->
-        <Button
-            android:layout_width="@dimen/stick_size"
-            android:layout_height="@dimen/stick_size"
-            android:clickable="false"
-            android:background="@drawable/bg_stick" />
-    </com.qthekan.qhere.joystick.Joystick>
+        <TextView
+            android:id="@+id/btJoyHide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#68002fff"
+            android:onClick="onHide"
+            android:text="  -  "
+            android:textAlignment="center"
+            android:textSize="25sp" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/btnStop"
+    <LinearLayout
+        android:id="@+id/viewJoyContents"
+        android:background="#7FFFFFFF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="stop" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvJoyAcc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#64ffffff"
+            android:gravity="center"
+            android:text="accuracy"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvJoyWalkSec"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#64ffffff"
+            android:gravity="center"
+            android:text="walk sec"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <com.qthekan.qhere.joystick.Joystick
+            android:id="@+id/joystick"
+            android:layout_width="@dimen/base_size"
+            android:layout_height="@dimen/base_size"
+            android:layout_gravity="center_vertical|right"
+            android:background="@drawable/bg_base">
+
+            <!-- You may use any View here. -->
+            <Button
+                android:layout_width="@dimen/stick_size"
+                android:layout_height="@dimen/stick_size"
+                android:background="@drawable/bg_stick"
+                android:clickable="false" />
+        </com.qthekan.qhere.joystick.Joystick>
+
+        <Button
+            android:id="@+id/btnStop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="stop" />
+
+    </LinearLayout>
 
 </LinearLayout>

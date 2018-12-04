@@ -8,6 +8,8 @@ import android.os.Build;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -16,15 +18,15 @@ public class qutil {
 
     /**
      * @param value : string value to want to change integer
-     * @return : int value. if occurred exception non-int-string that will return 0;
+     * @return : int value. if occurred exception non-int-string that will return defaultVal;
      */
-    public static int parseInt(String value)
+    public static int parseInt(String value, int defaultVal)
     {
         try {
             return Integer.parseInt(value);
         }
         catch(NumberFormatException e) {
-            return 0;
+            return defaultVal;
         }
     }
 
@@ -56,10 +58,23 @@ public class qutil {
     }
 
 
+    /**
+     * double 데이터에서 원하는 소수점 자리수만큼만 반환한다.
+     */
     public static double getDouble(double value, int decimalPoint)
     {
         String point = "%." + decimalPoint + "f";
         return Double.parseDouble( String.format(point, value) );
+    }
+
+
+    /**
+     * float 데이터에서 원하는 소수점 자리수만큼만 반환한다.
+     */
+    public static float getFloat(float value, int decimalPoint)
+    {
+        String point = "%." + decimalPoint + "f";
+        return Float.parseFloat( String.format(point, value) );
     }
 
 
@@ -84,5 +99,52 @@ public class qutil {
         }
 
         dialog.create().show();
+    }
+
+
+    /**
+     * String 위경도를 LatLng 형으로 반환한다.
+     * 37.1234,127.1234 => LatLng type
+     */
+    public static LatLng stringToLatlng(String latLng)
+    {
+        String latitude = latLng.split(",")[0].trim();
+        String longitude = latLng.split(",")[1].trim();
+
+        double lat = Double.valueOf(latitude);
+        double lng = Double.valueOf(longitude);
+
+        LatLng ret = new LatLng(lat, lng);
+        return ret;
+    }
+
+
+    public static String intToStr(int i, String defaultStr)
+    {
+        String ret = defaultStr;
+
+        try{
+            ret = String.valueOf(i);
+        }
+        catch (Exception e)
+        {
+            qlog.e(e.getMessage());
+        }
+        return ret;
+    }
+
+
+    public static String floatToStr(float f, String defaultStr)
+    {
+        String ret = defaultStr;
+
+        try{
+            ret = String.valueOf(f);
+        }
+        catch (Exception e)
+        {
+            qlog.e(e.getMessage());
+        }
+        return ret;
     }
 }

@@ -15,12 +15,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.qthekan.qhere.MainActivity;
 import com.qthekan.qhere.R;
 import com.qthekan.util.qlog;
+import com.qthekan.util.qutil;
 
 
 public class JoystickService extends Service {
@@ -29,7 +32,11 @@ public class JoystickService extends Service {
     Joystick mJoystick;
     WindowManager.LayoutParams mParams;
 
+    TextView mTvTitle;
     Button mBtnStop;
+    TextView mTvAccuracy;
+    TextView mTvWalkSec;
+    LinearLayout mViewJoyContens;
     SeekBar mSbMovePower;
     //private int mMovePower = 5;
     private int mMovePower = 8;
@@ -70,6 +77,7 @@ public class JoystickService extends Service {
                 PixelFormat.TRANSLUCENT);
 
         mParams.gravity = Gravity.LEFT | Gravity.TOP;
+
         mView = inflate.inflate(R.layout.activity_joystick, null);
 
         mJoystick = mView.findViewById(R.id.joystick);
@@ -104,6 +112,11 @@ public class JoystickService extends Service {
                 MainActivity.getIns().stopJoystick();
             }
         });
+
+        mTvTitle = mView.findViewById(R.id.tvJoyTitle);
+        mViewJoyContens = mView.findViewById(R.id.viewJoyContents);
+        mTvAccuracy = mView.findViewById(R.id.tvJoyAcc);
+        mTvWalkSec = mView.findViewById(R.id.tvJoyWalkSec);
 
         //===========================================================
         // seek bar move power
@@ -157,6 +170,9 @@ public class JoystickService extends Service {
                     prevY = event.getRawY();
 
                     mWinMgr.updateViewLayout(mView, mParams);
+                    break;
+                case MotionEvent.ACTION_BUTTON_PRESS:
+                    onHide(view);
                     break;
             }
             return true;
@@ -227,6 +243,7 @@ public class JoystickService extends Service {
                 while(mRunning)
                 {
                     moveMockLocation();
+                    setInfoStr();
 
                     try {
                         Thread.sleep(500);
@@ -245,6 +262,58 @@ public class JoystickService extends Service {
     }
 
 
+    private void setInfoStr()
+    {
+        MainActivity.getIns().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                float accuracy = qutil.getFloat( MainActivity.getIns().mAccuracy, 1);
+                if( MainActivity.getIns().mIsMockLoc || accuracy > 1000 )
+                {
+                    mTvAccuracy.setBackgroundColor(0x64FF1212);
+                    mTvTitle.setBackgroundColor(0x64FF1212);
+                }
+                else if( accuracy > 500)
+                {
+                    mTvAccuracy.setBackgroundColor(0x64FFCC14);
+                    mTvTitle.setBackgroundColor(0x64FFCC14);
+                }
+                else if( accuracy > 0 )
+                {
+                    mTvAccuracy.setBackgroundColor(0x644AFF0E);
+                    mTvTitle.setBackgroundColor(0x644AFF0E);
+                }
+
+                String strAcc = qutil.floatToStr(accuracy, "9999");
+                mTvAccuracy.setText( "Acc: " + strAcc);
+
+                if( MainActivity.getIns().mWalkThread != null ) {
+                    mTvWalkSec.setText("Walk: " + qutil.intToStr(MainActivity.getIns().mWalkThread.mSec, "0"));
+                }
+                else
+                {
+                    mTvWalkSec.setText("Walk: ");
+                }
+            }
+        });
+    }
+
+
+    boolean mHide = false;
+    public void onHide(View v)
+    {
+        if(mHide)
+        {
+            mViewJoyContens.setVisibility(View.VISIBLE);
+            mHide = false;
+        }
+        else
+        {
+            mViewJoyContens.setVisibility(View.INVISIBLE);
+            mHide = true;
+        }
+
+    }
 
 
 

@@ -41,6 +41,61 @@
                 android:text="Search" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnGoRadar"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/yellow_light"
+                android:onClick="onGoRadarActivity"
+                android:text="Radar" />
+
+            <Button
+                android:id="@+id/btnGoDictionary"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@color/pink_light"
+                android:onClick="onGoDictionary"
+                android:text="Dict" />
+
+            <Button
+                android:id="@+id/btnFav"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@color/blue_light"
+                android:onClick="onFavorite"
+                android:text="favorite" />
+
+            <Button
+                android:id="@+id/btnTalk"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@color/green_light"
+                android:onClick="onJoin"
+                android:text="Talk" />
+
+            <Button
+                android:id="@+id/btnWalk"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@color/orange"
+                android:onClick="onWalk"
+                android:text="walk" />
+        </LinearLayout>
+
         <FrameLayout
             android:id="@+id/map_view"
             android:layout_width="match_parent"
@@ -54,60 +109,6 @@
                 android:layout_height="match_parent"
                 tools:context="com.qthekan.qhere.MainActivity">
             </fragment>
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btnGoRadar"
-                    android:layout_width="70dp"
-                    android:layout_height="wrap_content"
-                    android:background="@color/yellow_light"
-                    android:onClick="onGoRadarActivity"
-                    android:text="Radar" />
-
-                <Button
-                    android:id="@+id/btnGoDictionary"
-                    android:layout_width="70dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:background="@color/pink_light"
-                    android:onClick="onGoDictionary"
-                    android:text="Dict" />
-
-                <Button
-                    android:id="@+id/btnGoIv100"
-                    android:layout_width="70dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:background="@color/blue_light"
-                    android:onClick="onGoIv100"
-                    android:text="Iv100"
-                    android:visibility="gone" />
-
-                <Button
-                    android:id="@+id/btnFav"
-                    android:layout_width="70dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:background="@color/blue_light"
-                    android:onClick="onFavorite"
-                    android:text="favorite" />
-
-                <Button
-                    android:id="@+id/btnTalk"
-                    android:layout_width="70dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:background="@color/green_light"
-                    android:onClick="onJoin"
-                    android:text="Talk" />
-
-            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/viewSubMenu"
