@@ -61,7 +61,7 @@ import static java.lang.Thread.sleep;
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
     private static MainActivity ins = null;
 
-    private GoogleMap mMap;
+    public GoogleMap mMap;
 
     private Button mBtnSearch;
     private EditText mEtSearch;
@@ -138,8 +138,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        mToast = Toast.makeText(MainActivity.getIns(), "detected mock location.\nplease wait.", Toast.LENGTH_LONG);
-        //mToast.setGravity(Gravity.BOTTOM, 0, 0);
+
+        Button btnStartWithMove = findViewById(R.id.btnStart);
+        btnStartWithMove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                qlog.i("start move");
+                startJoystick();
+            }
+        });
     }
 
 
@@ -461,28 +468,28 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnInfoWindowClickListener(infoWindowClickListener);
 
         // marker click listener
-        mMap.setOnMarkerClickListener(markerClickListener);
+//        mMap.setOnMarkerClickListener(markerClickListener);
     }
 
 
     //===============================================================
-    // marker click listener
+    // marker click listener for radar
     // if click other marker, then remove marker added by user
     //===============================================================
-    GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
-        @Override
-        public boolean onMarkerClick(Marker marker) {
-            if(mMarker != null)
-            {
-                mMarker.remove();
-            }
-
-            mNewPosition = marker.getPosition();
-            showSubMenu();
-
-            return false;
-        }
-    };
+//    GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
+//        @Override
+//        public boolean onMarkerClick(Marker marker) {
+//            if(mMarker != null)
+//            {
+//                mMarker.remove();
+//            }
+//
+//            mNewPosition = marker.getPosition();
+//            showSubMenu();
+//
+//            return false;
+//        }
+//    };
 
 
     //===============================================================
@@ -504,7 +511,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void moveCamera()
     {
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mNewPosition, 15));
+        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mNewPosition, 15));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mNewPosition, 17));
     }
 
 
@@ -526,14 +534,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         //===========================================================
         // move start button
         //===========================================================
-        Button btnStartWithMove = findViewById(R.id.btnStart);
-        btnStartWithMove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                qlog.i("start move");
-                startJoystick();
-            }
-        });
+//        Button btnStartWithMove = findViewById(R.id.btnStart);
+//        btnStartWithMove.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                qlog.i("start move");
+//                startJoystick();
+//            }
+//        });
 
         mLayoutSubMenu.setVisibility(View.VISIBLE);
     }
@@ -541,7 +549,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void invisibleSubMenu()
     {
-        mLayoutSubMenu.setVisibility(View.INVISIBLE);
+//        mLayoutSubMenu.setVisibility(View.INVISIBLE);
+        mLayoutSubMenu.setVisibility(View.GONE);
     }
 
 
@@ -813,7 +822,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     //===============================================================
     private FusedLocationProviderClient mFusedLocationClient;
     public Location mCurrentLocation;
-    private Toast mToast;
     public boolean mIsMockLoc = true;
     public float mAccuracy = 9999;
 
@@ -840,13 +848,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     if(mCurrentLocation.isFromMockProvider())
                     {
                         mIsMockLoc = true;
-                        mToast.setText(" 가상위치 수행중입니다\n qHere 화면에서 기다려주세요\n " + mCurrentLocation.getLatitude() + "," + mCurrentLocation.getLongitude() );
-                        mToast.show();
                     }
                     else
                     {
                         mIsMockLoc = false;
-                        mToast.cancel();
                     }
                 }
                 else

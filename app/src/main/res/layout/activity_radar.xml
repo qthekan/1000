@@ -21,14 +21,6 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btnAll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="onAll"
-                android:text="All" />
-
-            <Button
                 android:id="@+id/btnClear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,12 +29,20 @@
                 android:text="Clear" />
 
             <Button
-                android:id="@+id/btnDefault"
+                android:id="@+id/btSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="onDefault"
-                android:text="Default" />
+                android:onClick="onSave"
+                android:text="save" />
+
+            <Button
+                android:id="@+id/btLoad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="onLoad"
+                android:text="load" />
 
             <Button
                 android:id="@+id/btnSearch"

@@ -7,6 +7,8 @@
     tools:context="com.qthekan.qhere.walk.WalkActivity">
 
     <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -29,8 +31,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
+                android:hint="150"
                 android:inputType="number"
-                android:text="60" />
+                android:selectAllOnFocus="true"
+                android:text="150" />
 
         </LinearLayout>
 
@@ -51,7 +55,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
+                android:hint="11.1111,22.2222"
                 android:inputType="text|number"
+                android:selectAllOnFocus="true"
                 android:text="" />
 
         </LinearLayout>
@@ -74,6 +80,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="text|number"
+                android:selectAllOnFocus="true"
                 android:text="" />
         </LinearLayout>
 
@@ -95,6 +102,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="text|number"
+                android:selectAllOnFocus="true"
                 android:text="" />
         </LinearLayout>
 
@@ -116,6 +124,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="text|number"
+                android:selectAllOnFocus="true"
                 android:text="" />
         </LinearLayout>
 

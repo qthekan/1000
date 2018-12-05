@@ -2,9 +2,10 @@
 - modify : just modify function
 
 
-v5.0 20181204
-    - Add Walk
-    - Modify Joystick
+v5.0 20181205
+    - Add Walk function
+    - Modify Joystick view
+    - Modify Radar add(save, load), delete(all, default)
 
 v.4.7 20181112
     - Modify button size on google map

@@ -171,6 +171,18 @@ public class RadarActivity extends AppCompatActivity {
     }
 
 
+    public void onSave(View v)
+    {
+        saveUserInput();
+    }
+
+
+    public void onLoad(View v)
+    {
+        loadUserInput();
+    }
+
+
     /**
      * default button click event handler
      */
@@ -190,17 +202,13 @@ public class RadarActivity extends AppCompatActivity {
     public void onSearch(View v)
     {
         qlog.i("Search");
-
+        saveUserInput();
         mTvResult.setVisibility(View.VISIBLE);
-        getFilterValue();
-        getSelectedPokeIDs();
         if(mSelectedPokeIDs.length() < 1)
         {
             qutil.showToast(this, "Select Pokemon Please.");
             return;
         }
-
-        saveUserInput();
 
         // send search request to server
         AsyncTask.execute(new Runnable() {
@@ -480,6 +488,9 @@ public class RadarActivity extends AppCompatActivity {
     SharedPreferences mAppData;
     private void saveUserInput()
     {
+        getFilterValue();
+        getSelectedPokeIDs();
+
         SharedPreferences.Editor editor = mAppData.edit();
         editor.clear();
 

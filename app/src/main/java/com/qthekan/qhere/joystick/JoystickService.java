@@ -267,25 +267,32 @@ public class JoystickService extends Service {
         MainActivity.getIns().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                float accuracy = qutil.getFloat( MainActivity.getIns().mAccuracy, 1);
+                float accuracy = qutil.getFloat( MainActivity.getIns().mAccuracy, 0);
+                int color = 0x64FF1212;
                 if( MainActivity.getIns().mIsMockLoc || accuracy > 1000 )
                 {
-                    mTvAccuracy.setBackgroundColor(0x64FF1212);
-                    mTvTitle.setBackgroundColor(0x64FF1212);
+                    accuracy = 1000;
+                    color = 0x64FF1212;
                 }
                 else if( accuracy > 500)
                 {
-                    mTvAccuracy.setBackgroundColor(0x64FFCC14);
-                    mTvTitle.setBackgroundColor(0x64FFCC14);
+                    color = 0x64FFCC14;
                 }
                 else if( accuracy > 0 )
                 {
-                    mTvAccuracy.setBackgroundColor(0x644AFF0E);
-                    mTvTitle.setBackgroundColor(0x644AFF0E);
+                    color = 0x644AFF0E;
                 }
+                mTvAccuracy.setBackgroundColor(color);
+                mTvTitle.setBackgroundColor(color);
 
-                String strAcc = qutil.floatToStr(accuracy, "9999");
-                mTvAccuracy.setText( "Acc: " + strAcc);
+                float accpercent = (1000 - accuracy) / 10;
+                if(accpercent < 0)
+                {
+                    accpercent = 0;
+                }
+                String strAcc = qutil.floatToStr(accpercent, "0");
+                mTvAccuracy.setText( "Acc: " + strAcc + " %");
+//                qlog.e("accuracy: " + accuracy + ", accpercent: " + accpercent + ", strAcc: " + strAcc);
 
                 if( MainActivity.getIns().mWalkThread != null ) {
                     mTvWalkSec.setText("Walk: " + qutil.intToStr(MainActivity.getIns().mWalkThread.mSec, "0"));
@@ -309,7 +316,7 @@ public class JoystickService extends Service {
         }
         else
         {
-            mViewJoyContens.setVisibility(View.INVISIBLE);
+            mViewJoyContens.setVisibility(View.GONE);
             mHide = true;
         }
 

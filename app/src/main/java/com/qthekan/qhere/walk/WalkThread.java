@@ -1,17 +1,25 @@
 package com.qthekan.qhere.walk;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.qthekan.qhere.MainActivity;
 import com.qthekan.util.qlog;
 import com.qthekan.util.qutil;
+
+import java.util.ArrayList;
+
 
 public class WalkThread extends Thread
 {
     private boolean mFlag = false;
     public int mSec = 0;
+    ArrayList<Marker> mListMarker = new ArrayList<>();
 
 
     public void run() {
         mFlag = true;
+        printMarker();
 
         while (mFlag) {
             for (String position : MainActivity.getIns().mListPosition) {
@@ -53,7 +61,44 @@ public class WalkThread extends Thread
                 }
             }
         }
+        removeMarker();
         qlog.e("WalkThread end");
+    }
+
+
+    private void removeMarker()
+    {
+        MainActivity.getIns().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                for(Marker m : mListMarker)
+                {
+                    m.remove();
+                }
+            }
+        });
+    }
+
+
+    private void printMarker()
+    {
+        MainActivity.getIns().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                int i = 0;
+                for (String position : MainActivity.getIns().mListPosition) {
+                    i++;
+                    LatLng latlng = qutil.stringToLatlng(position);
+                    String title = "walk-" + (i);
+
+                    MarkerOptions mo = new MarkerOptions();
+                    mo.position(latlng).title(title).alpha(0.4f);
+                    Marker marker = MainActivity.getIns().mMap.addMarker(mo);
+                    marker.showInfoWindow();
+                    mListMarker.add(marker);
+                }
+            }
+        });
     }
 
 }

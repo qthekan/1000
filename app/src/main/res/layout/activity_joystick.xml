@@ -7,7 +7,7 @@
     tools:context="com.qthekan.qhere.joystick.JoystickService">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:background="#6800bbff"
         android:orientation="horizontal">
