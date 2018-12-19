@@ -99,6 +99,21 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //=====================================================================
+        // Runtime Exception 에 의해 thread 가 종료될 경우
+        // 로그를 출력하도록 설정한다.
+        //=====================================================================
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler()
+        {
+            @Override
+            public void uncaughtException(Thread thread, Throwable e)
+            {
+                qlog.e("uncaughtException() thread dead: " + thread.getName() + "\n" + e.toString() );
+                // 20180307 main thread 가 죽은 경우 프로세스 재기동이 되지 않아서 추가함.
+                System.exit(0);
+            }
+        });
+
         initView();
 
         //===========================================================
@@ -144,6 +159,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 qlog.i("start move");
+                if(mMockRunning)
+                {
+                    qutil.showToast(MainActivity.getIns(),"already running!!");
+                    return;
+                }
                 startJoystick();
             }
         });
@@ -468,7 +488,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnInfoWindowClickListener(infoWindowClickListener);
 
         // marker click listener
-//        mMap.setOnMarkerClickListener(markerClickListener);
+        mMap.setOnMarkerClickListener(markerClickListener);
     }
 
 
@@ -476,20 +496,26 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     // marker click listener for radar
     // if click other marker, then remove marker added by user
     //===============================================================
-//    GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
-//        @Override
-//        public boolean onMarkerClick(Marker marker) {
-//            if(mMarker != null)
-//            {
-//                mMarker.remove();
-//            }
-//
-//            mNewPosition = marker.getPosition();
-//            showSubMenu();
-//
-//            return false;
-//        }
-//    };
+    GoogleMap.OnMarkerClickListener markerClickListener = new GoogleMap.OnMarkerClickListener() {
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            if(mMockRunning)
+            {
+                //qutil.showToast(MainActivity.getIns(),"already running. you must stop!!");
+                return false;
+            }
+
+            if(mMarker != null)
+            {
+                mMarker.remove();
+            }
+
+            mNewPosition = marker.getPosition();
+            showSubMenu();
+
+            return false;
+        }
+    };
 
 
     //===============================================================

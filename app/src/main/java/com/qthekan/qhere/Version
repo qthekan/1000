@@ -2,6 +2,9 @@
 - modify : just modify function
 
 
+v5.1 20181219
+    - Modify Radar marker touch action. create start button.
+
 v5.0 20181205
     - Add Walk function
     - Modify Joystick view
