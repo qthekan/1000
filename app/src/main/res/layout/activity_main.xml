@@ -30,6 +30,7 @@
                 android:ems="10"
                 android:hint="Latitude,Longitude"
                 android:inputType="none"
+                android:digits="1234567890-,."
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:selectAllOnFocus="true" />

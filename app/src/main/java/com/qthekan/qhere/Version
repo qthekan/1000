@@ -2,6 +2,9 @@
 - modify : just modify function
 
 
+v5.2 20190110
+    - Modify gps location input box. can not input AtoZ character.
+
 v5.1 20181219
     - Modify Radar marker touch action. create start button.
 
