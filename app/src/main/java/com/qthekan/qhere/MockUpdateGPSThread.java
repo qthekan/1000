@@ -50,20 +50,24 @@ class MockUpdateGPSThread extends Thread {
 
         while (Running)
         {
-            if( JoystickService.mIsMoveing )
-            {
-                moveToMockLocation();
-                //continue;
+            try {
+                if (JoystickService.mIsMoveing) {
+                    moveToMockLocation();
+                    //continue;
+                }
+
+                MainActivity.getIns().getCurrentLocation();
+
+                if (Math.abs(mCurrLng - mLatLng.longitude) > mErrorRange
+                        || Math.abs(mCurrLat - mLatLng.latitude) > mErrorRange
+                        || mCurrAcc > mACCURACY_MAX) {
+                    qlog.e("current: " + mCurrLat + "," + mCurrLng + " destination: " + mLatLng.latitude + "," + mLatLng.longitude + " accuracy: " + mCurrAcc);
+                    moveToMockLocation();
+                }
             }
-
-            MainActivity.getIns().getCurrentLocation();
-
-            if( Math.abs(mCurrLng - mLatLng.longitude) > mErrorRange
-                    || Math.abs(mCurrLat - mLatLng.latitude) > mErrorRange
-                    || mCurrAcc > mACCURACY_MAX )
+            catch(Exception e)
             {
-                qlog.e("current: " + mCurrLat + "," + mCurrLng + " destination: " + mLatLng.latitude + "," + mLatLng.longitude + " accuracy: " + mCurrAcc);
-                moveToMockLocation();
+                qlog.e("MockUpdateGPSThread", e );
             }
 
             try

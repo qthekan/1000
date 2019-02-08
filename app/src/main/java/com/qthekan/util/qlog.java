@@ -3,6 +3,11 @@ package com.qthekan.util;
 
 import android.util.Log;
 
+import com.qthekan.qhere.MainActivity;
+
+import java.io.BufferedInputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -12,6 +17,18 @@ public class qlog
     {
         Log.e( getClassName(), getLogMsg(log) );
     }
+
+
+    public static void e(String log, Exception e)
+    {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+
+        Log.e( getClassName(), getLogMsg(log), e );
+        qutil.showDialog(MainActivity.getIns(), "error log", getLogMsg(log) + "\n" + sw.toString(), null, null );
+    }
+
 
     public static void w(String log)
     {

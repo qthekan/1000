@@ -55,8 +55,6 @@ import com.qthekan.util.qutil;
 
 import java.util.ArrayList;
 
-import static java.lang.Thread.sleep;
-
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener {
     private static MainActivity ins = null;
@@ -372,19 +370,21 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         String latLng = mEtSearch.getText().toString().replace(" ", "");
         Log.d("mEtSearch", "LatLng: " + latLng);
 
-        if(!latLng.matches("^[-0-9].*[,].*[-0-9]$"))
+        try {
+            String latitude = latLng.split(",")[0].trim();
+            String longitude = latLng.split(",")[1].trim();
+
+            double lat = Double.valueOf(latitude);
+            double lng = Double.valueOf(longitude);
+            mNewPosition = new LatLng(lat, lng);
+            moveMarker();
+        }
+        catch(Exception e)
         {
-            showToast("Invalid LatLng. \nYou Must Input like this \n123.456,321.654");
+            showToast("Bad LatLng. \nex) 123.4567,-123.4567");
+            //qlog.e("your input is wrong: " + latLng, e );
             return -1;
         }
-
-        String latitude = latLng.split(",")[0].trim();
-        String longitude = latLng.split(",")[1].trim();
-
-        double lat = Double.valueOf(latitude);
-        double lng = Double.valueOf(longitude);
-        mNewPosition = new LatLng(lat, lng);
-        moveMarker();
 
         return 0;
     }

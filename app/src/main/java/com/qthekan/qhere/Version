@@ -2,6 +2,11 @@
 - modify : just modify function
 
 
+v5.3 20190201
+    - 위경도 잘못 입력시 종료되지 않고 알림 뜨도록 수정.
+    - 앱이 강제 종료되는 의심구간에 로그 출력 하는 기능 추가.
+    - 뉴욕맵 부활.
+
 v5.2 20190110
     - Modify gps location input box. can not input AtoZ character.
 
