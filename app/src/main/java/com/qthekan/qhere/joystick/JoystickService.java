@@ -276,7 +276,7 @@ public class JoystickService extends Service {
                 }
                 else if( accuracy > 500)
                 {
-                    color = 0x64FFCC14;
+                    color = 0x64FFFF00;
                 }
                 else if( accuracy > 0 )
                 {

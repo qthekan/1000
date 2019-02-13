@@ -5,6 +5,7 @@ import android.content.res.AssetManager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.qthekan.qhere.MainActivity;
 import com.qthekan.util.qlog;
 
 import java.io.IOException;
@@ -21,21 +22,21 @@ import java.util.Comparator;
  */
 public class PokeDict {
     public static ArrayList<Poke> mPokeList = new ArrayList<>();
-    private Context mContext = null;
+    //private Context mContext = null;
 
 
-    /**
-     * @param context : main activity's context
-     */
-    public PokeDict(Context context)
+//    /**
+//     * @param context : main activity's context
+//     */
+//    public PokeDict(Context context)
+//    {
+//        mContext = context;
+//    }
+
+
+    public static int init()
     {
-        mContext = context;
-    }
-
-
-    public int init()
-    {
-        AssetManager am = mContext.getAssets();
+        AssetManager am = MainActivity.getIns().getAssets();
 
         try
         {
@@ -63,6 +64,9 @@ public class PokeDict {
     }
 
 
+    /**
+     * ID 로 정렬된 포켓몬 리스트를 가져온다.
+     */
     public void getListByID()
     {
         mPokeList.clear();
@@ -79,6 +83,9 @@ public class PokeDict {
     }
 
 
+    /**
+     * Name 으로 정렬된 포켓몬 리스트를 가져온다.
+     */
     public void getListByName()
     {
         mPokeList.clear();
@@ -94,6 +101,11 @@ public class PokeDict {
 
     public static String getNameByID(int id)
     {
+        if( mPokeList.size() == 0 )
+        {
+            init();
+        }
+
         for(int i = 0 ; i < mPokeList.size() ; i++)
         {
             Poke p = mPokeList.get(i);
@@ -104,6 +116,26 @@ public class PokeDict {
         }
 
         return "";
+    }
+
+
+    public static int getWeatherByID(int id)
+    {
+        if( mPokeList.size() == 0 )
+        {
+            init();
+        }
+
+        for(int i = 0 ; i < mPokeList.size() ; i++)
+        {
+            Poke p = mPokeList.get(i);
+            if(p.mID == id)
+            {
+                return p.mWeather;
+            }
+        }
+
+        return 0;
     }
 
     private void add(int id, String name)

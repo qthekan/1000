@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Build;
+import android.os.Environment;
+import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -45,7 +49,7 @@ public class qutil {
 
     /**
      * @param unixTimeStamp : unix timestamp. not java timestame.
-     * @return
+     * @return HH:mm
      */
     public static String unixtimeToHourMin(long unixTimeStamp)
     {
@@ -53,8 +57,7 @@ public class qutil {
         Date date = new Date(javaTimeStamp);
 
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-        String hourMin = format.format(date);
-        return hourMin;
+        return format.format(date);
     }
 
 
@@ -114,8 +117,7 @@ public class qutil {
         double lat = Double.valueOf(latitude);
         double lng = Double.valueOf(longitude);
 
-        LatLng ret = new LatLng(lat, lng);
-        return ret;
+        return new LatLng(lat, lng);
     }
 
 
@@ -147,4 +149,49 @@ public class qutil {
         }
         return ret;
     }
+
+
+    /**
+     *
+     * @param fileName : ex) qherelog.txt
+     * @param data : ex) 2019-01-01 ERROR contents....
+     */
+    public static void writeFile(String fileName, String data)
+    {
+        if( !isExternalStorageWritable() )
+        {
+            qlog.e("external storage not writable!!");
+            return;
+        }
+
+        File f = new File( getSaveDir(), fileName);
+        try {
+            FileWriter w = new FileWriter(f, false);
+            w.write(data);
+            w.close();
+        }
+        catch (IOException e) {
+            Log.e("", e.getMessage() );
+        }
+
+    }
+
+
+    private static File getSaveDir()
+    {
+        File f = new File( Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "qHere");
+        if( !f.mkdirs() )
+        {
+            qlog.e("mkdirs() fail: " + f.getAbsolutePath() );
+        }
+
+        return f;
+    }
+
+
+    private static boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
+    }
+
 }

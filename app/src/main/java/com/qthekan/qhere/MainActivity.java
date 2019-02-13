@@ -9,7 +9,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -46,6 +48,10 @@ import com.qthekan.qhere.joystick.JoystickService;
 import com.qthekan.qhere.radar.Poke;
 import com.qthekan.qhere.radar.RadarActivity;
 import com.qthekan.qhere.radar.listview.CustomAdapter;
+import com.qthekan.qhere.raid.RaidActivity;
+import com.qthekan.qhere.raid.RaidInfo;
+import com.qthekan.qhere.raid.RaidWeather;
+import com.qthekan.qhere.raid.Team;
 import com.qthekan.qhere.talk.ChatService;
 import com.qthekan.qhere.walk.WalkActivity;
 import com.qthekan.qhere.walk.WalkThread;
@@ -53,6 +59,8 @@ import com.qthekan.util.qBackPressExitApp;
 import com.qthekan.util.qlog;
 import com.qthekan.util.qutil;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 
@@ -69,14 +77,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public AdsMgr mAds;
 
 
-    public static MainActivity getIns()
-    {
+    public static MainActivity getIns() {
         return ins;
     }
 
 
-    private void initView()
-    {
+    private void initView() {
         mAds = new AdsMgr(this, (AdView) findViewById(R.id.adView));
 
         mEtSearch = findViewById(R.id.etSearch);
@@ -101,12 +107,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         // Runtime Exception 에 의해 thread 가 종료될 경우
         // 로그를 출력하도록 설정한다.
         //=====================================================================
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler()
-        {
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
-            public void uncaughtException(Thread thread, Throwable e)
-            {
-                qlog.e("uncaughtException() thread dead: " + thread.getName() + "\n" + e.toString() );
+            public void uncaughtException(Thread thread, Throwable e) {
+                qlog.e("uncaughtException() thread dead: " + thread.getName() + "\n" + e.toString(), (Exception) e);
                 // 20180307 main thread 가 죽은 경우 프로세스 재기동이 되지 않아서 추가함.
                 System.exit(0);
             }
@@ -131,18 +135,16 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         //===========================================================
         // init search frame element
         //===========================================================
-        mBtnSearch.setOnClickListener( new Button.OnClickListener() {
+        mBtnSearch.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("btn", "search click");
-                if(mMockRunning)
-                {
+                if (mMockRunning) {
                     showToast("Already running. Stop first.");
                     return;
                 }
 
-                if( setPosition() < 0 )
-                {
+                if (setPosition() < 0) {
                     return;
                 }
 
@@ -157,9 +159,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 qlog.i("start move");
-                if(mMockRunning)
-                {
-                    qutil.showToast(MainActivity.getIns(),"already running!!");
+                if (mMockRunning) {
+                    qutil.showToast(MainActivity.getIns(), "already running!!");
                     return;
                 }
                 startJoystick();
@@ -169,43 +170,40 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
 
-        if(mMockRunning)
-        {
+        if (mMockRunning) {
             stopJoystick();
         }
     }
 
 
     qBackPressExitApp mBack = new qBackPressExitApp(this);
+
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         mBack.onBackPressed();
     }
 
-    public void showToast(String msg)
-    {
+    public void showToast(String msg) {
         Toast t = Toast.makeText(this, msg, Toast.LENGTH_LONG);
         t.setGravity(Gravity.CENTER, 0, 0);
         t.show();
     }
 
 
+    private final int mPERMISSION_CODE_FINE_LOCATION = 1;
+    private final int mPERMISSION_CODE_COARSE_LOCATION = 2;
+    private static final int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 3;
+    private final int mPERMISSION_CODE_EXTERNAL_STROAGE_WRITE = 4;
+
     /**
      *
      * @return r == 0 : all permission ok <br>
      *     r < 0 : you need to add permission
      */
-    private final int mPERMISSION_CODE_FINE_LOCATION = 1;
-    private final int mPERMISSION_CODE_COARSE_LOCATION = 2;
-    private static final int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 3;
-    private final int mPERMISSION_CODE_EXTERNAL_STROAGE_WRITE = 4;
-    private int checkPermission()
-    {
+    private int checkPermission() {
         //===========================================================
         // check permission: gps
         //===========================================================
@@ -216,14 +214,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     ActivityCompat.requestPermissions(MainActivity.getIns(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, mPERMISSION_CODE_FINE_LOCATION);
                 }
             }, null);
-        }
-        else
-        {
+        } else {
             activateFindMyLocationButton();
         }
 
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             qutil.showDialog(this, "Need Permission", "Fake GPS location", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -235,8 +230,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         //===========================================================
         // check permission: external storage
         //===========================================================
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-        {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             qutil.showDialog(this, "Need Permission", "For save favorite as file", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -248,24 +242,21 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         //===========================================================
         // check permission: overlay window
         //===========================================================
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {   // 마시멜로우 이상일 경우
-            if (!Settings.canDrawOverlays(this)) {              // 체크
-                qutil.showDialog(this, "Need Permission", "For joystick", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                                Uri.parse("package:" + getPackageName()));
-                        startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
-                    }
-                }, null);
-            }
+        if (!Settings.canDrawOverlays(this)) {              // 체크
+            qutil.showDialog(this, "Need Permission", "For joystick", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                            Uri.parse("package:" + getPackageName()));
+                    startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
+                }
+            }, null);
         }
 
         //===========================================================
         // check permission: mock gps
         //===========================================================
-        if( !isMockLocationOn() )
-        {
+        if (!isMockLocationOn()) {
             qutil.showDialog(this, "Need Set Mock Location App", "설정 -> 개발자옵션 -> 모의위치앱 -> qHere", null, null);
             return -1;
         }
@@ -282,15 +273,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
-            if (!Settings.canDrawOverlays(this)) {
-                // 동의를 얻지 못했을 경우의 처리
-                //Log.d("", "not allowed overlay permission\n\n\n");
-                //showToast("You MUST accept the DrawOverys permisstion!!");
-            } else {
-                //Log.d("", "start joystick service\n\n\n");
-                //startService(new Intent(this, JoystickService.class));
-                //showToast("NOW, You can move mock GPS!!");
-            }
+            Settings.canDrawOverlays(this);
         }
     }
 
@@ -336,24 +319,18 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     /**
      * 개발자옵션 - 가상위치사용앱 이 설정되어 있는지 확인한다.
      */
-    private boolean isMockLocationOn()
-    {
+    private boolean isMockLocationOn() {
         try {
             LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            if (lm != null)
-            {
+            if (lm != null) {
                 lm.addTestProvider("check", false, true, false,
                         true, false, true, false,
                         Criteria.POWER_LOW, Criteria.ACCURACY_COARSE);
             }
-        }
-        catch (IllegalArgumentException e)
-        {
+        } catch (IllegalArgumentException e) {
             // activate mock location
             return true;
-        }
-        catch (SecurityException e)
-        {
+        } catch (SecurityException e) {
             // deactivate mock location
             return false;
         }
@@ -365,8 +342,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     /**
      * EditText 에 입력된 위경도로 마커를 이동.
      */
-    private int setPosition()
-    {
+    private int setPosition() {
         String latLng = mEtSearch.getText().toString().replace(" ", "");
         Log.d("mEtSearch", "LatLng: " + latLng);
 
@@ -378,9 +354,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             double lng = Double.valueOf(longitude);
             mNewPosition = new LatLng(lat, lng);
             moveMarker();
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             showToast("Bad LatLng. \nex) 123.4567,-123.4567");
             //qlog.e("your input is wrong: " + latLng, e );
             return -1;
@@ -417,6 +391,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      */
     private void activateFindMyLocationButton()
     {
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            return;
+        }
         mMap.setMyLocationEnabled(true);
     }
 
@@ -479,7 +459,28 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
                 .title(title).snippet(snippet);
 
-        Bitmap bitmap = ((CustomAdapter)RadarActivity.mListViewPoke.getAdapter()).getItemById(id).image;
+        //Bitmap bitmap = ((CustomAdapter)RadarActivity.mListViewPoke.getAdapter()).getItemById(id).image;
+        String strID = String.format("%03d", id);
+        AssetManager assetManager = getAssets();
+        InputStream is = null;
+        try {
+            // 레이드 검색에서 알 일때 id가 0 이다.
+            if(id == 0) {
+                is = assetManager.open("poke_img/egg.png");
+            }
+            else {
+                is = assetManager.open("poke_img/" + strID + ".png");
+            }
+        }
+        catch (IOException e) {
+            try {
+                is = assetManager.open("poke_img/unknown.png");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+        Bitmap bitmap = BitmapFactory.decodeStream(is);
+
         mo.icon( BitmapDescriptorFactory.fromBitmap(Bitmap.createScaledBitmap(bitmap, 130, 130, false)) );
 
         mMap.addMarker(mo);
@@ -530,7 +531,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
             ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             ClipData clipData = ClipData.newPlainText("latlng", latlng);
-            clipboardManager.setPrimaryClip( clipData );
+            if (clipboardManager != null) {
+                clipboardManager.setPrimaryClip( clipData );
+            }
         }
     };
 
@@ -538,7 +541,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private void moveCamera()
     {
         //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mNewPosition, 15));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mNewPosition, 17));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mNewPosition, 16));
     }
 
 
@@ -700,6 +703,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
+    public void onGoRaid(View v)
+    {
+        Intent intent = new Intent(this, RaidActivity.class);
+        startActivity(intent);
+    }
+
+
     public void onGoDictionary(View view)
     {
         String url = "https://pokemon.gameinfo.io/ko/pokemon/list/best-pokemon-by-cp";
@@ -723,11 +733,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         startActivity(intent);
     }
 
+
+    public static final int mLIST_POKE_MAX = 200;
     /**
      *
      * @param site : nation, region, site ...
      */
-    public static final int mLIST_POKE_MAX = 100;
     public void drawPokeListInMap(int site)
     {
         mMap.clear();
@@ -774,6 +785,36 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         {
             qlog.i( p.toStr() );
         }
+    }
+
+
+    public static ArrayList<RaidInfo> mListRaid = new ArrayList<>();
+    public void drawRaidListInMap(int site)
+    {
+        mMap.clear();
+
+        for(RaidInfo r : mListRaid)
+        {
+            qlog.i(r.toStr());
+            String endTime = qutil.unixtimeToHourMin(r.mEnd);
+            String startTime = qutil.unixtimeToHourMin(r.mStart);
+            String title = Team.getTeamStr(r.mTeam) + " Lv:" + r.mLevel + " " + r.mPokemonName;
+            String snippet = startTime + "~" + endTime + "  Ex:" + r.mExRaid + "  " + RaidWeather.getWeatherStr(r.mWeather);
+            addMarker(r.mLat, r.mLng, title, snippet, r.mPokemonID);
+        }
+
+        //LatLng camera = new LatLng(37.521938, 126.981117);
+        LatLng camera = new LatLng(1.3565, 103.871);
+        if(site == RadarActivity.mNEWYORK)
+        {
+            camera = new LatLng(40.695842, -73.946729);
+        }
+        else if(site == RadarActivity.mRONDON)
+        {
+            camera = new LatLng(51.513818, -0.115680);
+        }
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 10));
     }
 
 
@@ -852,7 +893,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public float mAccuracy = 9999;
 
     @SuppressLint("MissingPermission")
-    public Location getCurrentLocation()
+    public void getCurrentLocation()
     {
         OnCompleteListener<Location> mCompleteListener = new OnCompleteListener<Location>()
         {
@@ -871,19 +912,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
                     mAccuracy = mCurrentLocation.getAccuracy();
 
-                    if(mCurrentLocation.isFromMockProvider())
-                    {
-                        mIsMockLoc = true;
-                    }
-                    else
-                    {
-                        mIsMockLoc = false;
-                    }
+                    mIsMockLoc = mCurrentLocation.isFromMockProvider();
                 }
                 else
                 {
                     mAccuracy = 9999;
-                    if(task != null) {
+                    if(task.getException() != null) {
                         qlog.e("getCurrentLocation() fail: " + task.getException().getMessage());
                     }
                 }
@@ -891,7 +925,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         };
 
         mFusedLocationClient.getLastLocation().addOnCompleteListener(this, mCompleteListener);
-        return mCurrentLocation;
     }
 
 

@@ -14,31 +14,10 @@ import java.io.IOException;
 
 public class qSave
 {
-    SharedPreferences mAppData;
     private String mDirName = "qhere";
-    private String mFileName = "save.sav";
 
 
-    public qSave()
-    {
-
-    }
-
-
-    public qSave(String filename)
-    {
-        mFileName = filename;
-    }
-
-
-    public qSave(String dirName, String filename)
-    {
-        mDirName = dirName;
-        mFileName = filename;
-    }
-
-
-    public void save(String data)
+    public void save(String filename, String data)
     {
         if( isExternalStorageWritable() == false )
         {
@@ -46,7 +25,7 @@ public class qSave
             return;
         }
 
-        File f = new File( getSaveDir(), mFileName);
+        File f = new File( getSaveDir(), filename);
         try {
             FileWriter w = new FileWriter(f, false);
             w.write(data);
@@ -60,7 +39,7 @@ public class qSave
     }
 
 
-    public String load()
+    public String load(String filename)
     {
         if( isExternalStorageReadable() == false )
         {
@@ -68,9 +47,10 @@ public class qSave
             return null;
         }
 
-        File f = new File( getSaveDir(), mFileName);
+        File f = new File( getSaveDir(), filename);
         if( f.exists() == false )
         {
+            qlog.e("save file not exists: " + f.getAbsolutePath() );
             return null;
         }
 
@@ -87,7 +67,7 @@ public class qSave
         }
         catch (Exception e) {
             qlog.e("read fail: " + e.getMessage() );
-            return "";
+            return null;
         }
 
         return strData;

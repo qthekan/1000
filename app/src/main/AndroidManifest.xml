@@ -43,6 +43,7 @@
             android:permission="android.permission.SYSTEM_ALERT_WINDOW"></service>
 
         <activity android:name=".walk.WalkActivity"></activity>
+        <activity android:name=".raid.RaidActivity"></activity>
     </application>
 
 </manifest>

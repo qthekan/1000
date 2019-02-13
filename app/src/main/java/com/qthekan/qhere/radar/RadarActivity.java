@@ -62,14 +62,14 @@ public class RadarActivity extends AppCompatActivity {
         mEtLV = findViewById(R.id.etMinLv);
 
         mRadioGroup = findViewById(R.id.rgRegion);
-        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                qutil.showToast(getApplicationContext(), "Warning!! \nWhen move between countries, more than 2 hours of rest is required.");
-            }
-        });
+//        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+//                qutil.showToast(getApplicationContext(), "Warning!! \nWhen move between countries, more than 2 hours of rest is required.");
+//            }
+//        });
 
-        mRbSeoul = findViewById(R.id.rbSeoul);
+        mRbSeoul = findViewById(R.id.rbSG);
         mRbLondon = findViewById(R.id.rbLondon);
         mRbNewYork = findViewById(R.id.rbNewYork);
 
@@ -82,7 +82,8 @@ public class RadarActivity extends AppCompatActivity {
         //===========================================================
         // init Poke Dictionary
         //===========================================================
-        mPokeDict = new PokeDict(this);
+        //mPokeDict = new PokeDict(this);
+        mPokeDict = new PokeDict();
         mPokeDict.getListByID();
 
         //===========================================================
@@ -277,7 +278,7 @@ public class RadarActivity extends AppCompatActivity {
     private void sendHttpReq(String site, String ids)
     {
         try {
-            getCookies();
+            getCookies(site);
 
             String cmd = site + "/query2.php?since=0&mons=" + ids;
             URL url = new URL(cmd);
@@ -437,10 +438,11 @@ public class RadarActivity extends AppCompatActivity {
      * 최초 홈페이지 접속시 cookie 를 저장후 request 보낼때 사용할 목적.
      */
     private String mCookie = "";
-    private void getCookies()
+    private void getCookies(String site)
     {
         try {
-            HttpsURLConnection conn = (HttpsURLConnection) new URL("https://seoulpokemap.com/").openConnection();
+            //HttpsURLConnection conn = (HttpsURLConnection) new URL("https://seoulpokemap.com/").openConnection();
+            HttpsURLConnection conn = (HttpsURLConnection) new URL(site).openConnection();
             mCookie = conn.getHeaderField("Set-Cookie");
             qlog.i("cookie\n" + mCookie);
         }
@@ -492,7 +494,7 @@ public class RadarActivity extends AppCompatActivity {
         getSelectedPokeIDs();
 
         SharedPreferences.Editor editor = mAppData.edit();
-        editor.clear();
+        //editor.clear();
 
         //-----------------------------------------------------------
         // list view info

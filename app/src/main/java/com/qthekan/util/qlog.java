@@ -1,15 +1,12 @@
 package com.qthekan.util;
 
-
 import android.util.Log;
 
-import com.qthekan.qhere.MainActivity;
-
-import java.io.BufferedInputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 
 public class qlog
 {
@@ -26,7 +23,7 @@ public class qlog
         e.printStackTrace(pw);
 
         Log.e( getClassName(), getLogMsg(log), e );
-        qutil.showDialog(MainActivity.getIns(), "error log", getLogMsg(log) + "\n" + sw.toString(), null, null );
+        qutil.writeFile("qHere.txt", getLogMsg(log) + "\n" + sw.toString() );
     }
 
 

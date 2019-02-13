@@ -29,12 +29,21 @@
                 android:text="Clear" />
 
             <Button
+                android:id="@+id/btnAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="onAll"
+                android:text="All" />
+
+            <Button
                 android:id="@+id/btSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="onSave"
-                android:text="save" />
+                android:text="save"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/btLoad"
@@ -42,7 +51,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="onLoad"
-                android:text="load" />
+                android:text="load"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/btnSearch"
@@ -65,11 +75,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:checkedButton="@id/rbSeoul"
+                android:checkedButton="@id/rbSG"
                 android:layout_weight="1" >
 
                 <RadioButton
-                    android:id="@+id/rbSeoul"
+                    android:id="@+id/rbSG"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

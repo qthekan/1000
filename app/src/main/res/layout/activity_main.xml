@@ -57,10 +57,20 @@
                 android:text="Radar" />
 
             <Button
+                android:id="@+id/btnGoRaid"
+                android:layout_width="65dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:layout_weight="1"
+                android:background="#90fdff"
+                android:onClick="onGoRaid"
+                android:text="Raid" />
+
+            <Button
                 android:id="@+id/btnGoDictionary"
                 android:layout_width="65dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="1dp"
                 android:layout_weight="1"
                 android:background="@color/pink_light"
                 android:onClick="onGoDictionary"
@@ -70,17 +80,17 @@
                 android:id="@+id/btnFav"
                 android:layout_width="65dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="1dp"
                 android:layout_weight="1"
-                android:background="@color/blue_light"
+                android:background="#69a0ff"
                 android:onClick="onFavorite"
-                android:text="favorite" />
+                android:text="fav" />
 
             <Button
                 android:id="@+id/btnTalk"
                 android:layout_width="65dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="1dp"
                 android:layout_weight="1"
                 android:background="@color/green_light"
                 android:onClick="onJoin"
@@ -90,7 +100,7 @@
                 android:id="@+id/btnWalk"
                 android:layout_width="65dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="1dp"
                 android:layout_weight="1"
                 android:background="@color/orange"
                 android:onClick="onWalk"
