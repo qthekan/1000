@@ -1,6 +1,11 @@
 - fix : bug fix
 - modify : just modify function
 
+v5.6 20190214
+    - ads load 실패 시 재시도루틴 제거.
+
+v5.5 20190214
+    - ads load 실패 시 30초후 재시도하도록 수정.
 
 v5.4 20190211
     - Search 맵확대 단계 17 -> 16(축소) 수정.
@@ -8,7 +13,7 @@ v5.4 20190211
     - ACC 50% 이하일때 색깔을 조금더 노랗게 수정.
     - walk 좌표 입력 칸 4 -> 6 개로 수정.
     - walk area 5개로 수정.
-    - 비정상 종료시 로그파일 출력하도록 수정. document/qhere/qhere.log
+    - 비정상 종료시 로그파일 출력하도록 수정. document/qhere/qhere.txt
     - 레이드 검색 기능 추가
 
 v5.3 20190201

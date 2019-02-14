@@ -25,7 +25,7 @@ public class WalkThread extends Thread
             for (String position : MainActivity.getIns().mListPosition) {
                 qlog.e("position: " + position);
                 MainActivity.getIns().mNewPosition = qutil.stringToLatlng(position);
-                MainActivity.getIns().mIsMockLoc = true;
+                //MainActivity.getIns().mIsMockLoc = true;
 
                 MainActivity.getIns().runOnUiThread(new Runnable() {
                     @Override

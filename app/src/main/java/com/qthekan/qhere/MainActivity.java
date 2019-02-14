@@ -47,7 +47,6 @@ import com.qthekan.qhere.Favorite.FavoriteActivity;
 import com.qthekan.qhere.joystick.JoystickService;
 import com.qthekan.qhere.radar.Poke;
 import com.qthekan.qhere.radar.RadarActivity;
-import com.qthekan.qhere.radar.listview.CustomAdapter;
 import com.qthekan.qhere.raid.RaidActivity;
 import com.qthekan.qhere.raid.RaidInfo;
 import com.qthekan.qhere.raid.RaidWeather;
@@ -911,7 +910,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 //                            + ", accuracy: " + mCurrentLocation.getAccuracy() );
 
                     mAccuracy = mCurrentLocation.getAccuracy();
-
                     mIsMockLoc = mCurrentLocation.isFromMockProvider();
                 }
                 else

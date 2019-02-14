@@ -12,7 +12,8 @@ import com.qthekan.util.qlog;
 import com.qthekan.util.qutil;
 
 
-class MockUpdateGPSThread extends Thread {
+class MockUpdateGPSThread extends Thread
+{
     final int TIME_UPDATES_MS = 2000;
     public boolean Running;
 
@@ -50,10 +51,20 @@ class MockUpdateGPSThread extends Thread {
 
         while (Running)
         {
+            try
+            {
+                Thread.sleep(TIME_UPDATES_MS);
+            }
+            catch (Exception e)
+            {
+                Running = false;
+                break;
+            }
+
             try {
                 if (JoystickService.mIsMoveing) {
                     moveToMockLocation();
-                    //continue;
+                    continue;
                 }
 
                 MainActivity.getIns().getCurrentLocation();
@@ -70,15 +81,6 @@ class MockUpdateGPSThread extends Thread {
                 qlog.e("MockUpdateGPSThread", e );
             }
 
-            try
-            {
-                Thread.sleep(TIME_UPDATES_MS);
-            }
-            catch (Exception e)
-            {
-                Running = false;
-                break;
-            }
         }
 
         qlog.e("Mock GPSThread end");

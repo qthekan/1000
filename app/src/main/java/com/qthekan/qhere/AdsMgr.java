@@ -9,6 +9,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.qthekan.util.qlog;
 
 public class AdsMgr
 {
@@ -51,7 +52,8 @@ public class AdsMgr
 
             @Override
             public void onAdFailedToLoad(int errorCode) {
-                loadInterAds();
+                // 계속 실패할 경우 무한루프로 돌아서 주석처리함.
+                //loadInterAds();
             }
 
             @Override
