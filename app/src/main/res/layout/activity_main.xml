@@ -94,7 +94,8 @@
                 android:layout_weight="1"
                 android:background="@color/green_light"
                 android:onClick="onJoin"
-                android:text="Talk" />
+                android:text="Talk"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/btnWalk"

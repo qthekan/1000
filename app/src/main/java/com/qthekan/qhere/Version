@@ -1,6 +1,10 @@
 - fix : bug fix
 - modify : just modify function
 
+
+v5.7 20190215
+    - talk 기능 잠시 막음.
+
 v5.6 20190214
     - ads load 실패 시 재시도루틴 제거.
 
