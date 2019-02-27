@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">qHere</string>
-    <string name="title_activity_maps">qHere</string>
+    <string name="app_name">qHere2</string>
+    <string name="title_activity_maps">qHere2</string>
 
-    <string name="banner_ad_unit_id">ca-app-pub-6591940578118358/9163293980</string>
+    <string name="banner_ad_unit_id">ca-app-pub-6591940578118358/8199079486</string>
 
     <string name="title_activity_joystick">JoystickActivity</string>
 </resources>

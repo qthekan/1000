@@ -3,11 +3,11 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.qthekan.qhere"
+        applicationId "com.qthekan.qhere2"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 59
-        versionName "5.9"
+        versionCode 60
+        versionName "6.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

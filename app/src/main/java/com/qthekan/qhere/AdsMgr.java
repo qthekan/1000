@@ -37,11 +37,11 @@ public class AdsMgr
         // interstitial ads
         //===========================================================
         // app id
-        MobileAds.initialize(mContext, "ca-app-pub-6591940578118358~2789457324");
+        MobileAds.initialize(mContext, "ca-app-pub-6591940578118358~2783101273");
 
         // interstitial id
         mInterstitialAd = new InterstitialAd(mContext);
-        mInterstitialAd.setAdUnitId("ca-app-pub-6591940578118358/4757145117");
+        mInterstitialAd.setAdUnitId("ca-app-pub-6591940578118358/2372037736");
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
         mInterstitialAd.setAdListener(new AdListener() {
