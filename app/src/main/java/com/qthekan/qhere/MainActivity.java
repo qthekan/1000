@@ -102,6 +102,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        endService();
+
         //=====================================================================
         // Runtime Exception 에 의해 thread 가 종료될 경우
         // 로그를 출력하도록 설정한다.
@@ -115,56 +117,72 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        initView();
+//        initView();
+//
+//        //===========================================================
+//        // init google admob
+//        //===========================================================
+//        mAds.initAds();
+//        mAds.showInterAds();
+//
+//        //===========================================================
+//        // init google map
+//        //===========================================================
+//        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+//                .findFragmentById(R.id.map);
+//        mapFragment.getMapAsync(this);
+//
+//        //===========================================================
+//        // init search frame element
+//        //===========================================================
+//        mBtnSearch.setOnClickListener(new Button.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.d("btn", "search click");
+//                if (mMockRunning) {
+//                    showToast("Already running. Stop first.");
+//                    return;
+//                }
+//
+//                if (setPosition() < 0) {
+//                    return;
+//                }
+//
+//                moveCamera();
+//            }
+//        });
+//
+//        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+//
+//        Button btnStartWithMove = findViewById(R.id.btnStart);
+//        btnStartWithMove.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                qlog.i("start move");
+//                if (mMockRunning) {
+//                    qutil.showToast(MainActivity.getIns(), "already running!!");
+//                    return;
+//                }
+//                startJoystick();
+//            }
+//        });
+    }
 
-        //===========================================================
-        // init google admob
-        //===========================================================
-        mAds.initAds();
-        mAds.showInterAds();
 
-        //===========================================================
-        // init google map
-        //===========================================================
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+    public void endService()
+    {
+        qutil.showDialog(this, "qHere Service End", "qHere 서비스를 종료를 안내드립니다. qHere를 보완하여 개선된 qHere2를 이용해주시기 바랍니다.",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String url = "https://play.google.com/store/apps/details?id=com.qthekan.qhere2";
 
-        //===========================================================
-        // init search frame element
-        //===========================================================
-        mBtnSearch.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("btn", "search click");
-                if (mMockRunning) {
-                    showToast("Already running. Stop first.");
-                    return;
-                }
-
-                if (setPosition() < 0) {
-                    return;
-                }
-
-                moveCamera();
-            }
-        });
-
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-        Button btnStartWithMove = findViewById(R.id.btnStart);
-        btnStartWithMove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                qlog.i("start move");
-                if (mMockRunning) {
-                    qutil.showToast(MainActivity.getIns(), "already running!!");
-                    return;
-                }
-                startJoystick();
-            }
-        });
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri.parse(url));
+                        startActivity(intent);
+                    }
+        }, null);
     }
 
 

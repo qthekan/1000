@@ -54,7 +54,8 @@
                 android:layout_weight="1"
                 android:background="@color/yellow_light"
                 android:onClick="onGoRadarActivity"
-                android:text="Radar" />
+                android:text="Radar"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/btnGoRaid"
@@ -64,7 +65,8 @@
                 android:layout_weight="1"
                 android:background="#90fdff"
                 android:onClick="onGoRaid"
-                android:text="Raid" />
+                android:text="Raid"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/btnGoDictionary"
@@ -74,7 +76,8 @@
                 android:layout_weight="1"
                 android:background="@color/pink_light"
                 android:onClick="onGoDictionary"
-                android:text="Dict" />
+                android:text="Dict"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/btnFav"
@@ -84,7 +87,8 @@
                 android:layout_weight="1"
                 android:background="#69a0ff"
                 android:onClick="onFavorite"
-                android:text="fav" />
+                android:text="fav"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/btnTalk"
@@ -105,7 +109,8 @@
                 android:layout_weight="1"
                 android:background="@color/orange"
                 android:onClick="onWalk"
-                android:text="walk" />
+                android:text="walk"
+                android:visibility="gone" />
         </LinearLayout>
 
         <FrameLayout

@@ -2,6 +2,11 @@
 - modify : just modify function
 
 
+v6.0 20190305
+    - v5.9 에서 브랜치로 작업.
+    - Admob 에서 qhere 광고가 차단되어 qhere2 로 앱 재생성.
+    - 브랜치 나눔.
+
 v5.9 20190226
     - android 5.0 지원
 
