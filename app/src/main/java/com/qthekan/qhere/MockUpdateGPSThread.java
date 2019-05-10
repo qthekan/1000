@@ -5,6 +5,7 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.SystemClock;
+import android.provider.Settings;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.qthekan.qhere.joystick.JoystickService;
@@ -38,12 +39,17 @@ class MockUpdateGPSThread extends Thread
         mContext = c;
 
         mLocMgr = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
-
-        addSetProvider(mLocMgr, "gps");
-        addSetProvider(mLocMgr,"network");
     }
 
 
+    public void stopThread()
+    {
+        Running = false;
+        interrupt();
+    }
+
+
+    boolean mbMoveMockLoc = false;
     @Override
     public void run() {
         qlog.i("Starting Mock GPSThread");
@@ -51,6 +57,8 @@ class MockUpdateGPSThread extends Thread
 
         while (Running)
         {
+            MainActivity.getIns().getCurrentLocation();
+
             try
             {
                 Thread.sleep(TIME_UPDATES_MS);
@@ -67,14 +75,23 @@ class MockUpdateGPSThread extends Thread
                     continue;
                 }
 
-                MainActivity.getIns().getCurrentLocation();
-
                 if (Math.abs(mCurrLng - mLatLng.longitude) > mErrorRange
                         || Math.abs(mCurrLat - mLatLng.latitude) > mErrorRange
                         || mCurrAcc > mACCURACY_MAX) {
                     qlog.e("current: " + mCurrLat + "," + mCurrLng + " destination: " + mLatLng.latitude + "," + mLatLng.longitude + " accuracy: " + mCurrAcc);
                     moveToMockLocation();
                 }
+
+                Running = false;
+                break;
+
+//                if( mbMoveMockLoc || mCurrAcc > mACCURACY_MAX )
+//                {
+//                    qlog.e("111");
+//                    moveToMockLocation();
+//                    qlog.e("222");
+//                    mbMoveMockLoc = false;
+//                }
             }
             catch(Exception e)
             {
@@ -84,20 +101,22 @@ class MockUpdateGPSThread extends Thread
         }
 
         qlog.e("Mock GPSThread end");
-        delProvider(mLocMgr, "gps");
-        delProvider(mLocMgr, "network");
     }
 
 
     private void moveToMockLocation()
     {
         qlog.e("new lat: " + mLatLng.latitude + ", lng: " + mLatLng.longitude);
-        //addSetProvider(mLocMgr, "gps");
-        //addSetProvider(mLocMgr,"network");
+        int value = setMockLocationSettings();
+        addSetProvider(mLocMgr, "gps");
+        addSetProvider(mLocMgr,"network");
+
         setPLocation(mLocMgr, "gps", mLatLng.latitude, mLatLng.longitude);
         setPLocation(mLocMgr, "network", mLatLng.latitude, mLatLng.longitude);
-        //delProvider(mLocMgr, "gps");
-        //delProvider(mLocMgr, "network");
+
+        delProvider(mLocMgr, "gps");
+        delProvider(mLocMgr, "network");
+        restoreMockLocationSettings(value);
     }
 
 
@@ -108,10 +127,36 @@ class MockUpdateGPSThread extends Thread
         loc.setLatitude(curLat);
         loc.setLongitude(curLong);
         loc.setBearing(0);
-        loc.setAccuracy(0);   // 클 수록 맵에서 반경이 커짐.
+        loc.setAccuracy(10);   // 클 수록 맵에서 반경이 커짐.
         loc.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
-        loc.setSpeed((float) 0);
+        loc.setSpeed((float) 100);
+
+        //int value = setMockLocationSettings();
         locationManager.setTestProviderLocation(provider, loc);
+        //restoreMockLocationSettings(value);
+    }
+
+
+    private int setMockLocationSettings() {
+        int value = 1;
+        try {
+            value = Settings.Secure.getInt(MainActivity.getIns().getContentResolver(),
+                    Settings.Secure.ALLOW_MOCK_LOCATION);
+            Settings.Secure.putInt(MainActivity.getIns().getContentResolver(),
+                    Settings.Secure.ALLOW_MOCK_LOCATION, 1);
+        } catch (Exception e) {
+            //qlog.e("", e);
+        }
+        return value;
+    }
+
+    private void restoreMockLocationSettings(int restore_value) {
+        try {
+            Settings.Secure.putInt(MainActivity.getIns().getContentResolver(),
+                    Settings.Secure.ALLOW_MOCK_LOCATION, restore_value);
+        } catch (Exception e) {
+            //qlog.e("", e);
+        }
     }
 
 
@@ -132,6 +177,7 @@ class MockUpdateGPSThread extends Thread
     public void setLocation(LatLng loc)
     {
         mLatLng = new LatLng(qutil.getDouble(loc.latitude, 4), qutil.getDouble(loc.longitude, 4));
+        mbMoveMockLoc = true;
     }
 
 

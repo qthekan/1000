@@ -156,11 +156,11 @@ public class qutil {
      * @param fileName : ex) qherelog.txt
      * @param data : ex) 2019-01-01 ERROR contents....
      */
-    public static void writeFile(String fileName, String data)
+    static public void writeFile(String fileName, String data)
     {
         if( !isExternalStorageWritable() )
         {
-            qlog.e("external storage not writable!!");
+            //qlog.e("external storage not writable!!");
             return;
         }
 
@@ -171,7 +171,7 @@ public class qutil {
             w.close();
         }
         catch (IOException e) {
-            Log.e("", e.getMessage() );
+            //Log.e("", e.getMessage() );
         }
 
     }

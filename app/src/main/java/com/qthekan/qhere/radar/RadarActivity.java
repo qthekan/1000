@@ -502,12 +502,18 @@ public class RadarActivity extends AppCompatActivity {
         SparseBooleanArray booleanArray = mListViewPoke.getCheckedItemPositions();
         for(int i = 0; i < PokeDict.mPokeList.size() ; i++)
         {
+            // poke id start with 1. then, mID - 1
+            String id = PokeDict.mPokeList.get(i).mID - 1 + "";
+
             if( booleanArray.get(i) )
             {
-                // poke id start with 1. then, mID - 1
-                String id = PokeDict.mPokeList.get(i).mID - 1 + "";
                 editor.putBoolean(id, true);
-                qlog.i("save id:" + id);
+                qlog.e("save id:" + id);
+            }
+            else
+            {
+                editor.putBoolean(id, false);
+                qlog.e("save id:" + id);
             }
         }
 
@@ -535,8 +541,10 @@ public class RadarActivity extends AppCompatActivity {
         for(int i = 0 ; i < PokeDict.mPokeList.size() ; i++)
         {
             boolean flag = mAppData.getBoolean(i + "", false);
-            mListViewPoke.setItemChecked(i, flag);
-            qlog.i("load id:" + i);
+            if(flag) {
+                mListViewPoke.setItemChecked(i, flag);
+                qlog.e("load id:" + i);
+            }
         }
 
         //-----------------------------------------------------------

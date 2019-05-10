@@ -13,6 +13,7 @@ public class qlog
     public static void e(String log)
     {
         Log.e( getClassName(), getLogMsg(log) );
+        //qutil.writeFile("qHere-" + Thread.currentThread().getName() + ".txt", getLogMsg(log));
     }
 
 
@@ -23,6 +24,7 @@ public class qlog
         e.printStackTrace(pw);
 
         Log.e( getClassName(), getLogMsg(log), e );
+        //qutil.writeFile("qHere-" + Thread.currentThread().getName() + ".txt", getLogMsg(log) + "\n" + sw.toString() );
         qutil.writeFile("qHere.txt", getLogMsg(log) + "\n" + sw.toString() );
     }
 

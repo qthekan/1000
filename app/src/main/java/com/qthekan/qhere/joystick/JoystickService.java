@@ -18,10 +18,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.qthekan.qhere.MainActivity;
 import com.qthekan.qhere.R;
+import com.qthekan.qhere.walk.MockGPS;
 import com.qthekan.util.qlog;
 import com.qthekan.util.qutil;
 
@@ -34,6 +36,7 @@ public class JoystickService extends Service {
 
     TextView mTvTitle;
     Button mBtnStop;
+
     TextView mTvAccuracy;
     TextView mTvWalkSec;
     LinearLayout mViewJoyContens;
@@ -239,10 +242,32 @@ public class JoystickService extends Service {
             @Override
             public void run() {
                 mRunning = true;
+                int checkLocCnt = 0;
+                int checkMoveCnt = 0;
+                MainActivity.getIns().getCurrentLocation();
 
                 while(mRunning)
                 {
-                    moveMockLocation();
+                    // 2초마다 현재 좌표 확인
+                    if(checkLocCnt++ >= 4) {
+                        checkLocCnt = 0;
+                        MainActivity.getIns().getCurrentLocation();
+
+                        if (MainActivity.getIns().mAccuracy > 1000) {
+                            MainActivity.getIns().move();
+                        }
+                    }
+
+                    // 1초마다 위치 보정
+                    if(checkMoveCnt++ >= 2) {
+                        if( !MainActivity.getIns().isSameLoc() )
+                        {
+                            MainActivity.getIns().move();
+                            checkMoveCnt = 0;
+                        }
+                    }
+
+                    moveMarker();
                     setInfoStr();
 
                     try {
@@ -269,9 +294,8 @@ public class JoystickService extends Service {
             public void run() {
                 float accuracy = qutil.getFloat( MainActivity.getIns().mAccuracy, 0);
                 int color = 0x64FF1212;
-                if( MainActivity.getIns().mIsMockLoc || accuracy > 1000 )
+                if( MainActivity.getIns().mIsMockLoc || accuracy > 800 )
                 {
-                    accuracy = 1000;
                     color = 0x64FF1212;
                 }
                 else if( accuracy > 500)
@@ -319,9 +343,24 @@ public class JoystickService extends Service {
             mViewJoyContens.setVisibility(View.GONE);
             mHide = true;
         }
-
     }
 
+
+    public void onNext(View v)
+    {
+        if( MainActivity.getIns().mWalkThread == null )
+        {
+            return;
+        }
+
+        MainActivity.getIns().mWalkThread.onGoNext();
+    }
+
+
+    public void onRefresh(View v)
+    {
+        MainActivity.getIns().move();
+    }
 
 
     private float mX = 0;
@@ -329,7 +368,7 @@ public class JoystickService extends Service {
     private float mOffset = 0;
     private final double CONST = 0.0000001;
 
-    private void moveMockLocation()
+    private void moveMarker()
     {
         //qlog.i("x:" + mX + ", y:" + mY + ", offset:" + mOffset);
         //Log.i("moveMockLocation()", "x:" + mX + ", y:" + mY + ", offset:" + mOffset);
@@ -341,18 +380,21 @@ public class JoystickService extends Service {
         lng += (mX * c); // 가로
         lat += (mY * c); // 세로
 
-        LatLng newPos = new LatLng(lat, lng);
-        MainActivity.getIns().mNewPosition = newPos;
+        if( lat != MainActivity.getIns().mNewPosition.latitude
+                || lng != MainActivity.getIns().mNewPosition.longitude ) {
+            LatLng newPos = new LatLng(lat, lng);
+            MainActivity.getIns().mNewPosition = newPos;
 
-        /**
-         * GUI 관련된 작업은 main thread 에서 수행해야 되서 다음과 같이 처리함.
-         */
-        MainActivity.getIns().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                MainActivity.getIns().setMockLoc();
-            }
-        });
+            /**
+             * GUI 관련된 작업은 main thread 에서 수행해야 되서 다음과 같이 처리함.
+             */
+            MainActivity.getIns().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    MainActivity.getIns().moveMarker();
+                }
+            });
+        }
 
         //setJoystickValue(0, 0, 0);
     }

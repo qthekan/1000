@@ -8,60 +8,75 @@
 
     <LinearLayout
         android:layout_width="110dp"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:background="#55FFFFFF"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tvJoyTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="center"
             android:text="qHere"
             android:textAlignment="center"
             android:textColor="@android:color/black"
             android:textSize="25sp" />
 
-        <TextView
+        <Button
             android:id="@+id/btJoyHide"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#68002fff"
+            android:layout_height="match_parent"
+            android:background="#aa0096ff"
             android:onClick="onHide"
-            android:text="  -  "
-            android:textAlignment="center"
+            android:text="-"
             android:textSize="25sp" />
+
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/viewJoyContents"
-        android:background="#7FFFFFFF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="#7FFFFFFF"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/tvJoyAcc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#64ffffff"
+            android:background="#99ffffff"
             android:gravity="center"
             android:text="accuracy"
             android:textAlignment="viewStart"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/tvJoyWalkSec"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#64ffffff"
-            android:gravity="center"
-            android:text="walk sec"
-            android:textAlignment="viewStart"
-            android:textColor="@android:color/black"
-            android:textSize="16sp" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvJoyWalkSec"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#99ffffff"
+                android:gravity="center"
+                android:text="walk sec"
+                android:textAlignment="viewStart"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btnRight"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:background="#990096ff"
+                android:onClick="onNext"
+                android:text=">" />
+        </LinearLayout>
 
         <com.qthekan.qhere.joystick.Joystick
             android:id="@+id/joystick"
@@ -78,11 +93,33 @@
                 android:clickable="false" />
         </com.qthekan.qhere.joystick.Joystick>
 
+        <!--<Button-->
+        <!--android:id="@+id/btnRefresh"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:onClick="onRefresh"-->
+        <!--android:text="refresh"-->
+        <!--android:visibility="gone" />-->
+
+        <!--<ToggleButton-->
+        <!--android:id="@+id/tbtnAuto"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="#88fff700"-->
+        <!--android:checked="true"-->
+        <!--android:textOff="manual"-->
+        <!--android:textOn="auto"-->
+        <!--android:textSize="14sp" />-->
+
         <Button
             android:id="@+id/btnStop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
             android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="#990096ff"
             android:text="stop" />
 
     </LinearLayout>

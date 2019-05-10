@@ -53,6 +53,11 @@ public class WalkThread extends Thread
                     while(mSec-- > 0)
                     {
                         sleep(1000);
+                        // 가상위치 감지 시 초를 차감하지 않도록.
+                        if( MainActivity.getIns().mIsMockLoc )
+                        {
+                            mSec++;
+                        }
                     }
                 }
                 catch (InterruptedException e) {
@@ -63,6 +68,12 @@ public class WalkThread extends Thread
         }
         removeMarker();
         qlog.e("WalkThread end");
+    }
+
+
+    public void onGoNext()
+    {
+        mSec = 0;
     }
 
 

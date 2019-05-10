@@ -52,6 +52,7 @@ import com.qthekan.qhere.raid.RaidInfo;
 import com.qthekan.qhere.raid.RaidWeather;
 import com.qthekan.qhere.raid.Team;
 import com.qthekan.qhere.talk.ChatService;
+import com.qthekan.qhere.walk.MockGPS;
 import com.qthekan.qhere.walk.WalkActivity;
 import com.qthekan.qhere.walk.WalkThread;
 import com.qthekan.util.qBackPressExitApp;
@@ -132,7 +133,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         //===========================================================
-        // init search frame element
+        // SEARCH 버튼 클릭 이벤트 처리
         //===========================================================
         mBtnSearch.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -153,11 +154,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+        //===========================================================
+        // START 버튼 클릭 이벤트 처리
+        //===========================================================
         Button btnStartWithMove = findViewById(R.id.btnStart);
         btnStartWithMove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                qlog.i("start move");
+                qlog.e("start move");
                 if (mMockRunning) {
                     qutil.showToast(MainActivity.getIns(), "already running!!");
                     return;
@@ -241,24 +245,26 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         //===========================================================
         // check permission: overlay window
         //===========================================================
-        if (!Settings.canDrawOverlays(this)) {              // 체크
-            qutil.showDialog(this, "Need Permission", "For joystick", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                            Uri.parse("package:" + getPackageName()));
-                    startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
-                }
-            }, null);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {              // 체크
+                qutil.showDialog(this, "Need Permission", "For joystick", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                                Uri.parse("package:" + getPackageName()));
+                        startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
+                    }
+                }, null);
+            }
         }
 
         //===========================================================
         // check permission: mock gps
         //===========================================================
-        if (!isMockLocationOn()) {
-            qutil.showDialog(this, "Need Set Mock Location App", "설정 -> 개발자옵션 -> 모의위치앱 -> qHere", null, null);
-            return -1;
-        }
+//        if (!isMockLocationOn()) {
+//            qutil.showDialog(this, "Need Set Mock Location App", "설정 -> 개발자옵션 -> 모의위치앱 -> qHere", null, null);
+//            return -1;
+//        }
 
         return 0;
     }
@@ -408,7 +414,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapClick(LatLng latLng) {
         mNewPosition = latLng;
-        moveMarker();
+        setMockLoc();
     }
 
 
@@ -601,11 +607,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void startJoystick()
     {
         Log.d("", "start joystick");
-        if( startMock() < 0 )
-        {
-            return;
-        }
-
+        startMock();
         startService(new Intent(this, JoystickService.class));
     }
 
@@ -621,10 +623,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     //===============================================================
     // mock location
     //===============================================================
-    public MockUpdateGPSThread mMock;
-    //FakeUpdateGPSThread mMock;
-
-
     /**
      *
      * @return r == 0 : ok
@@ -632,11 +630,11 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
      */
     public int startMock()
     {
-        if(checkPermission() < 0)
-        {
-            qlog.e("checkPermission() nok");
-            return -1;
-        }
+//        if(checkPermission() < 0)
+//        {
+//            qlog.e("checkPermission() nok");
+//            return -1;
+//        }
 
         mAds.showInterAds();
         mMockRunning = true;
@@ -644,15 +642,21 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         moveMarker();
         moveCamera();
 
-        mMock = new MockUpdateGPSThread(this);
-        //mMock = new FakeUpdateGPSThread(this);
-        mMock.setLocation(mNewPosition);
-        mMock.start();
+        move();
 
         mLayoutSubMenu.setVisibility(View.INVISIBLE);
         genStopButton();
 
         return 0;
+    }
+
+
+    public void move()
+    {
+        qlog.e("main move() mNewPosition: " + mNewPosition.latitude + ", " + mNewPosition.longitude);
+        MockGPS mock = new MockGPS(this);
+        mock.moveToMockLocation(mNewPosition);
+        System.gc();
     }
 
 
@@ -669,10 +673,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         mMockRunning = false;
         mBtnSearch.setClickable(true);
 
-        mMock.Running = false;
-        mMock.interrupt();
-        mMock = null;
-
         mLayoutStop.setVisibility(View.INVISIBLE);
         mLayoutSubMenu.setVisibility(View.VISIBLE);
     }
@@ -680,12 +680,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void setMockLoc()
     {
-        if(mMock == null)
-        {
-            return;
-        }
-
-        mMock.setLocation(mNewPosition);
         moveMarker();
     }
 
@@ -818,6 +812,85 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     //===============================================================
+    // 현재 위치 정보를 구해오는 함수 (포켓몬고와 동일한 방식)
+    //===============================================================
+    private FusedLocationProviderClient mFusedLocationClient;
+    public Location mCurrentLocation;
+    public boolean mIsMockLoc = true;
+    public float mAccuracy = 9999;
+
+    @SuppressLint("MissingPermission")
+    public void getCurrentLocation()
+    {
+        OnCompleteListener<Location> mCompleteListener = new OnCompleteListener<Location>()
+        {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+                if( task.isSuccessful() && task.getResult() != null )
+                {
+                    mCurrentLocation = task.getResult();
+                    mAccuracy = mCurrentLocation.getAccuracy();
+                    mIsMockLoc = mCurrentLocation.isFromMockProvider();
+                    qlog.e("provider: " + mCurrentLocation.getProvider()
+                            + ", lat: " + mCurrentLocation.getLatitude()
+                            + ", lng: " + mCurrentLocation.getLongitude()
+                            + ", accuracy: " + mAccuracy
+                            + ", isMock: " + mIsMockLoc
+                    );
+                }
+                else
+                {
+                    mAccuracy = 9999;
+                    if(task.getException() != null) {
+                        qlog.e("getCurrentLocation() fail: " + task.getException().getMessage());
+                    }
+                }
+            }
+        };
+
+        mFusedLocationClient.getLastLocation().addOnCompleteListener(this, mCompleteListener);
+    }
+
+
+    public boolean isSameLoc()
+    {
+        return MockGPS.isSameLoc(mNewPosition, mCurrentLocation);
+    }
+
+
+    //===============================================================
+    // walk 관련 기능
+    //===============================================================
+    public ArrayList<String> mListPosition = new ArrayList<>();
+    public int mInterval = 3;
+    public WalkThread mWalkThread = null;
+
+
+    public void startWalk()
+    {
+        if(mWalkThread != null)
+        {
+            return;
+        }
+
+        mWalkThread = new WalkThread();
+        mWalkThread.start();
+    }
+
+
+    public void stopWalk()
+    {
+        if(mWalkThread == null)
+        {
+            return;
+        }
+
+        mWalkThread.interrupt();
+        mWalkThread = null;
+    }
+
+
+    //===============================================================
     // chat service
     //===============================================================
     private Button mBtnTalk;
@@ -880,81 +953,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         // stop service
         Intent intent = new Intent(this, ChatService.class);
         stopService(intent);
-    }
-
-
-    //===============================================================
-    // 현재 위치 정보를 구해오는 함수 (포켓몬고와 동일한 방식)
-    //===============================================================
-    private FusedLocationProviderClient mFusedLocationClient;
-    public Location mCurrentLocation;
-    public boolean mIsMockLoc = true;
-    public float mAccuracy = 9999;
-
-    @SuppressLint("MissingPermission")
-    public void getCurrentLocation()
-    {
-        OnCompleteListener<Location> mCompleteListener = new OnCompleteListener<Location>()
-        {
-            @Override
-            public void onComplete(@NonNull Task<Location> task) {
-                if( task.isSuccessful() && task.getResult() != null )
-                {
-                    mCurrentLocation = task.getResult();
-                    if( mMock != null ) {
-                        mMock.setCurrentLocation(mCurrentLocation);
-                    }
-//                    qlog.e("provider: " + mCurrentLocation.getProvider()
-//                            + ", lat: " + mCurrentLocation.getLatitude()
-//                            + ", lng: " + mCurrentLocation.getLongitude()
-//                            + ", accuracy: " + mCurrentLocation.getAccuracy() );
-
-                    mAccuracy = mCurrentLocation.getAccuracy();
-                    mIsMockLoc = mCurrentLocation.isFromMockProvider();
-                }
-                else
-                {
-                    mAccuracy = 9999;
-                    if(task.getException() != null) {
-                        qlog.e("getCurrentLocation() fail: " + task.getException().getMessage());
-                    }
-                }
-            }
-        };
-
-        mFusedLocationClient.getLastLocation().addOnCompleteListener(this, mCompleteListener);
-    }
-
-
-    //===============================================================
-    // walk 관련 기능
-    //===============================================================
-    public ArrayList<String> mListPosition = new ArrayList<>();
-    public int mInterval = 3;
-    public WalkThread mWalkThread = null;
-
-
-    public void startWalk()
-    {
-        if(mWalkThread != null)
-        {
-            return;
-        }
-
-        mWalkThread = new WalkThread();
-        mWalkThread.start();
-    }
-
-
-    public void stopWalk()
-    {
-        if(mWalkThread == null)
-        {
-            return;
-        }
-
-        mWalkThread.interrupt();
-        mWalkThread = null;
     }
 
 }
